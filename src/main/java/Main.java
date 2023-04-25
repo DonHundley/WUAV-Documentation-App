@@ -1,4 +1,6 @@
 
+import bll.eHandler.*;
+import bll.eHandler.errors.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.*;
 
 public class Main extends Application{
+    private ErrorFacade facade;
 
     @Override
     public void start(Stage stage) {
@@ -18,7 +21,11 @@ public class Main extends Application{
             stage.setScene(scene);
             stage.show();
         } catch (IOException e){
-            e.printStackTrace();
+            ErrorFacade facade = new ErrorFacade();
+
+            AlertUser exception = new EIOexception();
+
+            exception.showAlert(facade, "Main", "IOException");
         }
     }
 
