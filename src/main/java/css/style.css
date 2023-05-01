@@ -1,0 +1,61 @@
+/*FONTS*/
+
+/*Montserrat Regular*/
+@font-face {
+    font-family: 'Montserrat';
+    src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+}
+
+
+/* Montserrat Bold */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+}
+
+
+/*STYLE*/
+
+/*ROUND BUTTONS CLASS*/
+.round-btn {
+    -fx-background-color: #E84910;
+    -fx-text-fill: white;
+    -fx-background-radius: 50px;
+    -fx-padding: 7px 0 7px 0;
+    -fx-min-width: 75px;
+    -fx-min-height: 30px;
+    -fx-font-family: 'Montserrat';
+}
+
+/*SQUARE BUTTONS CLASS*/
+.square-btn {
+    -fx-background-color: #E84910;
+    -fx-text-fill: white;
+    -fx-background-radius: 0px;
+    -fx-padding: 7px 0 7px 0;
+    -fx-min-width: 75px;
+    -fx-min-height: 30px;
+    -fx-font-family: 'Montserrat';
+}
+
+/*Round and square buttons hover changes opacity*/
+.round-btn:hover, .square-btn:hover {
+    -fx-opacity: 0.8;
+}
+
+/*LOGIN AREA class - changes to radius, color, opacity */
+.login-area {
+    -fx-background-color: FFFFFF;
+    -fx-opacity: 46%;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+}
+
+
+/*WINDOWS TITLES CLASS*/
+.window-title {
+    -fx-font-family: 'Montserrat';
+    -fx-font-size: 36;
+    -fx-font-weight: bold;
+}
+
