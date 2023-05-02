@@ -7,6 +7,7 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 
+import java.awt.event.*;
 import java.util.*;
 
 public class ManageProjectController {
@@ -56,4 +57,13 @@ public class ManageProjectController {
         techSurname.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         numberOfTasks.setCellValueFactory(new PropertyValueFactory<>("number")); // needs changing
     }
+
+    @FXML private void assignProject(ActionEvent actionEvent){}
+
+    @FXML private void deleteProject(ActionEvent actionEvent){}
+
+    @FXML private void editProject(ActionEvent actionEvent){}
+
+    @FXML private void createProject(ActionEvent actionEvent){}
+    @FXML private void logOut(ActionEvent actionEvent){}
 }

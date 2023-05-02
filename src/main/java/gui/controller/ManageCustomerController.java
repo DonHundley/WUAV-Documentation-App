@@ -6,6 +6,8 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 
+import java.awt.event.*;
+
 public class ManageCustomerController {
 
     @FXML private TableView<Customer> customersTV;
@@ -37,4 +39,11 @@ public class ManageCustomerController {
         customerEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         projectName.setCellValueFactory(new PropertyValueFactory<>("project")); // needs changing
     }
+
+    private void clickCustomerTV(){}
+    @FXML private void editCustomer(ActionEvent actionEvent){}
+
+    @FXML private void createCustomer(ActionEvent actionEvent){}
+
+    @FXML private void logOut(ActionEvent actionEvent){}
 }

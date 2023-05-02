@@ -31,7 +31,7 @@ public class TaskDAO {
             FileInputStream inStreamLayout = new FileInputStream("task.getTaskLayout()");
             statement.setBinaryStream(3, inStreamLayout);
             statement.setString(4, task.getTaskDesc());
-            statement.setInt(5, task.getTaskState());
+            statement.setString(5, task.getTaskState());
             statement.execute();
             inStreamLayout.close();
 
@@ -54,7 +54,7 @@ public class TaskDAO {
      */
     public void updateTask(Task task) {
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "UPDATE task_documentation SET projectID = ?, task_name = ?, layout = ?, description = ?, task_state = ?) " + "WHERE documentationID = ?";
+            String sql = "UPDATE task_documentation SET projectID = ?, task_name = ?, layout = ?, description = ?, task_state = ? " + "WHERE documentationID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -63,7 +63,7 @@ public class TaskDAO {
             FileInputStream inStreamLayout = new FileInputStream("task.getTaskLayout()");
             statement.setBinaryStream(3, inStreamLayout);
             statement.setString(4, task.getTaskDesc());
-            statement.setInt(5, task.getTaskState());
+            statement.setString(5, task.getTaskState());
             statement.setInt(6, task.getDocID());
             statement.executeUpdate();
             inStreamLayout.close();
@@ -113,7 +113,7 @@ public class TaskDAO {
                     String taskName = resultSet.getString("task_name");
                     Image layout = new Image(resultSet.getBinaryStream("layout"));
                     String description = resultSet.getString("description");
-                    int taskState = resultSet.getInt("task_state");
+                    String taskState = resultSet.getString("task_state");
 
                     Task task = new Task(id, projectID, taskName, layout, description, taskState);
                     tasks.add(task);
@@ -144,7 +144,7 @@ public class TaskDAO {
                     String taskName = resultSet.getString("task_name");
                     Image layout = new Image(resultSet.getBinaryStream("layout"));
                     String description = resultSet.getString("description");
-                    int taskState = resultSet.getInt("task_state");
+                    String taskState = resultSet.getString("task_state");
 
                     return new Task(id, projectID, taskName, layout, description, taskState);
                 }
@@ -153,5 +153,37 @@ public class TaskDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    /**
+     * Method to get task by projectID from database.
+     */
+    public List<Task> getTaskByProject(int selectedProjectID) {
+        ArrayList<Task> tasksByProject = new ArrayList<>();
+        try (Connection connection = databaseConnector.getConnection()) {
+            String sql = "SELECT * FROM task_documentation WHERE projectID = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, selectedProjectID);
+
+            if(pstmt.execute(sql)) {
+                ResultSet resultSet = pstmt.getResultSet();
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("documentationID");
+                    int projectID = resultSet.getInt("projectID");
+                    String taskName = resultSet.getString("task_name");
+                    Image layout = new Image(resultSet.getBinaryStream("layout"));
+                    String description = resultSet.getString("description");
+                    String taskState = resultSet.getString("task_state");
+
+                    Task task = new Task(id, projectID, taskName, layout, description, taskState);
+                    tasksByProject.add(task);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return tasksByProject;
     }
 }
