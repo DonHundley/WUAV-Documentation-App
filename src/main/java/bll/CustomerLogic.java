@@ -10,4 +10,16 @@ public class CustomerLogic {
     public List<Customer> getCustomers() {
         return customerDAO.getAllCustomers();
     }
+
+    public void createCustomer(Customer customer) {
+        customerDAO.createCustomer(customer);
+    }
+
+    public void editCustomer(Customer customer) {
+        customerDAO.updateCustomer(customer);
+    }
+
+    public void deleteCustomer(Customer customer) {
+        customerDAO.deleteCustomer(customer);
+    }
 }

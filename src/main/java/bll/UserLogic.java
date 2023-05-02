@@ -15,4 +15,16 @@ public class UserLogic {
     public List<User> getTechs() {
         return userDAO.getTechnicians();
     }
+
+    public void createUser(User user) {
+        userDAO.createUser(user);
+    }
+
+    public void editUser(User user) {
+        userDAO.updateUser(user);
+    }
+
+    public void deleteUser(User user) {
+        userDAO.deleteUser(user);
+    }
 }
