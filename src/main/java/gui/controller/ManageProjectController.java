@@ -11,6 +11,7 @@ import java.awt.event.*;
 import java.util.*;
 
 public class ManageProjectController {
+    // TableViews
     @FXML private TableView<Project> projectTV;
     @FXML private TableColumn<Project, String> projectName;
     @FXML private TableColumn<Project, Date> projectDate;
@@ -21,12 +22,35 @@ public class ManageProjectController {
     @FXML private TableColumn<User, String> techSurname;
     @FXML private TableColumn<User, Integer> numberOfTasks;
 
+    // Labels
     @FXML private Label usernameLabel;
     @FXML private Label windowTitleLabel;
 
+    // Models
     private Persistent persistenceModel;
     private Observables observablesModel;
+    private Functions functionsModel;
 
+
+    /**
+     * We call this when this controller is called from navigation to set our models, tableview, and labels.
+     * @param persistenceModel this is our instance of Persistent from navigation
+     * @param observablesModel this is our instance of Observables from navigation
+     * @param functionsModel this is our instance of Functions from navigation
+     */
+    public void userController(Persistent persistenceModel, Observables observablesModel, Functions functionsModel){
+        this.persistenceModel = persistenceModel;
+        this.functionsModel = functionsModel;
+        this.observablesModel = observablesModel;
+
+        setUsernameLabel();
+        setProjectTV();
+        setTechTV();
+    }
+
+    /**
+     * We use this to set our username label and window title label.
+     */
     private void setUsernameLabel() {// set our username label to the users name and our window title label.
         windowTitleLabel.setText("Project Management");
         usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
@@ -34,6 +58,7 @@ public class ManageProjectController {
 
     /**
      * Mixed list
+     * This will be changed later
      */
     private void setProjectTV() {
         projectTV.setItems(observablesModel.getProjects());
@@ -48,6 +73,7 @@ public class ManageProjectController {
 
     /**
      * Mixed list
+     * This will be changed later
      */
     private void setTechTV() {
         techTV.setItems(observablesModel.getTechs());

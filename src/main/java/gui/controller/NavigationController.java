@@ -20,4 +20,5 @@ public class NavigationController {
 
     public void manageUsers(ActionEvent actionEvent) {
     }
+
 }
