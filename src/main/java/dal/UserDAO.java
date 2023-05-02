@@ -153,4 +153,36 @@ public class UserDAO {
         }
         return null;
     }
+
+    /**
+     * Method to get all technicians from users from database.
+     */
+    public List<User> getTechnicians() {
+        ArrayList<User> technicians = new ArrayList<>();
+
+        try (Connection connection = databaseConnector.getConnection()) {
+            String sql = "SELECT * FROM users WHERE access = 'Technician';";
+            Statement statement = connection.createStatement();
+
+            if(statement.execute(sql)) {
+                ResultSet resultSet = statement.getResultSet();
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("userID");
+                    String userName = resultSet.getString("username");
+                    String password = resultSet.getString("password");
+                    String access = resultSet.getString("access");
+                    String name = resultSet.getString("name");
+                    String lastName = resultSet.getString("last_name");
+
+                    User tech = new User(id, userName, password, access, name, lastName);
+                    technicians.add(tech);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return technicians;
+    }
+
 }
