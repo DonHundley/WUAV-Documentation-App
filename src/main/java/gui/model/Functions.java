@@ -5,9 +5,9 @@ import bll.*;
 
 public class Functions {
 
-    private UserLogic userLogic;
-    private CustomerLogic customerLogic;
-    private ProjectLogic projectLogic;
+    private UserLogic userLogic = new UserLogic();
+    private CustomerLogic customerLogic = new CustomerLogic();
+    private ProjectLogic projectLogic = new ProjectLogic();
 
     /**
      * Customer methods
@@ -20,6 +20,7 @@ public class Functions {
      * Task methods
      */
     public void addTaskPictures(TaskPictures taskPictures){projectLogic.addTaskPictures(taskPictures);}
+    public void createTask(Task task){projectLogic.createTask(task);}
     public void updateTask(Task task){projectLogic.updateTask(task);}
 
     /**

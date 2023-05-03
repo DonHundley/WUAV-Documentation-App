@@ -2,6 +2,9 @@ package dal;
 
 
 import be.Project;
+import be.ProjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -84,7 +87,7 @@ public class ProjectDAO {
             String sql = "SELECT * FROM project";
             Statement statement = connection.createStatement();
 
-            if(statement.execute(sql)) {
+            if (statement.execute(sql)) {
                 ResultSet resultSet = statement.getResultSet();
 
                 while (resultSet.next()) {
@@ -113,7 +116,7 @@ public class ProjectDAO {
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, project.getProjID());
 
-            if(pstmt.execute(sql)) {
+            if (pstmt.execute(sql)) {
                 ResultSet resultSet = pstmt.getResultSet();
 
                 while (resultSet.next()) {
@@ -129,5 +132,43 @@ public class ProjectDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    /**
+     * Method to get all projects from database together with their associated tasks count.
+     */
+    public ObservableList<ProjectWrapper> getAllProjectsWithTaskCount() {
+        ObservableList<ProjectWrapper> list = FXCollections.observableArrayList();
+
+        String sql = "SELECT p.*, COUNT(t.documentationID) AS totalTasks " +
+                "FROM project p " +
+                "LEFT JOIN task_documentation t ON p.projectID = t.projectID " +
+                "GROUP BY p.projectID, p.project_name, p.date_created, p.customerID";
+
+        try (Connection connection = databaseConnector.getConnection()) {
+
+            Statement statement = connection.createStatement();
+
+            if (statement.execute(sql)) {
+                ResultSet resultSet = statement.getResultSet();
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("projectID");
+                    String projectName = resultSet.getString("project_name");
+                    Date dateCreated = resultSet.getDate("date_created");
+                    int customerID = resultSet.getInt("customerID");
+                    int taskNumber = resultSet.getInt("totalTasks");
+
+                    Project project = new Project(id, projectName, dateCreated, customerID);
+                    int totalTasks = taskNumber;
+                    ProjectWrapper wrapper = new ProjectWrapper(project, totalTasks);
+                    list.add(wrapper);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return list;
     }
 }

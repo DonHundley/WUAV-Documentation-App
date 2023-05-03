@@ -8,20 +8,22 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class ManageProjectController {
+public class ManageProjectController{
 
     // TableViews
-    @FXML private TableView<Project> projectTV;
-    @FXML private TableColumn<Project, String> projectName;
-    @FXML private TableColumn<Project, Date> projectDate;
-    @FXML private TableColumn<Project, Integer> assignedUserCount;
+    @FXML private TableView<ProjectWrapper> projectTV;
+    @FXML private TableColumn<ProjectWrapper, String> projectName;
+    @FXML private TableColumn<ProjectWrapper, Date> projectDate;
+    @FXML private TableColumn<ProjectWrapper, Integer> assignedUserCount;
 
-    @FXML private TableView<User> techTV;
-    @FXML private TableColumn<User, String> techName;
-    @FXML private TableColumn<User, String> techSurname;
-    @FXML private TableColumn<User, Integer> numberOfTasks;
+    @FXML private TableView<UserWrapper> techTV;
+    @FXML private TableColumn<UserWrapper, String> techName;
+    @FXML private TableColumn<UserWrapper, String> techSurname;
+    @FXML private TableColumn<UserWrapper, Integer> numberOfTasks;
 
     // Labels
     @FXML private Label usernameLabel;
@@ -44,7 +46,7 @@ public class ManageProjectController {
         this.functionsModel = functionsModel;
         this.observablesModel = observablesModel;
 
-        setUsernameLabel();
+        //setUsernameLabel();
         setProjectTV();
         setTechTV();
     }
@@ -65,10 +67,23 @@ public class ManageProjectController {
         projectTV.setItems(observablesModel.getProjects());
         observablesModel.loadProjects();
 
-        projectDate.setCellValueFactory(new PropertyValueFactory<>("date"));
-        projectName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        assignedUserCount.setCellValueFactory(new PropertyValueFactory<>("count")); // needs changing
+        projectDate.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
+        projectDate.setCellFactory(column -> {
+            return new TableCell<ProjectWrapper, Date>() {
+                @Override
+                protected void updateItem(Date date, boolean empty) {
+                    super.updateItem(date, empty);
+                    if (empty || date == null) {
+                        setText(null);
+                    } else {
+                        setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                    }
+                }
+            };
+        });
 
+        projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
+        assignedUserCount.setCellValueFactory(cellData ->  new SimpleIntegerProperty(cellData.getValue().getTotalTasks()).asObject());
 
     }
 
@@ -80,9 +95,11 @@ public class ManageProjectController {
         techTV.setItems(observablesModel.getTechs());
         observablesModel.loadTechs();
 
-        techName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        techSurname.setCellValueFactory(new PropertyValueFactory<>("last_name"));
-        numberOfTasks.setCellValueFactory(new PropertyValueFactory<>("number")); // needs changing
+        //techName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        //techSurname.setCellValueFactory(new PropertyValueFactory<>("last_name"));
+        techName.setCellValueFactory(cellData ->new SimpleStringProperty(cellData.getValue().getUser().getFirstName()));
+        techSurname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getLastName()));
+        numberOfTasks.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAssignedTasks()).asObject());
     }
 
     @FXML private void assignProject(ActionEvent actionEvent){}
@@ -93,4 +110,6 @@ public class ManageProjectController {
 
     @FXML private void createProject(ActionEvent actionEvent){}
     @FXML private void logOut(ActionEvent actionEvent){}
+
+
 }

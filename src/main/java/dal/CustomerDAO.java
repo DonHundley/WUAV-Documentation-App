@@ -2,6 +2,8 @@ package dal;
 
 
 import be.Customer;
+import be.CustomerWrapper;
+import be.Project;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -130,4 +132,38 @@ public class CustomerDAO {
         }
         return null;
     }
+    /**method to get all customers and associated projects from the database. this is used to later display in a tableview*/
+
+    public List<CustomerWrapper> getAllCustomersWithProjects() {
+        List<CustomerWrapper> customersWithProjectsList = new ArrayList<>();
+        String sql = "SELECT c.*, p.* " +
+                "FROM customer c " +
+                "LEFT JOIN project p ON c.customerID = p.customerID";
+        try (Connection connection = databaseConnector.getConnection()) {
+            Statement statement = connection.createStatement();
+            if (statement.execute(sql)) {
+                ResultSet resultSet = statement.getResultSet();
+                while (resultSet.next()) {
+                    Customer customer = new Customer(
+                            resultSet.getInt("customerID"),
+                            resultSet.getString("customer_name"),
+                            resultSet.getString("customer_email"),
+                            resultSet.getString("customer_address")
+                    );
+                    Project project = new Project(
+                            resultSet.getInt("projectID"),
+                            resultSet.getString("project_name"),
+                            resultSet.getDate("date_created"),
+                            resultSet.getInt("customerID")
+                    );
+                    CustomerWrapper wrapper = new CustomerWrapper(customer, project);
+                    customersWithProjectsList.add(wrapper);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customersWithProjectsList;
+
+}
 }

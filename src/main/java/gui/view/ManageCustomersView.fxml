@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="gui.controller.ManageCustomerController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="650.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageCustomerController">
+   <children>
+      <TableView fx:id="customersTV" layoutX="534.0" layoutY="108.0" prefHeight="388.0" prefWidth="561.0">
+        <columns>
+          <TableColumn fx:id="customerAddress" prefWidth="141.5999755859375" text="Customer address" />
+          <TableColumn fx:id="customerName" prefWidth="97.60003662109375" text="Customer" />
+            <TableColumn fx:id="customerEmail" prefWidth="133.60003662109375" text="Customer email" />
+            <TableColumn fx:id="projectName" prefWidth="189.60003662109375" text="Project" />
+        </columns>
+      </TableView>
+   </children>
 </AnchorPane>

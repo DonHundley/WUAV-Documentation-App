@@ -15,27 +15,41 @@ public class ProjectLogic {
 
     /**
      * List of projects.
+     *
      * @return This returns a list of all projects.
      */
     public List<Project> getProjects() {
         return projectDAO.getAllProjects();
     }
+/**
+ *This returns a list of all projects with total tasks */
+
+    public List<ProjectWrapper> getProjectsWithTaskCount() {
+        return projectDAO.getAllProjectsWithTaskCount();
+    }
 
     /**
      * List of all tasks.
+     *
      * @return This returns a list of all tasks.
      */
-    public List<Task> getAllTasks() {return taskDAO.getAllTasks();}
+    public List<Task> getAllTasks() {
+        return taskDAO.getAllTasks();
+    }
 
     /**
      * Returns a curated list of tasks.
+     *
      * @param selectedProject The project we wish to fetch tasks for.
      * @return This returns a list of tasks for the selected project.
      */
-    public List<Task> getTasksByProject(Project selectedProject) {return taskDAO.getTaskByProject(selectedProject.getProjID());}
+    public List<Task> getTasksByProject(Project selectedProject) {
+        return taskDAO.getTaskByProject(selectedProject.getProjID());
+    }
 
     /**
      * Functions model uses this to add new pictures to our database.
+     *
      * @param taskPictures is the pictures and descriptions to be added to the database.
      */
     public void addTaskPictures(TaskPictures taskPictures) {
@@ -43,7 +57,17 @@ public class ProjectLogic {
     }
 
     /**
+     * Functions model uses this to create a task.
+     *
+     * @param task is the Task to be edited.
+     */
+    public void createTask(Task task) {
+        taskDAO.createTask(task);
+    }
+
+    /**
      * Functions model uses this to edit a specific task.
+     *
      * @param task is the Task to be edited.
      */
     public void updateTask(Task task) {
@@ -51,7 +75,13 @@ public class ProjectLogic {
     }
 
     /**
+     * Functions model uses this to create a new task.
+     * @param task this is the task to be added to the database.
+     */
+    public void createTask(Task task) {taskDAO.createTask(task);}
+    /**
      * Functions model uses this to create a new Project in our database.
+     *
      * @param project is the Project to be added to the database.
      */
     public void createProject(Project project) {
@@ -60,6 +90,7 @@ public class ProjectLogic {
 
     /**
      * Functions model uses this to delete a project from the database.
+     *
      * @param project is the Project to be deleted.
      */
     public void deleteProject(Project project) {
@@ -68,6 +99,7 @@ public class ProjectLogic {
 
     /**
      * Functions model uses this to update an event in the database.
+     *
      * @param project is the Project to be updated.
      */
     public void editProject(Project project) {
@@ -76,7 +108,8 @@ public class ProjectLogic {
 
     /**
      * Functions model uses this to assign a User to a Project.
-     * @param selectedUser The user to be assigned to a project.
+     *
+     * @param selectedUser    The user to be assigned to a project.
      * @param selectedProject The Project that the user will be assigned to.
      */
     public void assignProject(User selectedUser, Project selectedProject) {
@@ -85,10 +118,13 @@ public class ProjectLogic {
 
     /**
      * Functions model uses this to remove an assignment from a User.
-     * @param selectedUser is the User to be removed from the Project.
+     *
+     * @param selectedUser    is the User to be removed from the Project.
      * @param selectedProject is the Project the User will be removed from.
      */
     public void removeAssignedProject(User selectedUser, Project selectedProject) {
         worksOnDAO.deleteWork(selectedUser, selectedProject);
     }
+
+
 }

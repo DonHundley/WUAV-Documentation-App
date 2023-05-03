@@ -2,6 +2,7 @@ package dal;
 
 import be.Project;
 import be.User;
+import be.UserWrapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -184,5 +185,45 @@ public class UserDAO {
         }
         return technicians;
     }
+
+    /**
+     * Method to get all technicians with their assigned task. .
+     */
+    public List<UserWrapper> getTechWithAssignedTasks() {
+        String query = "SELECT u.*, COUNT(t.documentationID) as assigned_tasks " +
+                "FROM users u "+
+                "LEFT JOIN works_on w ON u.userID = w.userID " +
+                "LEFT JOIN task_documentation t ON t.projectID=w.projectID " +
+                "WHERE u.access = 'Technician'"+
+                "GROUP BY u.userID,u.username, u.name, u.last_name, u.access, u.password";
+
+        try (Connection conn = databaseConnector.getConnection();
+             PreparedStatement statement = conn.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            List<UserWrapper> users = new ArrayList<>();
+            while (resultSet.next()) {
+                User user = new User(
+                        resultSet.getInt("userID"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getString("access"),
+                        resultSet.getString("name"),
+                        resultSet.getString("last_Name")
+
+
+                );
+                int assignedTasks = resultSet.getInt("assigned_tasks");
+                UserWrapper wrapper = new UserWrapper(user, assignedTasks);
+                users.add(wrapper);
+            }
+            return users;
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            return null;
+        }
+    }
+
 
 }

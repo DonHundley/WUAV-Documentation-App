@@ -2,6 +2,7 @@ package gui.controller;
 
 import be.*;
 import gui.model.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
@@ -11,11 +12,11 @@ import java.awt.event.*;
 public class ManageCustomerController {
 
     // Tableview
-    @FXML private TableView<Customer> customersTV;
-    @FXML private TableColumn<Customer, String> customerEmail;
-    @FXML private TableColumn<Customer, String> customerName;
-    @FXML private TableColumn<Customer, String> customerAddress;
-    @FXML private TableColumn<Project, String> projectName;
+    @FXML private TableView<CustomerWrapper> customersTV;
+    @FXML private TableColumn<CustomerWrapper, String> customerEmail;
+    @FXML private TableColumn<CustomerWrapper, String> customerName;
+    @FXML private TableColumn<CustomerWrapper, String> customerAddress;
+    @FXML private TableColumn<CustomerWrapper, String> projectName;
 
     // TextField
     @FXML private TextField searchCustomer;
@@ -40,7 +41,7 @@ public class ManageCustomerController {
         this.functionsModel = functionsModel;
         this.observablesModel = observablesModel;
 
-        setUsernameLabel();
+        //setUsernameLabel();
         setCustomerTableView();
     }
 
@@ -48,8 +49,8 @@ public class ManageCustomerController {
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name
-        windowTitle.setText("Customers");
-        usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
+        //windowTitle.setText("Customers");
+        //usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
     }
 
     /**
@@ -60,10 +61,10 @@ public class ManageCustomerController {
         customersTV.setItems(observablesModel.getCustomers());
         observablesModel.loadCustomers();
 
-        customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        customerEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        projectName.setCellValueFactory(new PropertyValueFactory<>("project")); // needs changing
+        customerAddress.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustAddress()));
+        customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
+        customerEmail.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustEmail()));
+        projectName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
     }
 
     private void clickCustomerTV(){}

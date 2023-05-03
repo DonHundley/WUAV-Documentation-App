@@ -7,15 +7,17 @@ import javafx.collections.*;
 public class Observables {
 
     private ObservableList<User> users = FXCollections.observableArrayList();
-    private ObservableList<User> techs = FXCollections.observableArrayList();
-    private ObservableList<Project> projects = FXCollections.observableArrayList();
+    private ObservableList<UserWrapper> techs = FXCollections.observableArrayList();
+    private ObservableList<ProjectWrapper> projects = FXCollections.observableArrayList();
     private ObservableList<Task> allTasks = FXCollections.observableArrayList();
     private ObservableList<Task> tasksByProject = FXCollections.observableArrayList();
-    private ObservableList<Customer> customers = FXCollections.observableArrayList();
+    private ObservableList<CustomerWrapper> customers = FXCollections.observableArrayList();
 
-    private UserLogic userLogic;
-    private CustomerLogic customerLogic;
-    private ProjectLogic projectLogic;
+    private UserLogic userLogic=new UserLogic();
+    private CustomerLogic customerLogic=new CustomerLogic();
+    private ProjectLogic projectLogic=new ProjectLogic();
+
+
 
     /**
      * Getters for our observable lists.
@@ -24,11 +26,11 @@ public class Observables {
         return users;
     }
 
-    public ObservableList<User> getTechs() {
+    public ObservableList<UserWrapper> getTechs() {
         return techs;
     }
 
-    public ObservableList<Project> getProjects() {
+    public ObservableList<ProjectWrapper> getProjects() {
         return projects;
     }
 
@@ -38,7 +40,7 @@ public class Observables {
         return tasksByProject;
     }
 
-    public ObservableList<Customer> getCustomers() {
+    public ObservableList<CustomerWrapper> getCustomers() {
         return customers;
     }
 
@@ -51,11 +53,11 @@ public class Observables {
     }
     public void loadTechs() {
         techs.clear();
-        techs.addAll(userLogic.getTechs());
+        techs.addAll(userLogic.getTechsWithAssignedTasks());
     }
     public void loadProjects() {
         projects.clear();
-        projects.addAll(projectLogic.getProjects());
+        projects.addAll(projectLogic.getProjectsWithTaskCount());
     }
     public void loadAllTasks(){
         allTasks.clear();
@@ -67,6 +69,6 @@ public class Observables {
     }
     public void loadCustomers() {
         customers.clear();
-        customers.addAll(customerLogic.getCustomers());
+        customers.addAll(customerLogic.getCustomersWithProjects());
     }
 }

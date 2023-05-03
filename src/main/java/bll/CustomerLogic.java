@@ -16,6 +16,12 @@ public class CustomerLogic {
     }
 
     /**
+     * @return This returns the list of customers with associated projects created by CustomerDAO.
+     */
+    public List<CustomerWrapper> getCustomersWithProjects() {
+        return customerDAO.getAllCustomersWithProjects();
+    }
+    /**
      * Functions model uses this to create a new customer.
      * @param customer is a new Customer to be added to the database.
      */

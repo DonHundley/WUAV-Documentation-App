@@ -26,6 +26,14 @@ public class UserLogic {
     }
 
     /**
+     * List of technicians.
+     * @return This will return the list from UserDAO that retrieves all Users who have the technician access level.
+     */
+    public List<UserWrapper> getTechsWithAssignedTasks() {
+        return userDAO.getTechWithAssignedTasks();
+    }
+
+    /**
      * Functions model uses this to create a new user in our database.
      * @param user is the user to be added to the database.
      */
