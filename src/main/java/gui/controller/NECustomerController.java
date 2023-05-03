@@ -10,17 +10,21 @@ import java.awt.event.*;
 import java.util.*;
 
 public class NECustomerController {
-
+    // FXML
     @FXML private TextField customerName;
     @FXML private TextField customerEmail;
     @FXML private TextField customerAddress;
     @FXML private Label windowTitleLabel;
     @FXML private Button cancelButton;
+
+    // Customer instance
     private Customer customer;
 
+    // Model instances
     private Persistent persistentModel;
     private Functions functionsModel;
 
+    // True if editing, false if creating a new customer.
     private boolean isEdit;
 
     /**
@@ -36,7 +40,7 @@ public class NECustomerController {
         setEdit(isEdit); // sets the boolean to store if we are editing or creating.
         if(isEdit){ // if we are editing we set all text fields with the current information.
             setOnEdit();
-        }
+        }else {windowTitleLabel.setText("New Customer");}
 
     }
 
@@ -85,6 +89,7 @@ public class NECustomerController {
      */
     private void setOnEdit(){
         if(persistentModel.getSelectedCustomer() != null) {
+            windowTitleLabel.setText("Edit Customer");
             customer = persistentModel.getSelectedCustomer();
             customerName.setText(customer.getCustName());
             customerEmail.setText(customer.getCustEmail());
