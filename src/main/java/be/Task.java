@@ -16,6 +16,7 @@ public class Task {
 
     private String taskState;
 
+
     public Task(int docID, int projID, String taskName, Image taskLayout, String taskDesc, String taskState) {
         this.docID = docID;
         this.projID = projID;
