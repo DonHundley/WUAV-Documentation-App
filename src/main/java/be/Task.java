@@ -34,6 +34,13 @@ public class Task {
         this.taskState = taskState;
     }
 
+    public Task(int projID, String taskName, String taskDesc, String taskState) {
+        this.projID = projID;
+        this.taskName = taskName;
+        this.taskDesc = taskDesc;
+        this.taskState = taskState;
+    }
+
     public int getDocID() {
         return docID;
     }

@@ -20,6 +20,7 @@ public class Functions {
      * Task methods
      */
     public void addTaskPictures(TaskPictures taskPictures){projectLogic.addTaskPictures(taskPictures);}
+    public void createTask(Task task){projectLogic.createTask(task);}
     public void updateTask(Task task){projectLogic.updateTask(task);}
 
     /**

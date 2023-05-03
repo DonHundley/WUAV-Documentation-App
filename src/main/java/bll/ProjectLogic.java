@@ -51,6 +51,11 @@ public class ProjectLogic {
     }
 
     /**
+     * Functions model uses this to create a new task.
+     * @param task this is the task to be added to the database.
+     */
+    public void createTask(Task task) {taskDAO.createTask(task);}
+    /**
      * Functions model uses this to create a new Project in our database.
      * @param project is the Project to be added to the database.
      */
@@ -91,4 +96,6 @@ public class ProjectLogic {
     public void removeAssignedProject(User selectedUser, Project selectedProject) {
         worksOnDAO.deleteWork(selectedUser, selectedProject);
     }
+
+
 }
