@@ -48,7 +48,7 @@ public class NEUserController {
         if(isEdit){ // if we are editing we set all text fields with the current information.
             setOnEdit();
         }else {windowTitleLabel.setText("New User");}
-
+        setAccessSelection();
     }
 
     /**
