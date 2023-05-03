@@ -1,5 +1,6 @@
 
 
+import bll.LogicManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.*;
 
 public class Main extends Application{
+
 
 
     @Override

@@ -14,9 +14,10 @@ public class Task {
 
     private String taskDesc;
 
-    private int taskState;
+    private String taskState;
 
-    public Task(int docID, int projID, String taskName, Image taskLayout, String taskDesc, int taskState) {
+
+    public Task(int docID, int projID, String taskName, Image taskLayout, String taskDesc, String taskState) {
         this.docID = docID;
         this.projID = projID;
         this.taskName = taskName;
@@ -25,7 +26,7 @@ public class Task {
         this.taskState = taskState;
     }
 
-    public Task(int projID, String taskName, Image taskLayout, String taskDesc, int taskState) {
+    public Task(int projID, String taskName, Image taskLayout, String taskDesc, String taskState) {
         this.projID = projID;
         this.taskName = taskName;
         this.taskLayout = taskLayout;
@@ -73,11 +74,11 @@ public class Task {
         this.taskDesc = taskDesc;
     }
 
-    public int getTaskState() {
+    public String getTaskState() {
         return taskState;
     }
 
-    public void setTaskState(int taskState) {
+    public void setTaskState(String taskState) {
         this.taskState = taskState;
     }
 }
