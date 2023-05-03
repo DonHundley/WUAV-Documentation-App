@@ -27,7 +27,7 @@ public class NEProjectView {
 
     /**
      * This method is used to set our models and choose if we are editing or creating a project.
-     * @param isEdit if true, we are editing a customer.
+     * @param isEdit if true, we are editing a project.
      * @param persistentModel the instance of the persistent model
      * @param functionsModel the instance of the functions model
      */
@@ -55,7 +55,7 @@ public class NEProjectView {
     }
 
     /**
-     * This method is used to create a new customer if our isEdit boolean == false.
+     * This method is used to create a new project if our isEdit boolean == false.
      */
     private void createProject(){
         project = new Project(projectName.getText(), creationDate, persistentModel.getSelectedCustomer().getCustID());
@@ -63,7 +63,7 @@ public class NEProjectView {
     }
 
     /**
-     * This method is used to edit the selected customer from our persistent model with updated information.
+     * This method is used to edit the selected project from our persistent model with updated information.
      */
     private void editProject(){
         project.setProjName(projectName.getText());
@@ -94,6 +94,8 @@ public class NEProjectView {
             projectError(str);
         }
     }
+
+
 
     /**
      * We use this to display an error to the user if there is a problem.

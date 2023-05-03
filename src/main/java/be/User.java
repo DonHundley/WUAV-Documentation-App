@@ -49,6 +49,14 @@ public class User {
         this.worksOn = new ArrayList<>();
     }
 
+    public User(String userName, String password, String access, String firstName, String lastName) {
+        this.userName = userName;
+        this.password = password;
+        this.access = access;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
 
     public int getUserID() {
         return userID;
