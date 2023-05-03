@@ -3,6 +3,7 @@ package dal;
 import be.Task;
 import javafx.scene.image.Image;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,11 +25,12 @@ public class TaskDAO {
     public Task createTask(Task task) {
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO task_documentation(projectID, task_name, layout, description, task_state) VALUES (?,?,?,?,?)";
-
+            File inputFile=new File(task.getTaskLayout().getUrl());
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, task.getProjID());
             statement.setString(2, task.getTaskName());
-            FileInputStream inStreamLayout = new FileInputStream("task.getTaskLayout()");
+
+            FileInputStream inStreamLayout = new FileInputStream(inputFile);
             statement.setBinaryStream(3, inStreamLayout);
             statement.setString(4, task.getTaskDesc());
             statement.setString(5, task.getTaskState());
