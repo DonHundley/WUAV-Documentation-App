@@ -13,7 +13,7 @@ import java.nio.file.*;
 import java.util.*;
 
 public class EditTaskController {
-    
+
     // FXML
     @FXML private TextField taskDescription;
     @FXML private ComboBox<String> stateSelection;
