@@ -3,8 +3,14 @@ package gui.controller;
 import be.*;
 import gui.model.*;
 import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.stage.*;
+
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 public class ManagerTaskView {
 
@@ -49,9 +55,41 @@ public class ManagerTaskView {
         taskTV.setItems(observablesModel.getAllTasks());
         observablesModel.loadAllTasks();
 
-        projectName.setCellValueFactory(); // needs a combined list
+        //projectName.setCellValueFactory(); // needs a combined list
         taskName.setCellValueFactory(new PropertyValueFactory<>("task_name"));
         stateOfTask.setCellValueFactory(new PropertyValueFactory<>("task_state"));
-        customerName.setCellValueFactory(); // needs a combined list
+        //customerName.setCellValueFactory(); // needs a combined list
+    }
+
+    @FXML private void logOut(ActionEvent actionEvent){
+        try {
+            persistenceModel.setLoggedInUser(null);
+            Parent root = FXMLLoader.load(getClass().getResource("/gui/view/Login.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("WUAV");
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){
+            String str = "Login.fxml";
+            taskError(str);
+        }
+    }
+
+    /**
+     * If loading any of our views has a problem, we show the user an alert along with the view name.
+     * @param str This is the name of the view that is causing the problem.
+     */
+    private void taskError(String str) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Error loading view");
+        alert.setHeaderText("There has been an error loading " + str +". Please contact system admin.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            alert.close();
+        } else {
+            alert.close();
+        }
     }
 }
