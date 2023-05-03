@@ -9,6 +9,7 @@ public class Observables {
     private ObservableList<User> users = FXCollections.observableArrayList();
     private ObservableList<User> techs = FXCollections.observableArrayList();
     private ObservableList<Project> projects = FXCollections.observableArrayList();
+    private ObservableList<Task> allTasks = FXCollections.observableArrayList();
     private ObservableList<Task> tasksByProject = FXCollections.observableArrayList();
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
 
@@ -30,6 +31,8 @@ public class Observables {
     public ObservableList<Project> getProjects() {
         return projects;
     }
+
+    public ObservableList<Task> getAllTasks(){return allTasks;}
 
     public ObservableList<Task> getTasksByProject() {
         return tasksByProject;
@@ -53,6 +56,10 @@ public class Observables {
     public void loadProjects() {
         projects.clear();
         projects.addAll(projectLogic.getProjects());
+    }
+    public void loadAllTasks(){
+        allTasks.clear();
+        allTasks.addAll(projectLogic.getAllTasks());
     }
     public void loadTasksByProject(Project selectedProject){
         tasksByProject.clear();

@@ -14,6 +14,7 @@ import java.io.*;
 import java.util.*;
 
 public class ManageUsersController {
+
     // TableView
     @FXML private TableView<User> userTV;
     @FXML private TableColumn<User, String> userName;

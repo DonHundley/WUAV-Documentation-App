@@ -11,6 +11,7 @@ import java.awt.event.*;
 import java.util.*;
 
 public class ManageProjectController {
+
     // TableViews
     @FXML private TableView<Project> projectTV;
     @FXML private TableColumn<Project, String> projectName;

@@ -22,6 +22,12 @@ public class ProjectLogic {
     }
 
     /**
+     * List of all tasks.
+     * @return This returns a list of all tasks.
+     */
+    public List<Task> getAllTasks() {return taskDAO.getAllTasks();}
+
+    /**
      * Returns a curated list of tasks.
      * @param selectedProject The project we wish to fetch tasks for.
      * @return This returns a list of tasks for the selected project.

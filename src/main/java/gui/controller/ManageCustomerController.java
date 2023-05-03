@@ -9,6 +9,7 @@ import javafx.scene.control.cell.*;
 import java.awt.event.*;
 
 public class ManageCustomerController {
+
     // Tableview
     @FXML private TableView<Customer> customersTV;
     @FXML private TableColumn<Customer, String> customerEmail;
