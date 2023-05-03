@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NavigationController">
+   <children>
+      <AnchorPane fx:id="viewAnchor" prefHeight="650.0" prefWidth="1250.0" />
+      <AnchorPane fx:id="navAnchor" layoutX="671.0" layoutY="20.0" maxWidth="-Infinity" prefHeight="650.0" prefWidth="300.0" style="-fx-background-color: #17263A;" stylesheets="@../../css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="imageWUAV" fitHeight="156.0" fitWidth="300.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <VBox layoutX="100.0" layoutY="165.0" prefHeight="260.0" prefWidth="100.0" spacing="60.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="180.0">
+               <children>
+                  <MFXButton alignment="BASELINE_LEFT" buttonType="RAISED" depthLevel="LEVEL5" onAction="#home" prefHeight="30.0" prefWidth="265.0" stylesheets="@../../css/style.css" text="Home" />
+                  <MFXButton alignment="BASELINE_LEFT" buttonType="RAISED" depthLevel="LEVEL5" onAction="#manageProjects" prefHeight="30.0" prefWidth="265.0" text="MANAGE PROJECTS" />
+                  <MFXButton alignment="BASELINE_LEFT" buttonType="RAISED" depthLevel="LEVEL5" onAction="#manageCustomers" prefHeight="30.0" prefWidth="265.0" text="MANAGE CUSTOMERS" />
+                  <MFXButton alignment="BASELINE_LEFT" buttonType="RAISED" depthLevel="LEVEL5" onAction="#manageUsers" prefHeight="30.0" prefWidth="265.0" text="MANAGE USERS" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

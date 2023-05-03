@@ -1,12 +1,8 @@
 package dal;
 
 import be.Project;
-import be.TaskPictures;
 import be.User;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.*;
 
 public class WorksOnDAO {

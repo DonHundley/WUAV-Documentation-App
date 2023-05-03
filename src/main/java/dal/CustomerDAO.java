@@ -77,7 +77,7 @@ public class CustomerDAO {
     /**
      * Method to get all users from database.
      */
-    public List<Customer> getAllUsers() {
+    public List<Customer> getAllCustomers() {
         ArrayList<Customer> customers = new ArrayList<>();
 
         try (Connection connection = databaseConnector.getConnection()) {
