@@ -12,21 +12,25 @@ public class TaskPictures {
 
     private int docID;
 
-    private String pictureComment;
+    private String afterComment;
 
-    public TaskPictures(int pictureID, Image afterPicture, Image beforePicture, String pictureComment, int docID) {
+    private String beforeComment;
+
+    public TaskPictures(int pictureID, Image afterPicture, Image beforePicture, String afterComment, int docID, String beforeComment) {
         this.pictureID = pictureID;
         this.beforePicture = beforePicture;
         this.afterPicture = afterPicture;
         this.docID = docID;
-        this.pictureComment = pictureComment;
+        this.afterComment = afterComment;
+        this.beforeComment = beforeComment;
     }
 
-    public TaskPictures(Image afterPicture, Image beforePicture, String pictureComment, int docID) {
+    public TaskPictures(Image afterPicture, Image beforePicture, String afterComment, int docID, String beforeComment) {
         this.beforePicture = beforePicture;
         this.afterPicture = afterPicture;
         this.docID = docID;
-        this.pictureComment = pictureComment;
+        this.afterComment = afterComment;
+        this.beforeComment = beforeComment;
     }
 
     public int getPictureID() {
@@ -61,11 +65,19 @@ public class TaskPictures {
         this.docID = docID;
     }
 
-    public String getPictureComment() {
-        return pictureComment;
+    public String getAfterComment() {
+        return afterComment;
     }
 
-    public void setPictureComment(String pictureComment) {
-        this.pictureComment = pictureComment;
+    public void setAfterComment(String afterComment) {
+        this.afterComment = afterComment;
+    }
+
+    public String getBeforeComment() {
+        return beforeComment;
+    }
+
+    public void setBeforeComment(String beforeComment) {
+        this.beforeComment = beforeComment;
     }
 }
