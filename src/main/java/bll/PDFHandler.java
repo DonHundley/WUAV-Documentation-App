@@ -2,7 +2,6 @@ package bll;
 
 import be.Project;
 import be.Task;
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.apache.pdfbox.Loader;
@@ -19,33 +18,12 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class PDFHandler {
 
-    private static String description = "The project for the installation of the Microsoft Whiteboard has been completed. The Whiteboard was mounted and connected to the cables and power sources. Extensive testing was carried out to check all the functions were working properly.";
-    private static String comment1 = "comment 1";
-    private static String comment2 = "comment 2";
-
-
-    public static void main(String[] args) throws IOException {
-        Platform.startup(() -> {
-            Image image1 = new Image("images/beforeImage1.jpg");
-            Image image2 = new Image("images/afterImage1.jpg");
-            Image layout = new Image("images/layout.png");
-
-            Task task = new Task(2, 1, "Task 1", layout, description, "in progress");
-            Project project = new Project(1, "Microsoft Whiteboard Implementation", Date.valueOf("2023-08-12"), 3);
-            try {
-                exportDocumentation(image1, image2, comment1, comment2, task, project);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
 
     /**
      * method to export a pdf with text and images to create the documentation report
