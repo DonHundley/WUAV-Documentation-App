@@ -23,9 +23,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javafx.application.Application.launch;
 
-public class LogicManager {
+public class PDFHandler {
 
     private static String description = "The project for the installation of the Microsoft Whiteboard has been completed. The Whiteboard was mounted and connected to the cables and power sources. Extensive testing was carried out to check all the functions were working properly.";
     private static String comment1 = "comment 1";
