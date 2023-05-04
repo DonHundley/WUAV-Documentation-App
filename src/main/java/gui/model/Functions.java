@@ -39,4 +39,5 @@ public class Functions {
     public void editUser(User user){userLogic.editUser(user);}
     public void deleteUser(User user){userLogic.deleteUser(user);}
 
+
 }

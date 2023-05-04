@@ -4,10 +4,13 @@ import be.*;
 import gui.model.*;
 import javafx.beans.property.*;
 import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.stage.*;
 
 import java.awt.event.*;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -46,7 +49,7 @@ public class ManageProjectController{
         this.functionsModel = functionsModel;
         this.observablesModel = observablesModel;
 
-        //setUsernameLabel();
+        setUsernameLabel();
         setProjectTV();
         setTechTV();
     }
@@ -60,7 +63,7 @@ public class ManageProjectController{
     }
 
     /**
-     * We use this to set up the tableview ProjectTV with relative columns.
+     * We use this to set up the tableview ProjectTV with relative columns and add a listener for selected items.
      */
     private void setProjectTV() {
         projectTV.setItems(observablesModel.getProjects());
@@ -84,29 +87,132 @@ public class ManageProjectController{
         projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
         assignedUserCount.setCellValueFactory(cellData ->  new SimpleIntegerProperty(cellData.getValue().getTotalTasks()).asObject());
 
+        projectTV.getSelectionModel().selectedItemProperty().addListener(((((observable, oldValue, selectedProject) ->
+                persistenceModel.setSelectedProject(selectedProject.getProject())
+                ))));
     }
     /**
-     * We use this to set up the tableview TechTV with relative columns.
+     * We use this to set up the tableview TechTV with relative columns and add a listener for selected items.
      */
     private void setTechTV() {
         techTV.setItems(observablesModel.getTechs());
         observablesModel.loadTechs();
 
-        //techName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        //techSurname.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         techName.setCellValueFactory(cellData ->new SimpleStringProperty(cellData.getValue().getUser().getFirstName()));
         techSurname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getLastName()));
         numberOfTasks.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAssignedTasks()).asObject());
+
+        techTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedUser) -> {
+            persistenceModel.setSelectedUser(selectedUser.getUser());
+        })));
     }
 
-    @FXML private void assignProject(ActionEvent actionEvent){}
+    /**
+     * Assigns a project to the selected user.
+     * @param actionEvent triggered when the user activates the assign project button.
+     */
+    @FXML private void assignProject(ActionEvent actionEvent){
+        if(projectTV.getSelectionModel().getSelectedItem() != null && techTV.getSelectionModel().getSelectedItem() != null){
+            functionsModel.assignProject(persistenceModel.getSelectedUser(), persistenceModel.getSelectedProject());
+        }
+    }
 
-    @FXML private void deleteProject(ActionEvent actionEvent){}
+    /**
+     * Deletes the selected project.
+     * @param actionEvent triggered when the user activates the delete project button.
+     */
+    @FXML private void deleteProject(ActionEvent actionEvent){
+        if(projectTV.getSelectionModel().getSelectedItem() != null){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Project");
+            alert.setHeaderText("Are you sure you wish to delete the project " + persistenceModel.getSelectedProject().getProjName() + "?");
 
-    @FXML private void editProject(ActionEvent actionEvent){}
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.isPresent() && result.get() == ButtonType.OK){
+                functionsModel.deleteProject(persistenceModel.getSelectedProject());
+                alert.close();
+            } else {
+                alert.close();
+            }
+        }
+    }
 
-    @FXML private void createProject(ActionEvent actionEvent){}
-    @FXML private void logOut(ActionEvent actionEvent){}
+    /**
+     * Opens the edit window for the selected project.
+     * @param actionEvent triggers when the user activates the edit project button.
+     */
+    @FXML private void editProject(ActionEvent actionEvent){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEProject.fxml"));
+            Parent root = loader.load();
+            NEProjectController controller = loader.getController();
+            controller.setNEProjectController(true, persistenceModel, functionsModel);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Edit Project");
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){
+            String str = "There has been an error loading NEProject.fxml. Please contact system Admin.";
+            projectError(str);
+        }
+    }
 
+    /**
+     * Opens the new window for the selected project.
+     * @param actionEvent triggers when the user activates the new project button.
+     */
+    @FXML private void createProject(ActionEvent actionEvent){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEProject.fxml"));
+            Parent root = loader.load();
+            NEProjectController controller = loader.getController();
+            controller.setNEProjectController(false, persistenceModel, functionsModel);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Create Project");
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){
+            String str = "There has been an error loading NEProject.fxml. Please contact system Admin.";
+            projectError(str);
+        }
+    }
+    /**
+     * This will log the user out and change the view to the login.
+     * We catch the IOException and show the user a crafted alert.
+     * @param actionEvent triggered by the logout button.
+     */
+    @FXML private void logOut(ActionEvent actionEvent){
+        try {
+            persistenceModel.setLoggedInUser(null);
+            Parent root = FXMLLoader.load(getClass().getResource("/gui/view/Login.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("WUAV");
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){
+            String str = "There has been an error loading Login.fxml. Please contact system Admin.";
+            projectError(str);
+        }
+    }
+
+    /**
+     * We use this to display an error to the user if there is a problem.
+     * @param str This is the source of the problem so that the user is informed.
+     */
+    private void projectError(String str) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Error");
+        alert.setHeaderText(str);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            alert.close();
+        } else {
+            alert.close();
+        }
+    }
 
 }

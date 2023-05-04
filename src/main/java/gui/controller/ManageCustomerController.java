@@ -4,10 +4,14 @@ import be.*;
 import gui.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.stage.*;
 
 import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 public class ManageCustomerController {
 
@@ -41,7 +45,7 @@ public class ManageCustomerController {
         this.functionsModel = functionsModel;
         this.observablesModel = observablesModel;
 
-        //setUsernameLabel();
+        setUsernameLabel();
         setCustomerTableView();
     }
 
@@ -49,8 +53,8 @@ public class ManageCustomerController {
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name
-        //windowTitle.setText("Customers");
-        //usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
+        windowTitle.setText("Customers");
+        usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
     }
 
     /**
@@ -67,9 +71,74 @@ public class ManageCustomerController {
     }
 
     private void clickCustomerTV(){}
-    @FXML private void editCustomer(ActionEvent actionEvent){}
+    @FXML private void editCustomer(ActionEvent actionEvent){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NECustomer.fxml"));
+            Parent root = loader.load();
+            NECustomerController controller = loader.getController();
+            controller.setNEController(true, persistenceModel, functionsModel);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Edit Customer");
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){
+            String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+    }
 
-    @FXML private void createCustomer(ActionEvent actionEvent){}
+    @FXML private void createCustomer(ActionEvent actionEvent){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NECustomer.fxml"));
+            Parent root = loader.load();
+            NECustomerController controller = loader.getController();
+            controller.setNEController(false,persistenceModel,functionsModel);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("New customer");
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){
+            String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+    }
 
-    @FXML private void logOut(ActionEvent actionEvent){}
+    /**
+     * This will log the user out and change the view to the login.
+     * We catch the IOException and show the user a crafted alert.
+     * @param actionEvent triggered by the logout button.
+     */
+    @FXML private void logOut(ActionEvent actionEvent){
+        try {
+            persistenceModel.setLoggedInUser(null);
+            Parent root = FXMLLoader.load(getClass().getResource("/gui/view/Login.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("WUAV");
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){
+            String str = "There has been an error loading Login.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+    }
+
+    /**
+     * We use this to display an error to the user if there is a problem.
+     * @param str This is the source of the problem so that the user is informed.
+     */
+    private void customerError(String str) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Error");
+        alert.setHeaderText(str);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            alert.close();
+        } else {
+            alert.close();
+        }
+    }
 }

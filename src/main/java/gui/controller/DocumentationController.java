@@ -71,6 +71,12 @@ public class DocumentationController {
 
         taskName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskName()));
         taskName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskState()));
+
+        taskTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedTask) -> {
+            persistenceModel.setSelectedTask(selectedTask);
+            setDescriptionLabel();
+            //generateImgThumbnails();
+        })));
     }
 
     /**
@@ -93,7 +99,11 @@ public class DocumentationController {
     }
     private void generateImgThumbnails() {}
 
-    private void setDescriptionLabel() {}
+    private void setDescriptionLabel() {
+        if(persistenceModel.getSelectedTask().getTaskDesc() != null){
+        descriptionLabel.setText(persistenceModel.getSelectedTask().getTaskDesc());
+        }
+    }
     @FXML private void selectImage(ActionEvent actionEvent){}
 
     /**

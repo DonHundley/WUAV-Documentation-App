@@ -103,6 +103,8 @@ public class ManageUsersController {
         try {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEUser.fxml"));
         Parent root = loader.load();
+        NEUserController controller = loader.getController();
+        controller.setNEUserController(false, persistenceModel, functionsModel);
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setTitle("New user.");
@@ -120,6 +122,8 @@ public class ManageUsersController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEUser.fxml"));
             Parent root = loader.load();
+            NEUserController controller = loader.getController();
+            controller.setNEUserController(true, persistenceModel, functionsModel);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setTitle("Edit user.");
