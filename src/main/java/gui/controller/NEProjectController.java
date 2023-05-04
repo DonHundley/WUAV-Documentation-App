@@ -9,7 +9,7 @@ import javafx.stage.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class NEProjectView {
+public class NEProjectController {
     @FXML private TextField projectName;
     @FXML private Date creationDate;
     @FXML private Label windowTitleLabel;

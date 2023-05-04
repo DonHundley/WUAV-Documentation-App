@@ -6,14 +6,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
 import javafx.stage.*;
 
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 
-public class ManagerTaskView {
+public class ManageTaskController {
 
     @FXML private TableView<TaskWrapper> taskTV;
     @FXML private TableColumn<TaskWrapper, String> projectName;

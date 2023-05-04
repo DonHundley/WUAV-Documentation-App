@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="" prefHeight="650.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManagerTaskView">
+<AnchorPane fx:id="" prefHeight="650.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageTaskController">
    <children>
       <TableView fx:id="taskTV" layoutX="544.0" layoutY="140.0" prefHeight="348.0" prefWidth="542.0">
         <columns>
