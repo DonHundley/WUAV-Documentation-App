@@ -1,8 +1,8 @@
 package gui.model;
 
 import be.*;
-import bll.*;
 import javafx.collections.*;
+import logic.businessLogic.*;
 
 public class Observables {
 

@@ -1,7 +1,7 @@
 package gui.model;
 
 import be.*;
-import bll.*;
+import logic.businessLogic.*;
 
 public class Functions {
 

@@ -1,4 +1,4 @@
-package bll;
+package logic.businessLogic;
 
 import be.*;
 import dal.*;

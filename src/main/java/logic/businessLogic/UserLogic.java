@@ -1,4 +1,4 @@
-package bll;
+package logic.businessLogic;
 
 import be.*;
 import dal.*;
@@ -7,7 +7,9 @@ import java.util.*;
 
 public class UserLogic {
 
+
     private UserDAO userDAO = new UserDAO();
+
 
     /**
      * List of Users.
@@ -55,5 +57,16 @@ public class UserLogic {
      */
     public void deleteUser(User user) {
         userDAO.deleteUser(user);
+    }
+
+    public HashMap<String, String> loginInformation(List<User> allUsers){
+        HashMap<String, String> loginInfo = new HashMap<>();
+        for (User user: allUsers) {
+            String k = user.getUserName();
+            String v = user.getPassword();
+
+            loginInfo.put(k, v);
+        }
+        return loginInfo;
     }
 }
