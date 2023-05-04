@@ -15,7 +15,7 @@ import java.util.*;
 public class EditTaskController {
 
     // FXML
-    @FXML private TextField taskDescription;
+    @FXML private TextArea taskDescription;
     @FXML private ComboBox<String> stateSelection;
     @FXML private Label windowTitleLabel;
     @FXML private Label errorLabel;
