@@ -3,6 +3,8 @@ package gui.model;
 import be.*;
 import logic.businessLogic.*;
 
+import java.util.*;
+
 public class Functions {
 
     private UserLogic userLogic = new UserLogic();
@@ -38,6 +40,6 @@ public class Functions {
     public void createUser(User user){userLogic.createUser(user);}
     public void editUser(User user){userLogic.editUser(user);}
     public void deleteUser(User user){userLogic.deleteUser(user);}
-
+    public HashMap<String, String> userInfo(List<User> users){ return userLogic.loginInformation(users);}
 
 }

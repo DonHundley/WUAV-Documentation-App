@@ -4,25 +4,16 @@
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1250.0" style="-fx-background-color: black;" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.LoginController">
+<AnchorPane prefHeight="650.0" prefWidth="1250.0" style="-fx-background-color: black;" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.LoginController">
    <children>
-      <ImageView fitHeight="650.0" fitWidth="1250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <image>
-            <Image url="@../../../../../../../Downloads/LOGIN.png" />
-         </image>
-      </ImageView>
+      <ImageView fitHeight="650.0" fitWidth="1250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <MFXButton layoutX="466.0" layoutY="150.0" prefHeight="350.0" prefWidth="320.0" style="-fx-background-color: #17263A;" styleClass="login-area" stylesheets="@../../css/style.css" text=" " />
-      <MFXTextField floatingText="username" layoutX="558.0" layoutY="293.0" prefHeight="0.0" prefWidth="152.0" />
-      <MFXPasswordField floatingText="password" layoutX="558.0" layoutY="362.0" prefHeight="0.0" prefWidth="152.0" />
-      <Button layoutX="596.0" layoutY="442.0" mnemonicParsing="false" styleClass="round-btn" text="Login" />
-      <ImageView fitHeight="83.0" fitWidth="133.0" layoutX="559.0" layoutY="176.0">
-         <image>
-            <Image url="@../../../../../../../Downloads/WUAV-logo.png" />
-         </image>
-      </ImageView>
+      <MFXTextField fx:id="userName" floatingText="username" layoutX="558.0" layoutY="293.0" prefHeight="0.0" prefWidth="152.0" />
+      <MFXPasswordField fx:id="passTF" floatingText="password" layoutX="558.0" layoutY="362.0" prefHeight="0.0" prefWidth="152.0" />
+      <Button layoutX="596.0" layoutY="442.0" mnemonicParsing="false" onAction="#login" styleClass="round-btn" text="Login" />
+      <ImageView fitHeight="83.0" fitWidth="133.0" layoutX="559.0" layoutY="176.0" />
    </children>
 </AnchorPane>
