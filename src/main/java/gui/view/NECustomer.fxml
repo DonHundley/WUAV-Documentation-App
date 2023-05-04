@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="gui.controller.NECustomerController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="450.0" prefWidth="600.0" styleClass="NEwindow-background" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NECustomerController">
+   <children>
+      <Label fx:id="windowTitleLabel" layoutX="122.0" layoutY="55.0" styleClass="NEwindow-title" stylesheets="@../../css/style.css" text="Create New Customer" />
+      <Label layoutX="122.0" layoutY="152.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" text="*Name" textFill="WHITE" />
+      <TextField fx:id="customerName" layoutX="226.0" layoutY="150.0" prefHeight="25.0" prefWidth="260.0" />
+      <Label layoutX="122.0" layoutY="202.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" text="*Email" textFill="WHITE" />
+      <TextField fx:id="customerEmail" layoutX="226.0" layoutY="200.0" prefHeight="25.0" prefWidth="260.0" />
+      <Label layoutX="121.0" layoutY="250.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" text="*Address" textFill="WHITE" />
+      <TextField fx:id="customerAddress" layoutX="226.0" layoutY="248.0" prefHeight="25.0" prefWidth="260.0" />
+      <Label layoutX="291.0" layoutY="404.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" text="required fields are marked with *" />
+      <Button layoutX="111.0" layoutY="399.0" mnemonicParsing="false" onAction="#createOrEditCustomer" styleClass="round-btn" stylesheets="@../../css/style.css" text="Edit" />
+      <Button fx:id="cancelButton" layoutX="206.0" layoutY="399.0" mnemonicParsing="false" onAction="#cancel" styleClass="round-btn" stylesheets="@../../css/style.css" text="Cancel" />
+   </children>
 </AnchorPane>
