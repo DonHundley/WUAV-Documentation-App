@@ -15,9 +15,9 @@ import java.util.*;
 public class EditTaskController {
 
     // FXML
-    @FXML private TextField taskDescription;
+    @FXML private TextArea taskDescription;
+    @FXML private TextField layoutTF;
     @FXML private ComboBox<String> stateSelection;
-    @FXML private Label windowTitleLabel;
     @FXML private Label errorLabel;
     @FXML private Button cancelButton;
 
@@ -94,6 +94,7 @@ public class EditTaskController {
                 Path imagePath = FileSystems.getDefault().getPath(file.getPath());
                 layoutImage = new Image(new FileInputStream(imagePath+file.getName()));
                 layoutPreview.setImage(layoutImage);
+                layoutTF.setText(layoutImage.getUrl());
                 setUpdatedLayout(true);
             }catch (NullPointerException n){
                 String str = "There was a problem with selecting an image. Issue: NullPointerException.";
