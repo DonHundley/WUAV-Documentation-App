@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageProjectController">
+<AnchorPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageProjectController">
    <children>
-      <TableView fx:id="projectTV" layoutX="370.0" layoutY="105.0" prefHeight="357.0" prefWidth="343.0">
+      <TableView fx:id="projectTV" layoutX="29.0" layoutY="149.0" prefHeight="366.0" prefWidth="390.0">
         <columns>
-          <TableColumn fx:id="projectName" prefWidth="127.99994659423828" text="Project Name" />
-          <TableColumn fx:id="projectDate" prefWidth="89.33335876464844" text="Date" />
-            <TableColumn fx:id="assignedUserCount" prefWidth="125.3333740234375" text="Total tasks" />
+          <TableColumn fx:id="projectName" prefWidth="142.39999389648438" text="Project Name" />
+          <TableColumn fx:id="projectDate" prefWidth="137.59999084472656" text="Date" />
+            <TableColumn fx:id="assignedUserCount" prefWidth="109.60003662109375" text="Total tasks" />
         </columns>
       </TableView>
-      <TableView fx:id="techTV" layoutX="796.0" layoutY="105.0" prefHeight="357.0" prefWidth="334.0">
+      <TableView fx:id="techTV" layoutX="475.0" layoutY="149.0" prefHeight="366.0" prefWidth="430.0">
         <columns>
-          <TableColumn fx:id="techName" prefWidth="112.666748046875" text="Name" />
-          <TableColumn fx:id="techSurname" prefWidth="125.333251953125" text="Last Name" />
-            <TableColumn fx:id="numberOfTasks" prefWidth="95.333251953125" text="Assigned tasks" />
+          <TableColumn fx:id="techName" prefWidth="156.00006103515625" text="Name" />
+          <TableColumn fx:id="techSurname" prefWidth="147.99993896484375" text="Last Name" />
+            <TableColumn fx:id="numberOfTasks" prefWidth="159.2000732421875" text="Assigned tasks" />
         </columns>
       </TableView>
+      <Label fx:id="windowTitleLabel" layoutX="29.0" layoutY="38.0" styleClass="window-title" text="Manage Projects " />
+      <Button layoutX="29.0" layoutY="541.0" mnemonicParsing="false" onAction="#createProject" prefHeight="30.0" prefWidth="86.0" styleClass="round-btn" text="New Project" />
+      <Button layoutX="150.0" layoutY="541.0" mnemonicParsing="false" onAction="#editProject" prefHeight="30.0" prefWidth="86.0" styleClass="round-btn" text="Edit Project" />
+      <Button layoutX="287.0" layoutY="541.0" mnemonicParsing="false" onAction="#deleteProject" prefHeight="30.0" prefWidth="95.0" styleClass="round-btn" text="Delete Project" />
+      <Button layoutX="773.0" layoutY="556.0" mnemonicParsing="false" onAction="#assignProject" prefHeight="30.0" prefWidth="132.0" styleClass="square-btn" text="Assign Technician" />
+      <Button layoutX="813.0" layoutY="28.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" text="Log Out" />
+      <Label fx:id="usernameLabel" layoutX="717.0" layoutY="33.0" prefHeight="18.0" prefWidth="60.0" />
    </children>
 </AnchorPane>

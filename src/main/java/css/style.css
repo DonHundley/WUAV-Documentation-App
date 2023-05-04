@@ -13,7 +13,11 @@
     src: url('fonts/Montserrat-Bold.ttf') format('truetype');
 }
 
-
+/* Montserrat SemiBold */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('fonts/Montserrat-SemiBold.ttf') format('truetype');
+}
 /*STYLE*/
 
 /*ROUND BUTTONS CLASS*/
@@ -25,6 +29,7 @@
     -fx-min-width: 75px;
     -fx-min-height: 30px;
     -fx-font-family: 'Montserrat';
+
 }
 
 /*ROUND BUTTONS WITH WHITE BACKGROUND CLASS*/
@@ -58,8 +63,6 @@
 
 /*LOGIN AREA class - changes to radius, color, opacity */
 .login-area {
-    -fx-background-color: FFFFFF;
-    -fx-opacity: 46%;
     -fx-background-radius: 25px;
     -fx-border-radius: 25px;
 }
@@ -86,4 +89,11 @@
     -fx-font-family: 'Montserrat';
     -fx-font-size: 16;
     -fx-text-fill: white;
+}
+
+.NavMenu-text{
+    -fx-font-family: 'Montserrat';
+    -fx-font-size: 22;
+    -fx-font-weight: 600;
+    -fx-background-color: #17263A;
 }
