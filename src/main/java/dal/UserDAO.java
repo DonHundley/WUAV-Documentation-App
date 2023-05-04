@@ -187,7 +187,7 @@ public class UserDAO {
     }
 
     /**
-     * Method to get all technicians with their assigned task. .
+     * Method to get all technicians with their assigned task (UserWrapper)
      */
     public List<UserWrapper> getTechWithAssignedTasks() {
         String query = "SELECT u.*, COUNT(t.documentationID) as assigned_tasks " +

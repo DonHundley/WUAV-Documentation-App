@@ -60,8 +60,7 @@ public class ManageProjectController{
     }
 
     /**
-     * Mixed list
-     * This will be changed later
+     * We use this to set up the tableview ProjectTV with relative columns.
      */
     private void setProjectTV() {
         projectTV.setItems(observablesModel.getProjects());
@@ -86,10 +85,8 @@ public class ManageProjectController{
         assignedUserCount.setCellValueFactory(cellData ->  new SimpleIntegerProperty(cellData.getValue().getTotalTasks()).asObject());
 
     }
-
     /**
-     * Mixed list
-     * This will be changed later
+     * We use this to set up the tableview TechTV with relative columns.
      */
     private void setTechTV() {
         techTV.setItems(observablesModel.getTechs());

@@ -1,11 +1,9 @@
 package dal;
 
-import be.Task;
+import be.*;
 import javafx.scene.image.Image;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +102,7 @@ public class TaskDAO {
             String sql = "SELECT * FROM task_documentation";
             Statement statement = connection.createStatement();
 
-            if(statement.execute(sql)) {
+            if (statement.execute(sql)) {
                 ResultSet resultSet = statement.getResultSet();
 
                 while (resultSet.next()) {
@@ -135,7 +133,7 @@ public class TaskDAO {
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, task.getDocID());
 
-            if(pstmt.execute(sql)) {
+            if (pstmt.execute(sql)) {
                 ResultSet resultSet = pstmt.getResultSet();
 
                 while (resultSet.next()) {
@@ -166,7 +164,7 @@ public class TaskDAO {
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, selectedProjectID);
 
-            if(pstmt.execute(sql)) {
+            if (pstmt.execute(sql)) {
                 ResultSet resultSet = pstmt.getResultSet();
 
                 while (resultSet.next()) {
@@ -185,5 +183,57 @@ public class TaskDAO {
             throw new RuntimeException(e);
         }
         return tasksByProject;
+    }
+
+    /**
+     * Method to get tasks data together with project and customer (TaskWrapper)
+     */
+
+    public List<TaskWrapper> getTasksInfo() {
+        List<TaskWrapper> taskInfo = new ArrayList<>();
+        String sql = "SELECT t.*, p.*, c.* " +
+                "FROM project p " +
+                "JOIN task_documentation t ON p.projectID=t.projectID " +
+                "JOIN customer c ON p.customerID=c.customerID ";
+
+        try (Connection connection = databaseConnector.getConnection()) {
+            PreparedStatement prepareStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = prepareStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("projectID");
+                String projectName = resultSet.getString("project_name");
+                Date dateCreated = resultSet.getDate("date_created");
+                int customerID = resultSet.getInt("customerID");
+                Project project = new Project(id, projectName, dateCreated, customerID);
+                int documentationID = resultSet.getInt("documentationID");
+                int projectID = resultSet.getInt("projectID");
+                String taskName = resultSet.getString("task_name");
+
+                byte[] layoutData = resultSet.getBytes("layout");
+                Image layout = null;
+                if (layoutData != null) {
+                    layout = new Image(new ByteArrayInputStream(layoutData));
+                }
+                String description = resultSet.getString("description");
+                String taskState = resultSet.getString("task_state");
+
+                Task task = new Task(documentationID, projectID, taskName, layout, description, taskState);
+                int custID = resultSet.getInt("customerID");
+                String customerName = resultSet.getString("customer_name");
+                String customerEmail = resultSet.getString("customer_email");
+                String customerAddress = resultSet.getString("customer_address");
+
+                Customer customer = new Customer(custID, customerName, customerEmail, customerAddress);
+                TaskWrapper taskWrapper = new TaskWrapper(project, task, customer);
+                taskInfo.add(taskWrapper);
+            }
+
+        return taskInfo;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

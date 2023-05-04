@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="gui.controller.ManagerTaskView"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="" prefHeight="650.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManagerTaskView">
+   <children>
+      <TableView fx:id="taskTV" layoutX="544.0" layoutY="140.0" prefHeight="348.0" prefWidth="542.0">
+        <columns>
+          <TableColumn fx:id="projectName" prefWidth="140.800048828125" text="Project Name" />
+          <TableColumn fx:id="taskName" prefWidth="132.79998779296875" text="Task" />
+            <TableColumn fx:id="stateOfTask" prefWidth="94.39996337890625" text="Task state" />
+            <TableColumn fx:id="customerName" prefWidth="174.39996337890625" text="Customer Name" />
+        </columns>
+      </TableView>
+   </children>
 </AnchorPane>

@@ -54,8 +54,7 @@ public class ManageCustomerController {
     }
 
     /**
-     * Mixed List
-     * This will be changed later
+     * We use this to set up the tableview customerTV with relative columns.
      */
     private void setCustomerTableView() {
         customersTV.setItems(observablesModel.getCustomers());

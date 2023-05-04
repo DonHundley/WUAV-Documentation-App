@@ -135,7 +135,7 @@ public class ProjectDAO {
     }
 
     /**
-     * Method to get all projects from database together with their associated tasks count.
+     * Method to get all projects from database together with their associated tasks count (ProjectWrapper).
      */
     public ObservableList<ProjectWrapper> getAllProjectsWithTaskCount() {
         ObservableList<ProjectWrapper> list = FXCollections.observableArrayList();

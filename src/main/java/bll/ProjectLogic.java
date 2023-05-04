@@ -37,6 +37,16 @@ public class ProjectLogic {
         return taskDAO.getAllTasks();
     }
 
+
+    /**
+     * List of all tasks with additional info from TaskWrapper.
+     *
+     * @return This returns a list of all tasks with info.
+     */
+    public List<TaskWrapper> getTasksInfo() {
+        return taskDAO.getTasksInfo();
+    }
+
     /**
      * Returns a curated list of tasks.
      *
@@ -56,14 +66,7 @@ public class ProjectLogic {
         pictureDAO.createPicture(taskPictures);
     }
 
-    /**
-     * Functions model uses this to create a task.
-     *
-     * @param task is the Task to be edited.
-     */
-    public void createTask(Task task) {
-        taskDAO.createTask(task);
-    }
+
 
     /**
      * Functions model uses this to edit a specific task.
@@ -125,6 +128,7 @@ public class ProjectLogic {
     public void removeAssignedProject(User selectedUser, Project selectedProject) {
         worksOnDAO.deleteWork(selectedUser, selectedProject);
     }
+
 
 
 }
