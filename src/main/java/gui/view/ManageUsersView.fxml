@@ -20,8 +20,8 @@
       <Button layoutX="289.0" layoutY="540.0" mnemonicParsing="false" onAction="#editUser" styleClass="round-btn" stylesheets="@../../css/style.css" text="Edit User" />
       <Button layoutX="394.0" layoutY="540.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="30.0" prefWidth="81.0" styleClass="round-btn" stylesheets="@../../css/style.css" text="Delete User" />
       <Label fx:id="windowTitleLabel" layoutX="47.0" layoutY="30.0" styleClass="window-title" stylesheets="@../../css/style.css" text="Manage Users" />
-      <Label fx:id="usernameLabel" layoutX="750.0" layoutY="30.0" prefHeight="17.0" prefWidth="0.0" />
-      <Button layoutX="841.0" layoutY="24.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" stylesheets="@../../css/style.css" text="Log Out" />
+      <Label fx:id="usernameLabel" layoutX="717.0" layoutY="33.0" prefHeight="18.0" prefWidth="60.0" />
+      <Button layoutX="813.0" layoutY="28.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" stylesheets="@../../css/style.css" text="Log Out" />
       <Label fx:id="errorLabel" layoutX="181.0" layoutY="593.0" />
    </children>
 </AnchorPane>
