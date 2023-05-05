@@ -1,6 +1,7 @@
 package dal;
 
 import be.Project;
+import be.ProjectWrapper;
 import be.User;
 import be.UserWrapper;
 
@@ -187,21 +188,24 @@ public class UserDAO {
     }
 
     /**
-     * Method to get all technicians with their assigned task (UserWrapper)
+     * Method to get all technicians with their assigned task number and a list of projects (UserWrapper)
      */
     public List<UserWrapper> getTechWithAssignedTasks() {
-        String query = "SELECT u.*, COUNT(t.documentationID) as assigned_tasks " +
+        String sql = "SELECT u.*,p.*, COUNT(t.documentationID) as assigned_tasks " +
                 "FROM users u "+
                 "LEFT JOIN works_on w ON u.userID = w.userID " +
                 "LEFT JOIN task_documentation t ON t.projectID=w.projectID " +
+                "LEFT JOIN  project p ON p.projectID=t.projectID "+
                 "WHERE u.access = 'Technician'"+
-                "GROUP BY u.userID,u.username, u.name, u.last_name, u.access, u.password";
+                "GROUP BY u.userID,u.username, u.name, u.last_name, u.access, u.password, p.projectID,p.project_name, p.date_created,p.customerID";
 
         try (Connection conn = databaseConnector.getConnection();
-             PreparedStatement statement = conn.prepareStatement(query);
+             PreparedStatement statement = conn.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
 
             List<UserWrapper> users = new ArrayList<>();
+            List<Project> assignedProjects = new ArrayList<>();
+
             while (resultSet.next()) {
                 User user = new User(
                         resultSet.getInt("userID"),
@@ -210,13 +214,19 @@ public class UserDAO {
                         resultSet.getString("access"),
                         resultSet.getString("name"),
                         resultSet.getString("last_Name")
-
-
                 );
                 int assignedTasks = resultSet.getInt("assigned_tasks");
-                UserWrapper wrapper = new UserWrapper(user, assignedTasks);
-                users.add(wrapper);
+
+                int projectId = resultSet.getInt("projectID");
+                String projectName = resultSet.getString("project_name");
+                Date projectDate = resultSet.getDate("date_created");
+                int customerID=resultSet.getInt("customerID");
+                Project project = new Project(projectId, projectName, projectDate, customerID);
+                assignedProjects.add(project);
+                UserWrapper userWrapper = new UserWrapper(user, assignedTasks, assignedProjects);
+                users.add(userWrapper);
             }
+
             return users;
 
         } catch (SQLException ex) {
