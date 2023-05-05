@@ -1,6 +1,7 @@
 package gui.model;
 
 import be.*;
+import javafx.scene.layout.AnchorPane;
 
 public class Persistent {
 
@@ -9,6 +10,7 @@ public class Persistent {
     private Task selectedTask;
     private Project selectedProject;
     private Customer selectedCustomer;
+    private AnchorPane viewAnchor;
 
     /**
      * Thread safe singleton of Persistent.
@@ -57,4 +59,13 @@ public class Persistent {
     }
 
     public void setSelectedCustomer(Customer selectedCustomer) {this.selectedCustomer = selectedCustomer;}
+
+
+    public AnchorPane getViewAnchor() {
+        return viewAnchor;
+    }
+
+    public void setViewAnchor(AnchorPane viewAnchor) {
+        this.viewAnchor = viewAnchor;
+    }
 }

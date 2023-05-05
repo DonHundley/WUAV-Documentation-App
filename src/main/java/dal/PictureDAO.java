@@ -1,5 +1,6 @@
 package dal;
 
+import be.Task;
 import be.TaskPictures;
 import javafx.scene.image.Image;
 
@@ -24,9 +25,13 @@ public class PictureDAO {
             String sql = "INSERT INTO task_picture(after_picture, before_picture, after_comment, documentationID, before_comment) VALUES (?,?,?,?,?)";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            FileInputStream inStreamAfter = new FileInputStream("taskPictures.getAfterPicture()");
+            File beforeInputFile=new File(taskPictures.getBeforeAbsolutePath());
+            File afterInputFile=new File(taskPictures.getAfterAbsolutePath());
+
+
+            FileInputStream inStreamAfter = new FileInputStream(afterInputFile);
             statement.setBinaryStream(1, inStreamAfter);
-            FileInputStream inStreamBefore = new FileInputStream("taskPictures.getBeforePicture()");
+            FileInputStream inStreamBefore = new FileInputStream(beforeInputFile);
             statement.setBinaryStream(2, inStreamBefore);
             statement.setString(3, taskPictures.getAfterComment());
             statement.setInt(4, taskPictures.getDocID());
@@ -155,5 +160,37 @@ public class PictureDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    /**
+     * Method to get picture by Document ID from database.
+     */
+    public List<TaskPictures> getPictureByDocumentID(Task task) {
+        ArrayList<TaskPictures> taskPicturesByDocID = new ArrayList<>();
+        try (Connection connection = databaseConnector.getConnection()) {
+            String sql = "SELECT * FROM task_picture WHERE documentationID = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, task.getDocID());
+
+            if(pstmt.execute()) {
+                ResultSet resultSet = pstmt.getResultSet();
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("pictureID");
+                    Image tryingAfterPicture = new Image(resultSet.getBinaryStream("after_picture"));
+                    Image tryingBeforePicture = new Image(resultSet.getBinaryStream("before_picture"));
+                    String afterComment = resultSet.getString("after_comment");
+                    int documentationID = resultSet.getInt("documentationID");
+                    String beforeComment = resultSet.getString("before_comment");
+
+                    TaskPictures taskPictures = new TaskPictures(id, tryingAfterPicture, tryingBeforePicture, afterComment, documentationID, beforeComment);
+                    taskPicturesByDocID.add(taskPictures);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return taskPicturesByDocID;
     }
 }

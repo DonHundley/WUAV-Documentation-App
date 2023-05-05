@@ -23,11 +23,11 @@ public class NavigationController {
     private Observables observablesModel = Observables.getInstance();
     private Functions functionsModel = new Functions();
 
-    public void setNavigationController(Persistent persistentModel, Observables observablesModel, Functions functionsModel) throws IOException {
-        this.persistentModel = persistentModel;
-        this.observablesModel = observablesModel;
-        this.functionsModel = functionsModel;
 
+
+    public void setNavigationController() throws IOException {
+
+        persistentModel.setViewAnchor(viewAnchor);
 
         Node n = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
 
@@ -40,7 +40,9 @@ public class NavigationController {
 
     }
 
-    public void home(ActionEvent actionEvent) {
+    public void home(ActionEvent actionEvent) throws IOException {
+        Node n = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
+        viewAnchor.getChildren().setAll(n);
     }
 
     public void manageProjects(ActionEvent actionEvent) throws IOException {
@@ -55,10 +57,16 @@ public class NavigationController {
 
     }
 
-    public void manageCustomers(ActionEvent actionEvent) {
+    public void manageCustomers(ActionEvent actionEvent) throws IOException {
+        Node n = FXMLLoader.load(getClass().getResource("/gui/view/ManageCustomersView.fxml"));
+        viewAnchor.getChildren().setAll(n);
     }
 
-    public void manageUsers(ActionEvent actionEvent) {
+    public void manageUsers(ActionEvent actionEvent) throws IOException {
+        Node n = FXMLLoader.load(getClass().getResource("/gui/view/ManageUsersView.fxml"));
+        viewAnchor.getChildren().setAll(n);
     }
+
+
 
 }

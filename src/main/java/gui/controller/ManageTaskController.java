@@ -11,9 +11,10 @@ import javafx.stage.*;
 
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
-public class ManageTaskController {
+public class ManageTaskController extends NavigationController implements Initializable{
 
     @FXML private TableView<TaskWrapper> taskTV;
     @FXML private TableColumn<TaskWrapper, String> projectName;
@@ -31,6 +32,8 @@ public class ManageTaskController {
     private Observables observablesModel = Observables.getInstance();
 
 
+
+
     /**
      * We call this when this controller is called from navigation to set our models, tableview, and labels.
      * @param persistenceModel this is our instance of Persistent from navigation
@@ -41,7 +44,6 @@ public class ManageTaskController {
         this.observablesModel = observablesModel;
 
         //setUsernameLabel();
-        setTaskTV();
     }
 
     /**
@@ -50,6 +52,7 @@ public class ManageTaskController {
     private void setUsernameLabel() {// set our username label to the users name and our window title label.
         //windowTitleLabel.setText("Task Overview");
         usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
+
     }
 
 
@@ -99,4 +102,39 @@ public class ManageTaskController {
     }
 
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setTaskTV();
+    }
+
+    public void openProjectInfo(ActionEvent actionEvent) throws IOException {
+        /**
+        TaskWrapper selectedRow = taskTV.getSelectionModel().getSelectedItem();
+        Project selectedProject=selectedRow.getProject();
+        System.out.println(selectedProject);
+
+        if (selectedProject != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/DocumentationView.fxml"));
+            Parent root = loader.load();
+          DocumentationController controller = loader.getController();
+            controller.setProject(selectedProject);
+           controller.documentationViewLaunch();
+
+
+           //Node n = FXMLLoader.load(getClass().getResource("/gui/view/DocumentationView.fxml"));
+            navigationController.viewAnchor.getChildren().setAll(root);
+
+
+            /*Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("Documentation");
+            stage.setScene(scene);
+            stage.show();*/
+        //} else { errorLabel.setText("Please select an task to see related documentation.");
+        //}
+
+        persistenceModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
+        Node n = FXMLLoader.load(getClass().getResource("/gui/view/DocumentationView.fxml"));
+        persistenceModel.getViewAnchor().getChildren().setAll(n);
+    }
 }

@@ -8,6 +8,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 
 
@@ -17,6 +18,7 @@ import java.util.*;
 
 public class DocumentationController implements Initializable{
 
+    public AnchorPane imagePane;
     // Tableview
     @FXML private TableView<Task> taskTV;
     @FXML private TableColumn<Task, String> taskName;
@@ -37,7 +39,7 @@ public class DocumentationController implements Initializable{
     private Functions functionsModel = new Functions();
 
     // private variables
-    private Project selectedProject = persistenceModel.getSelectedProject();
+    private Project selectedProject=persistenceModel.getSelectedProject();
 
 
     /**
@@ -72,12 +74,12 @@ public class DocumentationController implements Initializable{
         observablesModel.loadTasksByProject(selectedProject);
 
         taskName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskName()));
-        taskName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskState()));
+        taskState.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskState()));
 
         taskTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedTask) -> {
             persistenceModel.setSelectedTask(selectedTask);
             setDescriptionLabel();
-            //generateImgThumbnails();
+            generateImgThumbnails();
         })));
     }
 
@@ -99,7 +101,25 @@ public class DocumentationController implements Initializable{
             }
         }
     }
-    private void generateImgThumbnails() {}
+    private void generateImgThumbnails() {
+        Task task = persistenceModel.getSelectedTask();
+        List<TaskPictures> pics = functionsModel.taskPicturesByDocID(task);
+        imagePane.getChildren().clear();
+        for (TaskPictures picture:pics) {
+            if (picture.getBeforePicture() != null){
+                ImageView bImage = new ImageView(picture.getBeforePicture());
+                bImage.setFitHeight(150);
+                bImage.setFitWidth(200);
+                imagePane.getChildren().add(new ImageView(picture.getBeforePicture()));
+            }
+            if (picture.getAfterPicture() != null){
+                ImageView bImage = new ImageView(picture.getAfterPicture());
+                bImage.setFitHeight(150);
+                bImage.setFitWidth(200);
+                imagePane.getChildren().add(new ImageView(picture.getAfterPicture()));
+            }
+        }
+    }
 
     private void setDescriptionLabel() {
         if(persistenceModel.getSelectedTask().getTaskDesc() != null){
@@ -209,4 +229,16 @@ public class DocumentationController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         setTaskTV();
     }
+
+    public void setProject(Project selectedProject) {
+        this.selectedProject = selectedProject;
+    }
+
+    public void documentationViewLaunch() {
+        //setSelectedProject();
+        setTaskTV();
+
+    }
+
+
 }

@@ -43,4 +43,5 @@ public class Functions {
     public HashMap<Integer, Integer> userInfo(){ return userLogic.loginInformation();}
     public List<User> users(){return userLogic.getUsers();}
 
+    public List<TaskPictures> taskPicturesByDocID(Task task){return projectLogic.getTaskPicturesByTask(task);}
 }

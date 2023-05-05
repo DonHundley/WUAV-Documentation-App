@@ -109,7 +109,13 @@ public class TaskDAO {
                     int id = resultSet.getInt("documentationID");
                     int projectID = resultSet.getInt("projectID");
                     String taskName = resultSet.getString("task_name");
-                    Image layout = new Image(resultSet.getBinaryStream("layout"));
+
+                    byte[] layoutData = resultSet.getBytes("layout");
+                    Image layout = null;
+                    if (layoutData != null) {
+                        layout = new Image(new ByteArrayInputStream(layoutData));
+                    }
+
                     String description = resultSet.getString("description");
                     String taskState = resultSet.getString("task_state");
 
@@ -140,7 +146,13 @@ public class TaskDAO {
                     int id = resultSet.getInt("documentationID");
                     int projectID = resultSet.getInt("projectID");
                     String taskName = resultSet.getString("task_name");
-                    Image layout = new Image(resultSet.getBinaryStream("layout"));
+
+                    byte[] layoutData = resultSet.getBytes("layout");
+                    Image layout = null;
+                    if (layoutData != null) {
+                        layout = new Image(new ByteArrayInputStream(layoutData));
+                    }
+
                     String description = resultSet.getString("description");
                     String taskState = resultSet.getString("task_state");
 
@@ -164,14 +176,20 @@ public class TaskDAO {
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, selectedProjectID);
 
-            if (pstmt.execute(sql)) {
+            if (pstmt.execute()) {
                 ResultSet resultSet = pstmt.getResultSet();
 
                 while (resultSet.next()) {
                     int id = resultSet.getInt("documentationID");
                     int projectID = resultSet.getInt("projectID");
                     String taskName = resultSet.getString("task_name");
-                    Image layout = new Image(resultSet.getBinaryStream("layout"));
+
+                    byte[] layoutData = resultSet.getBytes("layout");
+                    Image layout = null;
+                    if (layoutData != null) {
+                        layout = new Image(new ByteArrayInputStream(layoutData));
+                    }
+
                     String description = resultSet.getString("description");
                     String taskState = resultSet.getString("task_state");
 
@@ -236,4 +254,6 @@ public class TaskDAO {
         }
 
     }
+
+
 }

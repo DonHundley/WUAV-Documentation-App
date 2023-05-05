@@ -16,6 +16,20 @@ public class TaskPictures {
 
     private String beforeComment;
 
+    private String beforeAbsolutePath;
+    private String afterAbsolutePath;
+
+
+
+    public TaskPictures(int docID, String afterComment, String beforeComment, String beforeAbsolutePath, String afterAbsolutePath) {
+
+        this.docID = docID;
+        this.afterComment = afterComment;
+        this.beforeComment = beforeComment;
+        this.beforeAbsolutePath = beforeAbsolutePath;
+        this.afterAbsolutePath = afterAbsolutePath;
+    }
+
     public TaskPictures(int pictureID, Image afterPicture, Image beforePicture, String afterComment, int docID, String beforeComment) {
         this.pictureID = pictureID;
         this.beforePicture = beforePicture;
@@ -32,6 +46,8 @@ public class TaskPictures {
         this.afterComment = afterComment;
         this.beforeComment = beforeComment;
     }
+
+
 
     public int getPictureID() {
         return pictureID;
@@ -79,5 +95,21 @@ public class TaskPictures {
 
     public void setBeforeComment(String beforeComment) {
         this.beforeComment = beforeComment;
+    }
+
+    public String getBeforeAbsolutePath() {
+        return beforeAbsolutePath;
+    }
+
+    public void setBeforeAbsolutePath(String beforeAbsolutePath) {
+        this.beforeAbsolutePath = beforeAbsolutePath;
+    }
+
+    public String getAfterAbsolutePath() {
+        return afterAbsolutePath;
+    }
+
+    public void setAfterAbsolutePath(String afterAbsolutePath) {
+        this.afterAbsolutePath = afterAbsolutePath;
     }
 }

@@ -46,7 +46,7 @@ public class LoginController implements Initializable{
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NavigationView.fxml"));
                             Parent root = loader.load();
                             NavigationController controller = loader.getController();
-                            controller.setNavigationController(persistentModel, observablesModel, functionsModel);
+                            controller.setNavigationController();
                             Scene scene = new Scene(root);
                             Stage stage = new Stage();
                             stage.setTitle("");

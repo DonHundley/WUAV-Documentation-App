@@ -32,7 +32,8 @@ public class AddTaskPicturesController {
 
     private Image beforePicture;
     private Image afterPicture;
-
+    private String beforePictureAbsolute;
+    private String afterPictureAbsolute;
 
     /**
      * We call this when this controller is called from navigation to set our models, tableview, and labels.
@@ -55,7 +56,7 @@ public class AddTaskPicturesController {
      * @param actionEvent triggers when the user activates the after picture button.
      */
     @FXML private void openFileChooserAfter(ActionEvent actionEvent){
-        imageFileExplorer(false);
+        imageFileExplorer(true);
     }
 
     /**
@@ -63,7 +64,7 @@ public class AddTaskPicturesController {
      * @param actionEvent triggers when the user activates the before picture button.
      */
     @FXML private void openFileChooserBefore(ActionEvent actionEvent){
-        imageFileExplorer(true);
+        imageFileExplorer(false);
     }
 
     /**
@@ -71,7 +72,7 @@ public class AddTaskPicturesController {
      * @param actionEvent triggered when the user activates the create button.
      */
     @FXML private void createTaskPictures(ActionEvent actionEvent){
-        TaskPictures taskPictures = new TaskPictures(afterPicture, beforePicture, afterComment.getText(),task.getDocID(), beforeComment.getText());
+        TaskPictures taskPictures = new TaskPictures(task.getDocID(), afterComment.getText(), beforeComment.getText(), beforePictureAbsolute, afterPictureAbsolute );
         functionsModel.addTaskPictures(taskPictures);
     }
 
@@ -89,7 +90,7 @@ public class AddTaskPicturesController {
      * @param isAfter true if the picture being added is an after picture.
      */
     @FXML private void imageFileExplorer(Boolean isAfter) {
-        try {
+
             FileChooser fileChooser = new FileChooser();
             setFileChooser(fileChooser);
             File file = fileChooser.showOpenDialog(new Stage());
@@ -98,22 +99,23 @@ public class AddTaskPicturesController {
                 Path imagePath = FileSystems.getDefault().getPath(file.getPath());
 
                 if(isAfter){
-                    afterPicture = new Image(new FileInputStream(imagePath+file.getName()));
+                    afterPicture = new Image(new FileInputStream(imagePath.toFile()));
+                    afterPictureAbsolute = file.getAbsolutePath();
                     afterImageView.setImage(afterPicture);
-                    afterTF.setText(afterPicture.getUrl());
+                    afterTF.setText(imagePath.toString());
                 }else {
-                    beforePicture = new Image(new FileInputStream(imagePath+file.getName()));
+                    beforePicture = new Image(new FileInputStream(imagePath.toFile()));
+                    beforePictureAbsolute = file.getAbsolutePath();
                     beforeImageView.setImage(beforePicture);
-                    beforeTF.setText(beforePicture.getUrl());
+                    beforeTF.setText(imagePath.toString());
                 }
             }catch (NullPointerException n){
                 String str = "There was a problem with selecting an image. Issue: NullPointerException.";
                 pictureError(str);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
             }
-        } catch(IOException e){
-            String str = "There was a problem with selecting an image. Issue: IOException.";
-            pictureError(str);
-        }
+
     }
 
     /**

@@ -130,5 +130,5 @@ public class ProjectLogic {
     }
 
 
-
+    public List<TaskPictures> getTaskPicturesByTask(Task task){return pictureDAO.getPictureByDocumentID(task);}
 }

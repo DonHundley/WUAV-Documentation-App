@@ -11,9 +11,10 @@ import javafx.scene.control.cell.*;
 import javafx.stage.*;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
-public class ManageUsersController {
+public class ManageUsersController implements Initializable{
 
     // TableView
     @FXML private TableView<User> userTV;
@@ -44,7 +45,6 @@ public class ManageUsersController {
         this.observablesModel = observablesModel;
 
         setUsernameLabel();
-        setUserTV();
     }
 
     /**
@@ -176,5 +176,10 @@ public class ManageUsersController {
                 alert.close();
             }
         }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setUserTV();
     }
 }
