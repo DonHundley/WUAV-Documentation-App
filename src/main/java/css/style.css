@@ -34,7 +34,7 @@
 
 /*ROUND BUTTONS WITH WHITE BACKGROUND CLASS*/
 .round-btn-v2 {
-    -fx-background-color: #white;
+    -fx-background-color: white;
     -fx-text-fill: black;
     -fx-border-color: #E84910;
     -fx-border-radius: 50px;
