@@ -93,7 +93,14 @@
 
 .NavMenu-text{
     -fx-font-family: 'Montserrat';
-    -fx-font-size: 22;
-    -fx-font-weight: 600;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
     -fx-background-color: #17263A;
+    -fx-text-fill: white;
+}
+
+.description-text {
+    -fx-font-family: 'Montserrat';
+    -fx-font-size: 12;
+    -fx-text-fill: white;
 }

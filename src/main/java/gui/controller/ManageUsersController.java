@@ -3,13 +3,13 @@ package gui.controller;
 import be.*;
 import gui.model.*;
 import javafx.beans.property.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.stage.*;
 
-import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 
@@ -177,6 +177,4 @@ public class ManageUsersController {
             }
         }
     }
-
-
 }
