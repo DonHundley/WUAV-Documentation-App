@@ -2,13 +2,14 @@ package gui.controller;
 
 import be.*;
 import gui.model.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.stage.*;
 
 import javax.swing.*;
-import java.awt.event.*;
+
 import java.util.*;
 
 public class NewTaskController {
