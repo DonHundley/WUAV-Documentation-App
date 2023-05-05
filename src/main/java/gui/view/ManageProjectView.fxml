@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageProjectController">
+<AnchorPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageProjectController">
    <children>
       <TableView fx:id="projectTV" layoutX="29.0" layoutY="149.0" prefHeight="366.0" prefWidth="390.0">
         <columns>
@@ -28,6 +28,6 @@
       <Button layoutX="287.0" layoutY="541.0" mnemonicParsing="false" onAction="#deleteProject" prefHeight="30.0" prefWidth="95.0" styleClass="round-btn" text="Delete Project" />
       <Button layoutX="773.0" layoutY="556.0" mnemonicParsing="false" onAction="#assignProject" prefHeight="30.0" prefWidth="132.0" styleClass="square-btn" text="Assign Technician" />
       <Button layoutX="813.0" layoutY="28.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" text="Log Out" />
-      <Label fx:id="usernameLabel" layoutX="717.0" layoutY="33.0" prefHeight="18.0" prefWidth="60.0" />
+      <Label fx:id="usernameLabel" layoutX="645.0" layoutY="33.0" prefHeight="18.0" prefWidth="132.0" />
    </children>
 </AnchorPane>

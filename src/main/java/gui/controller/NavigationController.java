@@ -17,6 +17,7 @@ public class NavigationController {
     public ImageView imageWUAV;
     public AnchorPane baseAnchor;
     public ScrollPane scrollPane;
+    public Pane pane;
 
     private Persistent persistentModel;
     private Observables observablesModel;
@@ -28,10 +29,11 @@ public class NavigationController {
         this.functionsModel = functionsModel;
 
 
+        Node n = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
 
-        //Node n = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
 
 
+        viewAnchor.getChildren().setAll(n);
 
         //scrollPane.setContent(n);
 
@@ -40,7 +42,20 @@ public class NavigationController {
     public void home(ActionEvent actionEvent) {
     }
 
-    public void manageProjects(ActionEvent actionEvent) {
+    public void manageProjects(ActionEvent actionEvent) throws IOException {
+        /**
+
+        Node n = FXMLLoader.load(getClass().getResource("/gui/view/ManageProjectView.fxml"));
+
+        viewAnchor.getChildren().setAll(n);
+        viewAnchor.getChildren().
+        */
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/gui/view/ManageProjectView.fxml"));
+        try{
+            Node n = loader.setLoadListener();
+        }
     }
 
     public void manageCustomers(ActionEvent actionEvent) {
