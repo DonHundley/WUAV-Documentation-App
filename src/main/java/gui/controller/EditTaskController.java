@@ -25,9 +25,9 @@ public class EditTaskController {
     @FXML private Button cancelButton;
 
     // Model
-    private Functions functionsModel;
+    private Functions functionsModel = new Functions();
 
-    private Persistent persistenceModel;
+    private Persistent persistenceModel = Persistent.getInstance();
 
     // Image
     private Image layoutImage;

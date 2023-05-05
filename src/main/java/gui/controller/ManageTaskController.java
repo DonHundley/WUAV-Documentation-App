@@ -27,8 +27,8 @@ public class ManageTaskController {
     @FXML private Label errorLabel;
 
     // Models
-    private Persistent persistenceModel;
-    private Observables observablesModel;
+    private Persistent persistenceModel = Persistent.getInstance();
+    private Observables observablesModel = Observables.getInstance();
 
 
     /**

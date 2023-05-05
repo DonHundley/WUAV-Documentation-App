@@ -28,8 +28,8 @@ public class NEUserController {
     private User user;
 
     // Model instances
-    private Persistent persistentModel;
-    private Functions functionsModel;
+    private Persistent persistentModel = Persistent.getInstance();
+    private Functions functionsModel = new Functions();
 
     // True if editing, false if creating a new customer.
     private boolean isEdit;

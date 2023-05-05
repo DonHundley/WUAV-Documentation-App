@@ -28,8 +28,8 @@ public class ManageUsersController {
     @FXML private Label errorLabel;
 
     // Models
-    private Persistent persistenceModel;
-    private Observables observablesModel;
+    private Persistent persistenceModel = Persistent.getInstance();
+    private Observables observablesModel = Observables.getInstance();
     private Functions functionsModel;
 
     /**

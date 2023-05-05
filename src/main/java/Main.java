@@ -17,19 +17,19 @@ public class Main extends Application{
 
     @Override
     public void start(Stage stage) throws IOException {
-        Persistent persistent = new Persistent();
+        Persistent persistent = Persistent.getInstance();
         Functions functions = new Functions();
-        Observables observables = new Observables();
+        Observables observables = Observables.getInstance();
 
 
-        User user = new User(10, "ManagerAcc", "password", "Manager", "Man", "Ager");
-        persistent.setLoggedInUser(user);
+        //User user = new User(10, "ManagerAcc", "password", "Manager", "Man", "Ager");
+        //persistent.setLoggedInUser(user);
 
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NavigationView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Login.fxml"));
             Parent root = loader.load();
-            NavigationController controller = loader.getController();
-            controller.setNavigationController(persistent, observables, functions);
+            //NavigationController controller = loader.getController();
+            //controller.setNavigationController(persistent, observables, functions);
             Scene scene = new Scene(root);
             stage.setTitle("");
             stage.setScene(scene);

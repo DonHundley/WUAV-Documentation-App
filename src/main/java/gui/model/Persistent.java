@@ -11,6 +11,18 @@ public class Persistent {
     private Customer selectedCustomer;
 
     /**
+     * Thread safe singleton of Persistent.
+     */
+    private Persistent(){}
+    private static Persistent instance;
+    public static synchronized Persistent getInstance(){
+        if(instance == null){
+            instance = new Persistent();
+        }
+        return instance;
+    }
+
+    /**
      * These methods are the getters for the objects we keep a persistent instance of.
      */
     public User getLoggedInUser() {

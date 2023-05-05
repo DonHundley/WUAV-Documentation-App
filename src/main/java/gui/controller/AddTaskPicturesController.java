@@ -23,12 +23,12 @@ public class AddTaskPicturesController {
     @FXML private Button cancelButton;
 
     // Models
-    private Persistent persistenceModel;
-    private Observables observablesModel;
-    private Functions functionsModel;
+    private Persistent persistenceModel = Persistent.getInstance();
+    private Observables observablesModel = Observables.getInstance();
+    private Functions functionsModel = new Functions();
 
     // Task to have pictures added to
-    private Task task;
+    private Task task = persistenceModel.getSelectedTask();
 
     private Image beforePicture;
     private Image afterPicture;

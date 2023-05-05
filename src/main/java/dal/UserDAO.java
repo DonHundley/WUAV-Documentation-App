@@ -86,7 +86,7 @@ public class UserDAO {
         ArrayList<Project> currentProjects = new ArrayList<>();
 
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "SELECT * FROM users JOIN works_on ON works_on.userID = users.userID JOIN project ON project.projectID = works_on.projectID;";
+            String sql = "SELECT * FROM users";
             Statement statement = connection.createStatement();
 
             if(statement.execute(sql)) {
@@ -99,13 +99,9 @@ public class UserDAO {
                     String access = resultSet.getString("access");
                     String name = resultSet.getString("name");
                     String lastName = resultSet.getString("last_name");
-                    int projectID = resultSet.getInt("projectID");
-                    String projectName = resultSet.getString("project_name");
-                    Date dateCreated = resultSet.getDate("date_created");
-                    int customerID = resultSet.getInt("customerID");
 
-                    Project project = new Project(projectID, projectName, dateCreated, customerID);
-                    currentProjects.add(project);
+
+
                     User user = new User(id, userName, password, access, name, lastName, currentProjects);
                     users.add(user);
                 }
@@ -123,7 +119,7 @@ public class UserDAO {
         ArrayList<Project> currentProjects = new ArrayList<>();
 
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "SELECT * FROM users WHERE userID = ? JOIN works_on ON works_on.userID = users.userID JOIN project ON project.projectID = works_on.projectID";
+            String sql = "SELECT * FROM users WHERE userID = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, user.getUserID());
@@ -138,14 +134,9 @@ public class UserDAO {
                     String access = resultSet.getString("access");
                     String name = resultSet.getString("name");
                     String lastName = resultSet.getString("last_name");
-                    int projectID = resultSet.getInt("projectID");
-                    String projectName = resultSet.getString("project_name");
-                    Date dateCreated = resultSet.getDate("date_created");
-                    int customerID = resultSet.getInt("customerID");
 
 
-                    Project project = new Project(projectID, projectName, dateCreated, customerID);
-                    currentProjects.add(project);
+
                     return new User(id, userName, password, access, name, lastName, currentProjects);
                 }
             }

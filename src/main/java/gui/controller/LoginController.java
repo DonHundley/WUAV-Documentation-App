@@ -22,8 +22,8 @@ public class LoginController implements Initializable{
     public MFXPasswordField passTF;
     @FXML private Label messageLabel;
 
-    private Persistent persistentModel = new Persistent();
-    private Observables observablesModel = new Observables();
+    private Persistent persistentModel = Persistent.getInstance();
+    private Observables observablesModel = Observables.getInstance();
     private Functions functionsModel = new Functions();
 
 
@@ -43,7 +43,7 @@ public class LoginController implements Initializable{
                         persistentModel.setLoggedInUser(user);
 
                         try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Login.fxml"));
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NavigationView.fxml"));
                             Parent root = loader.load();
                             NavigationController controller = loader.getController();
                             controller.setNavigationController(persistentModel, observablesModel, functionsModel);
@@ -52,11 +52,12 @@ public class LoginController implements Initializable{
                             stage.setTitle("");
                             stage.setScene(scene);
                             stage.show();
+                            break;
                         } catch (IOException e){
 
                         }
                         System.out.println(persistentModel.getLoggedInUser().toString());
-                        break;
+
                     }
                 }
             } else messageLabel.setText(loginError);

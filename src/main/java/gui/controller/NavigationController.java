@@ -19,9 +19,9 @@ public class NavigationController {
     public ScrollPane scrollPane;
     public Pane pane;
 
-    private Persistent persistentModel;
-    private Observables observablesModel;
-    private Functions functionsModel;
+    private Persistent persistentModel = Persistent.getInstance();
+    private Observables observablesModel = Observables.getInstance();
+    private Functions functionsModel = new Functions();
 
     public void setNavigationController(Persistent persistentModel, Observables observablesModel, Functions functionsModel) throws IOException {
         this.persistentModel = persistentModel;
@@ -37,25 +37,22 @@ public class NavigationController {
 
         //scrollPane.setContent(n);
 
+
     }
 
     public void home(ActionEvent actionEvent) {
     }
 
     public void manageProjects(ActionEvent actionEvent) throws IOException {
-        /**
+
 
         Node n = FXMLLoader.load(getClass().getResource("/gui/view/ManageProjectView.fxml"));
 
         viewAnchor.getChildren().setAll(n);
-        viewAnchor.getChildren().
-        */
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/gui/view/ManageProjectView.fxml"));
-        try{
-            Node n = loader.setLoadListener();
-        }
+
+
+
     }
 
     public void manageCustomers(ActionEvent actionEvent) {

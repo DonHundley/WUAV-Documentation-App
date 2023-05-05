@@ -6,6 +6,8 @@ import logic.businessLogic.*;
 
 public class Observables {
 
+
+
     private ObservableList<User> users = FXCollections.observableArrayList();
     private ObservableList<UserWrapper> techs = FXCollections.observableArrayList();
     private ObservableList<ProjectWrapper> projects = FXCollections.observableArrayList();
@@ -18,7 +20,17 @@ public class Observables {
     private CustomerLogic customerLogic=new CustomerLogic();
     private ProjectLogic projectLogic=new ProjectLogic();
 
-
+    /**
+     * Thread safe singleton of Observables.
+     */
+    private Observables(){}
+    private static Observables instance;
+    public static synchronized Observables getInstance(){
+        if(instance == null){
+            instance = new Observables();
+        }
+        return instance;
+    }
 
     /**
      * Getters for our observable lists.

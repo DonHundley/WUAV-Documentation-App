@@ -12,9 +12,10 @@ import javafx.stage.*;
 
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
-public class DocumentationController {
+public class DocumentationController implements Initializable{
 
     // Tableview
     @FXML private TableView<Task> taskTV;
@@ -31,12 +32,12 @@ public class DocumentationController {
     @FXML private ImageView largeImageView;
 
     // Models
-    private Persistent persistenceModel;
-    private Observables observablesModel;
-    private Functions functionsModel;
+    private Persistent persistenceModel = Persistent.getInstance();
+    private Observables observablesModel = Observables.getInstance();
+    private Functions functionsModel = new Functions();
 
     // private variables
-    private Project selectedProject;
+    private Project selectedProject = persistenceModel.getSelectedProject();
 
 
     /**
@@ -202,5 +203,10 @@ public class DocumentationController {
         } else {
             alert.close();
         }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setTaskTV();
     }
 }

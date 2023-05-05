@@ -21,8 +21,8 @@ public class NewTaskController {
     @FXML private Button cancelButton;
 
     // Model instances
-    private Persistent persistentModel;
-    private Functions functionsModel;
+    private Persistent persistentModel = Persistent.getInstance();
+    private Functions functionsModel = new Functions();
 
     // The project to have a task added.
     private Project selectedProject;

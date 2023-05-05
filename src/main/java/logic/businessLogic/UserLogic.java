@@ -64,7 +64,7 @@ public class UserLogic {
         HashMap<Integer, Integer> loginInfo = new HashMap<>();
         for (User user: allUsers) {
             System.out.println(user.getUserName() + " "+ user.getPassword());
-
+            System.out.println(allUsers.size());
             int k = user.getUserName().hashCode();
             int v = user.getPassword().hashCode();
 

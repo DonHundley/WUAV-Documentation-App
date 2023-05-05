@@ -12,11 +12,12 @@ import javafx.stage.*;
 
 
 import java.io.*;
+import java.net.*;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class ManageProjectController{
+public class ManageProjectController implements Initializable{
 
     // TableViews
     @FXML private TableView<ProjectWrapper> projectTV;
@@ -34,25 +35,12 @@ public class ManageProjectController{
     @FXML private Label windowTitleLabel;
 
     // Models
-    private Persistent persistenceModel;
-    private Observables observablesModel;
-    private Functions functionsModel;
+    private Persistent persistenceModel = Persistent.getInstance();
+    private Observables observablesModel = Observables.getInstance();
+    private Functions functionsModel = new Functions();
 
+    private void ManageProjectController(){
 
-    /**
-     * We call this when this controller is called from navigation to set our models, tableview, and labels.
-     * @param persistenceModel this is our instance of Persistent from navigation
-     * @param observablesModel this is our instance of Observables from navigation
-     * @param functionsModel this is our instance of Functions from navigation
-     */
-    public void userController(Persistent persistenceModel, Observables observablesModel, Functions functionsModel){
-        this.persistenceModel = persistenceModel;
-        this.functionsModel = functionsModel;
-        this.observablesModel = observablesModel;
-
-        setUsernameLabel();
-        setProjectTV();
-        setTechTV();
     }
 
     /**
@@ -216,4 +204,9 @@ public class ManageProjectController{
         }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setProjectTV();
+        setTechTV();
+    }
 }
