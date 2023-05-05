@@ -7,13 +7,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.stage.*;
 
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
-public class ManageTaskController {
+public class ManageTaskController implements Initializable{
 
     @FXML private TableView<TaskWrapper> taskTV;
     @FXML private TableColumn<TaskWrapper, String> projectName;
@@ -64,8 +66,32 @@ public class ManageTaskController {
         taskName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getTask().getTaskName()));
         stateOfTask.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getTask().getTaskState()));
         customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
-    }
 
+
+    }
+    @FXML private void openDocumentWindow(MouseEvent mouseEvent) throws IOException {
+        try {
+            persistenceModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
+            System.out.println(persistenceModel.getSelectedProject());
+            if (mouseEvent.getClickCount() == 2) {
+
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/DocumentationView.fxml"));
+                Parent root = loader.load();
+                //DocumentationController controller = loader.getController();
+                //controller.userController(persistenceModel, observablesModel, functionsModel);
+                Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setTitle("Documentation Manager");
+                stage.setScene(scene);
+                stage.show();
+            }
+        }catch (IOException e){
+            String str = "DocumentationView.fxml.";
+            taskError(str);
+            e.printStackTrace();
+        }
+    }
     @FXML private void logOut(ActionEvent actionEvent){
         try {
             persistenceModel.setLoggedInUser(null);
@@ -99,4 +125,19 @@ public class ManageTaskController {
     }
 
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setTaskTV();
+    }
+
+    public void projectInformation(ActionEvent actionEvent) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/DocumentationView.fxml"));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setTitle("Add Task Pictures");
+        stage.setScene(scene);
+        stage.show();
+    }
 }

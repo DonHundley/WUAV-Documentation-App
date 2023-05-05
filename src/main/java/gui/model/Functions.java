@@ -23,6 +23,7 @@ public class Functions {
      */
     public void addTaskPictures(TaskPictures taskPictures){projectLogic.addTaskPictures(taskPictures);}
     public void createTask(Task task){projectLogic.createTask(task);}
+    public List<TaskPictures> taskPicturesByDocID(Task task){return projectLogic.getTaskPicturesByTask(task);}
     public void updateTask(Task task){projectLogic.updateTask(task);}
 
     /**

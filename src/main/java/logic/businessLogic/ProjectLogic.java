@@ -54,7 +54,7 @@ public class ProjectLogic {
      * @return This returns a list of tasks for the selected project.
      */
     public List<Task> getTasksByProject(Project selectedProject) {
-        return taskDAO.getTaskByProject(selectedProject.getProjID());
+        return taskDAO.getTaskByProject(selectedProject);
     }
 
     /**
@@ -129,6 +129,6 @@ public class ProjectLogic {
         worksOnDAO.deleteWork(selectedUser, selectedProject);
     }
 
-
+    public List<TaskPictures> getTaskPicturesByTask(Task task){return pictureDAO.getPictureByDocumentID(task);}
 
 }

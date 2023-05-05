@@ -1,6 +1,6 @@
 package dal;
 
-import be.TaskPictures;
+import be.*;
 import javafx.scene.image.Image;
 
 import java.io.*;
@@ -155,5 +155,37 @@ public class PictureDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    /**
+     * Method to get picture by Document ID from database.
+     */
+    public List<TaskPictures> getPictureByDocumentID(Task task) {
+        ArrayList<TaskPictures> taskPicturesByDocID = new ArrayList<>();
+        try (Connection connection = databaseConnector.getConnection()) {
+            String sql = "SELECT * FROM task_picture WHERE DocumentID = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, task.getDocID());
+
+            if(pstmt.execute(sql)) {
+                ResultSet resultSet = pstmt.getResultSet();
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("pictureID");
+                    Image tryingAfterPicture = new Image(resultSet.getBinaryStream("after_picture"));
+                    Image tryingBeforePicture = new Image(resultSet.getBinaryStream("before_picture"));
+                    String afterComment = resultSet.getString("after_comment");
+                    int documentationID = resultSet.getInt("documentationID");
+                    String beforeComment = resultSet.getString("before_comment");
+
+                    TaskPictures taskPictures = new TaskPictures(id, tryingAfterPicture, tryingBeforePicture, afterComment, documentationID, beforeComment);
+                    taskPicturesByDocID.add(taskPictures);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return taskPicturesByDocID;
     }
 }

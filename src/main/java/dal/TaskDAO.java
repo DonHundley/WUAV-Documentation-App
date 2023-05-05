@@ -156,13 +156,13 @@ public class TaskDAO {
     /**
      * Method to get task by projectID from database.
      */
-    public List<Task> getTaskByProject(int selectedProjectID) {
+    public List<Task> getTaskByProject(Project project) {
         ArrayList<Task> tasksByProject = new ArrayList<>();
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM task_documentation WHERE projectID = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, selectedProjectID);
+            pstmt.setInt(1, project.getProjID());
 
             if (pstmt.execute(sql)) {
                 ResultSet resultSet = pstmt.getResultSet();
