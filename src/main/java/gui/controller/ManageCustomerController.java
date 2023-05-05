@@ -7,6 +7,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.*;
 
 import java.awt.event.*;
@@ -68,9 +69,50 @@ public class ManageCustomerController {
         customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
         customerEmail.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustEmail()));
         projectName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
+
+        customersTV.getSelectionModel().selectedItemProperty().addListener(((((observable, oldValue, selectedProject) ->
+                persistenceModel.setSelectedProject(selectedProject.getProject())
+        ))));
     }
 
-    private void clickCustomerTV(){}
+    @FXML private void openDocumentWindow(MouseEvent mouseEvent) throws IOException {
+        try {
+            if (mouseEvent.getClickCount() == 2) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/DocumentationView.fxml"));
+                Parent root = loader.load();
+                DocumentationController controller = loader.getController();
+                controller.userController(persistenceModel, observablesModel, functionsModel);
+                Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setTitle("Documentation Manager");
+                stage.setScene(scene);
+                stage.show();
+            }
+        }catch (IOException e){
+            String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+    }
+
+    @FXML private void openDocumentButton(ActionEvent actionEvent) {
+        try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/DocumentationView.fxml"));
+                Parent root = loader.load();
+                DocumentationController controller = loader.getController();
+                controller.userController(persistenceModel, observablesModel, functionsModel);
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setTitle("Documentation Manager");
+                stage.setScene(scene);
+                stage.show();
+
+        }catch (IOException e){
+            String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+
+    }
+
     @FXML private void editCustomer(ActionEvent actionEvent){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NECustomer.fxml"));

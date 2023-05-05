@@ -1,6 +1,9 @@
 
 
 
+import be.*;
+import gui.controller.*;
+import gui.model.*;
 import javafx.application.Application;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -14,13 +17,24 @@ public class Main extends Application{
 
     @Override
     public void start(Stage stage) throws IOException {
+        Persistent persistent = new Persistent();
+        Functions functions = new Functions();
+        Observables observables = new Observables();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("main/java/gui/view/Login.fxml"));
+
+        User user = new User(10, "ManagerAcc", "password", "Manager", "Man", "Ager");
+        persistent.setLoggedInUser(user);
+
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NavigationView.fxml"));
             Parent root = loader.load();
+            NavigationController controller = loader.getController();
+            controller.setNavigationController(persistent, observables, functions);
             Scene scene = new Scene(root);
             stage.setTitle("");
             stage.setScene(scene);
             stage.show();
+
     }
 
     public static void main(String[] args) {

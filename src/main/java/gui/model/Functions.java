@@ -40,6 +40,7 @@ public class Functions {
     public void createUser(User user){userLogic.createUser(user);}
     public void editUser(User user){userLogic.editUser(user);}
     public void deleteUser(User user){userLogic.deleteUser(user);}
-    public HashMap<String, String> userInfo(List<User> users){ return userLogic.loginInformation(users);}
+    public HashMap<Integer, Integer> userInfo(){ return userLogic.loginInformation();}
+    public List<User> users(){return userLogic.getUsers();}
 
 }

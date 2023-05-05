@@ -11,7 +11,6 @@ import java.util.*;
 
 public class NEProjectController {
     @FXML private TextField projectName;
-    @FXML private Date creationDate;
     @FXML private Label windowTitleLabel;
     @FXML private Button cancelButton;
 
@@ -24,6 +23,7 @@ public class NEProjectController {
     // True if editing, false if creating a new customer.
     private boolean isEdit;
 
+    private Date creationDate;
 
     /**
      * This method is used to set our models and choose if we are editing or creating a project.

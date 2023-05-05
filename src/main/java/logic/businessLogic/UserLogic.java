@@ -59,12 +59,16 @@ public class UserLogic {
         userDAO.deleteUser(user);
     }
 
-    public HashMap<String, String> loginInformation(List<User> allUsers){
-        HashMap<String, String> loginInfo = new HashMap<>();
+    public HashMap<Integer, Integer> loginInformation(){
+        List<User> allUsers = userDAO.getAllUsers();
+        HashMap<Integer, Integer> loginInfo = new HashMap<>();
         for (User user: allUsers) {
-            String k = user.getUserName();
-            String v = user.getPassword();
+            System.out.println(user.getUserName() + " "+ user.getPassword());
 
+            int k = user.getUserName().hashCode();
+            int v = user.getPassword().hashCode();
+
+            System.out.println(k + v);
             loginInfo.put(k, v);
         }
         return loginInfo;
