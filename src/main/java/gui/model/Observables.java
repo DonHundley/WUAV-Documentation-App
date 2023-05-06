@@ -58,6 +58,11 @@ public class Observables {
         return customers;
     }
 
+    public void search(String query) {
+        customers.clear();
+        customers.addAll(customerLogic.searchCustomer(query));
+    }
+
     /**
      * These commands are used to load and refresh our lists.
      */

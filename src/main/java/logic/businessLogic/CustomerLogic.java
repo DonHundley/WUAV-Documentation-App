@@ -8,6 +8,18 @@ import java.util.*;
 public class CustomerLogic {
     private CustomerDAO customerDAO = new CustomerDAO();
 
+    public List<CustomerWrapper> searchCustomer(String query) {
+        List<CustomerWrapper> customers = customerDAO.getAllCustomersWithProjects();
+        List<CustomerWrapper> filtered = new ArrayList<>();
+
+        for(CustomerWrapper c : customers){
+            if((""+c.getCustomer().getCustAddress()).toLowerCase().contains(query.toLowerCase())) {
+                filtered.add(c);
+            }
+        }
+        return filtered;
+    }
+
     /**
      * @return This returns the list of customers created by CustomerDAO.
      */

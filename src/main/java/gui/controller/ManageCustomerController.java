@@ -3,6 +3,8 @@ package gui.controller;
 import be.*;
 import gui.model.*;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -176,5 +178,12 @@ public class ManageCustomerController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setCustomerTableView();
+
+        searchCustomer.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                observablesModel.search(newValue);
+            }
+        });
     }
 }
