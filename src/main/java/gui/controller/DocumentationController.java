@@ -3,22 +3,27 @@ package gui.controller;
 import be.*;
 import gui.model.*;
 import javafx.beans.property.*;
+
+
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.stage.*;
+
 
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class DocumentationController implements Initializable{
+
+public class DocumentationController implements Initializable {
 
     public AnchorPane imagePane;
+
     // Tableview
     @FXML private TableView<Task> taskTV;
     @FXML private TableColumn<Task, String> taskName;
@@ -40,7 +45,7 @@ public class DocumentationController implements Initializable{
 
     // private variables
     private Project selectedProject=persistenceModel.getSelectedProject();
-
+    //private HashMap<String, Image> images = new HashMap<>();
 
     /**
      * We call this when this controller is called from navigation to set our models, tableview, and labels.
@@ -79,6 +84,7 @@ public class DocumentationController implements Initializable{
         taskTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedTask) -> {
             persistenceModel.setSelectedTask(selectedTask);
             setDescriptionLabel();
+            //images.clear();
             generateImgThumbnails();
         })));
     }
@@ -104,29 +110,100 @@ public class DocumentationController implements Initializable{
     private void generateImgThumbnails() {
         Task task = persistenceModel.getSelectedTask();
         List<TaskPictures> pics = functionsModel.taskPicturesByDocID(task);
+
         imagePane.getChildren().clear();
+
+        int imgCount = 1;
         for (TaskPictures picture:pics) {
             if (picture.getBeforePicture() != null){
                 ImageView bImage = new ImageView(picture.getBeforePicture());
                 bImage.setFitHeight(150);
                 bImage.setFitWidth(200);
-                imagePane.getChildren().add(new ImageView(picture.getBeforePicture()));
+                bImage.setX(imageLocationX(imgCount, 200));
+                bImage.setY(imageLocationY(imgCount, 150));
+                //bImage.setId("BeforeImage"+imgCount);
+                //bImage.isFocusVisible();
+                imagePane.getChildren().add(bImage);
+                //System.out.println(bImage.getId());
+                //images.put(bImage.getId(), bImage.getImage());
+                imgCount++;
             }
             if (picture.getAfterPicture() != null){
-                ImageView bImage = new ImageView(picture.getAfterPicture());
-                bImage.setFitHeight(150);
-                bImage.setFitWidth(200);
-                imagePane.getChildren().add(new ImageView(picture.getAfterPicture()));
+                ImageView aImage = new ImageView(picture.getAfterPicture());
+                aImage.setFitHeight(150);
+                aImage.setFitWidth(200);
+                aImage.setX(imageLocationX(imgCount, 200));
+                aImage.setY(imageLocationY(imgCount, 150));
+                //aImage.setId("AfterImage"+imgCount);
+                //aImage.isFocusVisible();
+                imagePane.getChildren().add(aImage);
+                //System.out.println(aImage.getId());
+                //images.put(aImage.getId(), aImage.getImage());
+                imgCount++;
+            }
+            if(imgCount == 20){
+                break;
             }
         }
     }
 
+    private int imageLocationX(int imgCount, int imgWidth){
+        int getX;
+        int spacing;
+        if(imgCount <= 4){
+        getX = imgCount*imgWidth;
+        spacing = imgCount * 5;
+        return getX- imgWidth + spacing;
+        }else if(imgCount <= 8){
+            imgCount = imgCount-4;
+            getX = imgCount*imgWidth;
+            spacing = imgCount * 5;
+            return getX- imgWidth + spacing;
+        }else if(imgCount <= 12){
+            imgCount = imgCount-8;
+            getX = imgCount*imgWidth;
+            spacing = imgCount * 5;
+            return getX- imgWidth + spacing;
+        }else if(imgCount <= 16){
+            imgCount = imgCount-12;
+            getX = imgCount*imgWidth;
+            spacing = imgCount * 5;
+            return getX- imgWidth + spacing;
+        }else {
+            imgCount = imgCount - 16;
+            getX = imgCount * imgWidth;
+            spacing = imgCount * 5;
+            return getX- imgWidth + spacing;
+        }
+    }
+
+    private int imageLocationY(int imgCount, int imgHeight){
+        int getY;
+
+        if(imgCount <= 4){
+            return 0;
+        } else if(imgCount <= 8){
+            return imgHeight + 5;
+        } else if (imgCount <= 12){
+
+            getY = imgHeight *2;
+            return getY + 10;
+        } else if (imgCount <= 16){
+            getY = imgHeight *3;
+            return getY + 15;
+        } else {
+            getY = imgHeight *4;
+            return getY + 20;
+        }
+    }
     private void setDescriptionLabel() {
         if(persistenceModel.getSelectedTask().getTaskDesc() != null){
         descriptionLabel.setText(persistenceModel.getSelectedTask().getTaskDesc());
         }
     }
-    @FXML private void selectImage(ActionEvent actionEvent){}
+    @FXML private void selectImage(Image image){
+
+    }
 
     /**
      *  This will open the New Task View.
@@ -230,15 +307,12 @@ public class DocumentationController implements Initializable{
         setTaskTV();
     }
 
-    public void setProject(Project selectedProject) {
-        this.selectedProject = selectedProject;
+
+    public void getSelectedImage(javafx.scene.input.MouseEvent mouseEvent) {
+
+        //String str = imagePane.getScene().getFocusOwner().getId();
+        //System.out.println(str);
+        //Image image = images.get(str);
+        //largeImageView.setImage(image);
     }
-
-    public void documentationViewLaunch() {
-        //setSelectedProject();
-        setTaskTV();
-
-    }
-
-
 }

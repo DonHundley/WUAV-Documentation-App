@@ -9,26 +9,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
-
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.DocumentationController">
    <children>
-      <ScrollPane prefHeight="650.0" prefWidth="950.0">
+      <ScrollPane hbarPolicy="NEVER" prefHeight="650.0" prefWidth="950.0">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="950.0">
                <children>
@@ -51,10 +37,13 @@
                   <Button layoutX="419.0" layoutY="504.0" mnemonicParsing="false" onAction="#createTask" styleClass="round-btn" text="Create Task" />
                   <VBox layoutY="554.0" prefHeight="440.0" prefWidth="950.0">
                      <children>
-                        <ScrollPane prefHeight="200.0" prefWidth="950.0">
+                        <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="420.0" prefWidth="850.0">
                            <content>
-                              <AnchorPane fx:id="imagePane" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="950.0" />
+                              <AnchorPane fx:id="imagePane" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" onMouseClicked="#getSelectedImage" prefHeight="750.0" prefWidth="850.0" style="-fx-background-color: black;" />
                            </content>
+                           <VBox.margin>
+                              <Insets left="25.0" />
+                           </VBox.margin>
                         </ScrollPane>
                         <ImageView fx:id="largeImageView" fitHeight="254.0" fitWidth="374.0" pickOnBounds="true" preserveRatio="true">
                            <VBox.margin>
