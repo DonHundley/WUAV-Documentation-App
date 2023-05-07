@@ -129,6 +129,27 @@ public class ProjectLogic {
         worksOnDAO.deleteWork(selectedUser, selectedProject);
     }
 
+    public List<TaskWrapper> tasksByUserID(User user){
+        List<TaskWrapper> tasksByUserID = new ArrayList<>();
+        List<Integer> projectIDsByUserIDs = worksOnDAO.getProjectIDsByUserID(user);
+        List<TaskWrapper> getTasksInfo = getTasksInfo();
 
+        for (int projectID: projectIDsByUserIDs) {
+
+            System.out.println(worksOnDAO.getProjectIDsByUserID(user).size() + " is the size of projects by userID");
+
+
+            for (TaskWrapper project: getTasksInfo
+                 ) {
+                System.out.println("checking a project");
+                if(project.getProject().getProjID() == projectID){
+                    System.out.println("Project found");
+                    tasksByUserID.add(project);
+                }
+            }
+        }
+        System.out.println("Process complete");
+        return tasksByUserID;
+    }
     public List<TaskPictures> getTaskPicturesByTask(Task task){return pictureDAO.getPictureByDocumentID(task);}
 }

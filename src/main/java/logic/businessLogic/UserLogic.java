@@ -59,6 +59,8 @@ public class UserLogic {
         userDAO.deleteUser(user);
     }
 
+
+
     public HashMap<Integer, Integer> loginInformation(){
         List<User> allUsers = userDAO.getAllUsers();
         HashMap<Integer, Integer> loginInfo = new HashMap<>();

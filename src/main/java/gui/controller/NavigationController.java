@@ -47,6 +47,9 @@ public class NavigationController {
                 home = "/gui/view/ManageTaskView.fxml";
                 break;
             case "TECHNICIAN":
+                System.out.println("Loading list");
+                observablesModel.loadProjectsByUser(loggedInUser);
+                System.out.println("done loading list");
                 Node t = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
                 viewAnchor.getChildren().setAll(t);
                 home = "/gui/view/ManageTaskView.fxml";

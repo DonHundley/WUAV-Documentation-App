@@ -106,6 +106,11 @@ public class User {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
     /*public List<String> getWorksOn() {
         return worksOn;
     }

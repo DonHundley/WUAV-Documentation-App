@@ -2,7 +2,7 @@ package gui.controller;
 
 import be.*;
 import gui.model.*;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.*;
 
 public class ManageTaskController extends NavigationController implements Initializable{
+
 
     @FXML private TableView<TaskWrapper> taskTV;
     @FXML private TableColumn<TaskWrapper, String> projectName;
@@ -32,7 +33,8 @@ public class ManageTaskController extends NavigationController implements Initia
     private Persistent persistenceModel = Persistent.getInstance();
     private Observables observablesModel = Observables.getInstance();
 
-
+    // Userwrapper
+    private UserWrapper userWrapper;
 
 
     /**
@@ -43,18 +45,7 @@ public class ManageTaskController extends NavigationController implements Initia
     }
 
 
-    /**
-     * We use this to set up the tableview TaskTV with relative columns.
-     */
-    private void setTaskTV() {
-        taskTV.setItems(observablesModel.getTasksInfo());
-        observablesModel.loadTasksInfo();
 
-        projectName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
-        taskName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getTask().getTaskName()));
-        stateOfTask.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getTask().getTaskState()));
-        customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
-    }
 
     @FXML private void logOut(ActionEvent actionEvent){
         try {
@@ -92,9 +83,29 @@ public class ManageTaskController extends NavigationController implements Initia
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setUsernameLabel();
-        setUsernameLabel();
-        setTaskTV();
+
+        if(persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("TECHNICIAN"))
+        {
+            User loggedIn = persistenceModel.getLoggedInUser();
+            taskTV.setItems(observablesModel.getTasksByUserID());
+            observablesModel.loadProjectsByUser(loggedIn);
+            customerName.setVisible(false);
+            projectName.setMinWidth(projectName.getWidth() + 90);
+            taskName.setMinWidth(taskName.getWidth() + 90);
+            stateOfTask.setMinWidth(stateOfTask.getWidth() + 90);
+
+            System.out.println(observablesModel.getTasksByUserID().size());
+        }else {
+            taskTV.setItems(observablesModel.getTasksInfo());
+            observablesModel.loadTasksInfo();
+            customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
+        }
+        projectName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
+        taskName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getTask().getTaskName()));
+        stateOfTask.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getTask().getTaskState()));
+
     }
+
 
     @FXML private void openProjectInfo(ActionEvent actionEvent)  {
         openProjectInformation();
