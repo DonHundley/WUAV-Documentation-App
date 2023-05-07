@@ -23,6 +23,7 @@ import java.util.*;
 
 public class DocumentationController implements Initializable {
 
+    @FXML private Button createTaskButton;
     @FXML private AnchorPane imagePane;
     @FXML private Label messageLabel;
 
@@ -297,6 +298,9 @@ public class DocumentationController implements Initializable {
         setSelectedProject();
         setUsernameLabel();
         setTaskTV();
+        if(persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("TECHNICIAN") || persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES") ){
+            createTaskButton.setVisible(false);
+        }
         windowTitleLabel.setText("Project Documentation");
     }
 

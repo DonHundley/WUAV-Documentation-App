@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.DocumentationController">
+<AnchorPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.DocumentationController">
    <children>
       <ScrollPane hbarPolicy="NEVER" prefHeight="650.0" prefWidth="950.0">
          <content>
@@ -34,7 +34,7 @@
                   <Label fx:id="usernameLabel" alignment="CENTER_RIGHT" layoutX="595.0" layoutY="33.0" prefHeight="18.0" prefWidth="211.0" />
                   <Button layoutX="111.0" layoutY="500.0" mnemonicParsing="false" onAction="#updateTask" prefHeight="30.0" prefWidth="87.0" styleClass="round-btn" text="Update task" />
                   <Button layoutX="207.0" layoutY="500.0" mnemonicParsing="false" onAction="#addPictures" prefHeight="30.0" prefWidth="139.0" styleClass="round-btn" text="Add pictures to task" />
-                  <Button layoutX="26.0" layoutY="500.0" mnemonicParsing="false" onAction="#createTask" styleClass="round-btn" text="Create Task" />
+                  <Button fx:id="createTaskButton" layoutX="26.0" layoutY="500.0" mnemonicParsing="false" onAction="#createTask" styleClass="round-btn" text="Create Task" />
                   <VBox layoutY="554.0" prefHeight="440.0" prefWidth="950.0">
                      <children>
                         <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="420.0" prefWidth="850.0">
