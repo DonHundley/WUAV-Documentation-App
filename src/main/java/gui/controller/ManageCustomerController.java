@@ -18,27 +18,34 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class ManageCustomerController implements Initializable{
+public class ManageCustomerController implements Initializable {
 
     // Tableview
-    @FXML private TableView<CustomerWrapper> customersTV;
-    @FXML private TableColumn<CustomerWrapper, String> customerEmail;
-    @FXML private TableColumn<CustomerWrapper, String> customerName;
-    @FXML private TableColumn<CustomerWrapper, String> customerAddress;
-    @FXML private TableColumn<CustomerWrapper, String> projectName;
+    @FXML
+    private TableView<CustomerWrapper> customersTV;
+    @FXML
+    private TableColumn<CustomerWrapper, String> customerEmail;
+    @FXML
+    private TableColumn<CustomerWrapper, String> customerName;
+    @FXML
+    private TableColumn<CustomerWrapper, String> customerAddress;
+    @FXML
+    private TableColumn<CustomerWrapper, String> projectName;
 
     // TextField
-    @FXML private TextField searchCustomer;
+    @FXML
+    private TextField searchCustomer;
 
     // Labels
-    @FXML private Label usernameLabel;
-    @FXML private Label windowTitle;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label windowTitle;
 
     // Models
     private Persistent persistenceModel = Persistent.getInstance();
     private Observables observablesModel = Observables.getInstance();
     private Functions functionsModel = new Functions();
-
 
 
     /**
@@ -56,17 +63,21 @@ public class ManageCustomerController implements Initializable{
         customersTV.setItems(observablesModel.getCustomersWithWrapper());
         observablesModel.loadCustomersWithWrapper();
 
-        customerAddress.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustAddress()));
-        customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
-        customerEmail.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustEmail()));
-        projectName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
+        customerAddress.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustAddress()));
+        customerName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
+        customerEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustEmail()));
+        projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
 
-        customersTV.getSelectionModel().selectedItemProperty().addListener(((((observable, oldValue, selectedProject) ->
-                persistenceModel.setSelectedProject(selectedProject.getProject())
-        ))));
+        customersTV.getSelectionModel().selectedItemProperty().addListener(((((observable, oldValue, selection) -> {
+            if (selection != null) {
+                persistenceModel.setSelectedProject(selection.getProject());
+                persistenceModel.setSelectedCustomer(selection.getCustomer());
+            }
+        }))));
     }
 
-    @FXML private void openDocumentWindow(MouseEvent mouseEvent) throws IOException {
+    @FXML
+    private void openDocumentWindow(MouseEvent mouseEvent) throws IOException {
         try {
             if (mouseEvent.getClickCount() == 2) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/DocumentationView.fxml"));
@@ -79,32 +90,26 @@ public class ManageCustomerController implements Initializable{
                 stage.setScene(scene);
                 stage.show();
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
             customerError(str);
         }
     }
 
-    @FXML private void openDocumentButton(ActionEvent actionEvent) {
+    @FXML
+    private void openDocumentButton(ActionEvent actionEvent) {
         try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/DocumentationView.fxml"));
-                Parent root = loader.load();
-                //DocumentationController controller = loader.getController();
-                //controller.userController(persistenceModel, observablesModel, functionsModel);
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                Scene scene = new Scene(root);
-                stage.setTitle("Documentation Manager");
-                stage.setScene(scene);
-                stage.show();
-
-        }catch (IOException e){
+            persistenceModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
+            Node n = FXMLLoader.load(getClass().getResource("/gui/view/DocumentationView.fxml"));
+            persistenceModel.getViewAnchor().getChildren().setAll(n);
+        } catch (IOException e) {
             String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
             customerError(str);
         }
-
     }
 
-    @FXML private void editCustomer(ActionEvent actionEvent){
+    @FXML
+    private void editCustomer(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NECustomer.fxml"));
             Parent root = loader.load();
@@ -115,24 +120,25 @@ public class ManageCustomerController implements Initializable{
             stage.setTitle("Edit Customer");
             stage.setScene(scene);
             stage.show();
-        }catch (IOException e){
+        } catch (IOException e) {
             String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
             customerError(str);
         }
     }
 
-    @FXML private void createCustomer(ActionEvent actionEvent){
+    @FXML
+    private void createCustomer(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NECustomer.fxml"));
             Parent root = loader.load();
             NECustomerController controller = loader.getController();
-            controller.setNEController(false,persistenceModel,functionsModel);
+            controller.setNEController(false, persistenceModel, functionsModel);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setTitle("New customer");
             stage.setScene(scene);
             stage.show();
-        }catch (IOException e){
+        } catch (IOException e) {
             String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
             customerError(str);
         }
@@ -141,9 +147,11 @@ public class ManageCustomerController implements Initializable{
     /**
      * This will log the user out and change the view to the login.
      * We catch the IOException and show the user a crafted alert.
+     *
      * @param actionEvent triggered by the logout button.
      */
-    @FXML private void logOut(ActionEvent actionEvent){
+    @FXML
+    private void logOut(ActionEvent actionEvent) {
         try {
             persistenceModel.setLoggedInUser(null);
             Parent root = FXMLLoader.load(getClass().getResource("/gui/view/Login.fxml"));
@@ -152,7 +160,7 @@ public class ManageCustomerController implements Initializable{
             stage.setTitle("WUAV");
             stage.setScene(scene);
             stage.show();
-        }catch (IOException e){
+        } catch (IOException e) {
             String str = "There has been an error loading Login.fxml. Please contact system Admin.";
             customerError(str);
         }
@@ -160,6 +168,7 @@ public class ManageCustomerController implements Initializable{
 
     /**
      * We use this to display an error to the user if there is a problem.
+     *
      * @param str This is the source of the problem so that the user is informed.
      */
     private void customerError(String str) {
@@ -168,7 +177,7 @@ public class ManageCustomerController implements Initializable{
         alert.setHeaderText(str);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             alert.close();
         } else {
             alert.close();

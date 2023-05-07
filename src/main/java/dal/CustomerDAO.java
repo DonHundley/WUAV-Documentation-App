@@ -44,7 +44,7 @@ public class CustomerDAO {
      */
     public void updateCustomer(Customer customer) {
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "UPDATE customer SET customer_name = ?, customer_email = ?, customer_address = ?) " + "WHERE customerID = ?";
+            String sql = "UPDATE customer SET customer_name = ?, customer_email = ?, customer_address = ? " + "WHERE customerID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 

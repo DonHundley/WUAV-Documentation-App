@@ -5,13 +5,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="450.0" prefWidth="600.0" styleClass="NEwindow-background" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NewTaskController">
    <children>
       <Label fx:id="windowTitleLabel" layoutX="223.0" layoutY="27.0" styleClass="NEwindow-title" stylesheets="@../../css/style.css" text="New Task" />
       <Label layoutX="105.0" layoutY="103.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" text="*Task Name" />
       <TextField fx:id="taskName" layoutX="243.0" layoutY="101.0" prefHeight="25.0" prefWidth="234.0" />
-      <Button layoutX="67.0" layoutY="368.0" mnemonicParsing="false" onAction="#createTask" styleClass="round-btn" stylesheets="@../../css/style.css" text="Create" />
+      <Button fx:id="createTask" layoutX="67.0" layoutY="368.0" mnemonicParsing="false" onAction="#createTask" styleClass="round-btn" stylesheets="@../../css/style.css" text="Create" />
       <Button fx:id="cancelButton" layoutX="168.0" layoutY="368.0" mnemonicParsing="false" onAction="#cancel" styleClass="round-btn" stylesheets="@../../css/style.css" text="Cancel" />
       <Label fx:id="errorLabel" layoutX="150.0" layoutY="333.0" prefHeight="21.0" prefWidth="300.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" />
       <Label layoutX="270.0" layoutY="373.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" text="required fields are marked with *" />

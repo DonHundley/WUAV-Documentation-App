@@ -107,34 +107,14 @@ public class ManageTaskController extends NavigationController implements Initia
         setTaskTV();
     }
 
-    public void openProjectInfo(ActionEvent actionEvent) throws IOException {
-        /**
-        TaskWrapper selectedRow = taskTV.getSelectionModel().getSelectedItem();
-        Project selectedProject=selectedRow.getProject();
-        System.out.println(selectedProject);
-
-        if (selectedProject != null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/DocumentationView.fxml"));
-            Parent root = loader.load();
-          DocumentationController controller = loader.getController();
-            controller.setProject(selectedProject);
-           controller.documentationViewLaunch();
-
-
-           //Node n = FXMLLoader.load(getClass().getResource("/gui/view/DocumentationView.fxml"));
-            navigationController.viewAnchor.getChildren().setAll(root);
-
-
-            /*Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setTitle("Documentation");
-            stage.setScene(scene);
-            stage.show();*/
-        //} else { errorLabel.setText("Please select an task to see related documentation.");
-        //}
-
-        persistenceModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
-        Node n = FXMLLoader.load(getClass().getResource("/gui/view/DocumentationView.fxml"));
-        persistenceModel.getViewAnchor().getChildren().setAll(n);
+    public void openProjectInfo(ActionEvent actionEvent)  {
+        try {
+            persistenceModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
+            Node n = FXMLLoader.load(getClass().getResource("/gui/view/DocumentationView.fxml"));
+            persistenceModel.getViewAnchor().getChildren().setAll(n);
+        }  catch (IOException e) {
+            errorLabel.setText("Please select an task to see related documentation.");
+            
+        }
     }
 }

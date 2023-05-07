@@ -31,7 +31,7 @@ public class EditTaskController {
 
     // Image
     private Image layoutImage;
-    private ImageView layoutPreview;
+    @FXML private ImageView layoutPreview;
 
     // Instance of our task to be edited.
     private Task selectedTask;
@@ -131,7 +131,7 @@ public class EditTaskController {
             selectedTask.setTaskLayout(layoutImage);
         }
 
-        if(taskDescription.getText() != null){
+        if(!taskDescription.getText().isEmpty()){
             selectedTask.setTaskDesc(taskDescription.getText());
         }
 

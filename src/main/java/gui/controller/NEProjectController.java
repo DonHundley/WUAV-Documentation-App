@@ -87,19 +87,26 @@ public class NEProjectController implements Initializable {
      * This method is used to create a new project if our isEdit boolean == false.
      */
     private void createProject() {
+        if (!projectName.getText().isEmpty()) {
+            project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), NEProjectTV.getSelectionModel().getSelectedItem().getCustID());
+            functionsModel.createProject(project);
 
-        project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), NEProjectTV.getSelectionModel().getSelectedItem().getCustID());
-        functionsModel.createProject(project);
-
-        observablesModel.loadProjects();
-        Stage stage = (Stage) createOrEditProject.getScene().getWindow();
-        stage.close();
+            observablesModel.loadProjects();
+            Stage stage = (Stage) createOrEditProject.getScene().getWindow();
+            stage.close();
+        } else {
+            String str = "Please fill in the project name";
+            projectError(str);
+        }
     }
 
     /**
      * This method is used to edit the selected project from our persistent model with updated information.
      */
     private void editProject() {
+
+        if(!projectName.getText().isEmpty())
+    {
         project.setProjName(projectName.getText());
 
         functionsModel.editProject(project);
@@ -108,6 +115,14 @@ public class NEProjectController implements Initializable {
         Stage stage = (Stage) createOrEditProject.getScene().getWindow();
         stage.close();
     }
+     else
+
+    {
+        String str = "Please fill in the project name";
+        projectError(str);
+    }
+
+}
 
     /**
      * Closes the window with an action event.
