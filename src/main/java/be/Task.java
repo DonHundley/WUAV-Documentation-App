@@ -16,6 +16,8 @@ public class Task {
 
     private String taskState;
 
+    private String taskLayoutAbsolute;
+
 
     public Task(int docID, int projID, String taskName, Image taskLayout, String taskDesc, String taskState) {
         this.docID = docID;
@@ -95,5 +97,13 @@ public class Task {
 
     public void setTaskState(String taskState) {
         this.taskState = taskState;
+    }
+
+    public String getTaskLayoutAbsolute() {
+        return taskLayoutAbsolute;
+    }
+
+    public void setTaskLayoutAbsolute(String taskLayoutAbsolute) {
+        this.taskLayoutAbsolute = taskLayoutAbsolute;
     }
 }

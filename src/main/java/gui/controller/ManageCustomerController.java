@@ -52,7 +52,6 @@ public class ManageCustomerController implements Initializable {
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name
-        windowTitle.setText("Customers");
         usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
     }
 
@@ -187,7 +186,7 @@ public class ManageCustomerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setCustomerTableView();
-
+        setUsernameLabel();
         searchCustomer.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

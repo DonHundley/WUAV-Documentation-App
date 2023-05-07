@@ -51,10 +51,13 @@ public class TaskDAO {
             String sql = "UPDATE task_documentation SET projectID = ?, task_name = ?, layout = ?, description = ?, task_state = ? " + "WHERE documentationID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
+            File layoutAbsolutePath = new File(task.getTaskLayoutAbsolute());
+
+
 
             statement.setInt(1, task.getProjID());
             statement.setString(2, task.getTaskName());
-            FileInputStream inStreamLayout = new FileInputStream("task.getTaskLayout()");
+            FileInputStream inStreamLayout = new FileInputStream(layoutAbsolutePath);
             statement.setBinaryStream(3, inStreamLayout);
             statement.setString(4, task.getTaskDesc());
             statement.setString(5, task.getTaskState());

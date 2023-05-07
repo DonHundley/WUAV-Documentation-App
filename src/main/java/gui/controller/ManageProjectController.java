@@ -57,7 +57,6 @@ public class ManageProjectController implements Initializable {
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name and our window title label.
-        windowTitleLabel.setText("Project Management");
         usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
     }
 
@@ -267,6 +266,7 @@ public class ManageProjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setUsernameLabel();
         setProjectTV();
         setTechTV();
     }

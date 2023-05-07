@@ -33,25 +33,13 @@ public class ManageUsersController implements Initializable{
     private Observables observablesModel = Observables.getInstance();
     private Functions functionsModel = new Functions();
 
-    /**
-     * We call this when this controller is called from navigation to set our models, tableview, and labels.
-     * @param persistenceModel this is our instance of Persistent from navigation
-     * @param observablesModel this is our instance of Observables from navigation
-     * @param functionsModel this is our instance of Functions from navigation
-     */
-    public void userController(Persistent persistenceModel, Observables observablesModel, Functions functionsModel){
-        this.persistenceModel = persistenceModel;
-        this.functionsModel = functionsModel;
-        this.observablesModel = observablesModel;
 
-        setUsernameLabel();
-    }
 
     /**
      * We use this to set our username label and window title label.
      */
-    private void setUsernameLabel() {// set our username label to the users name and our window title label.
-        windowTitleLabel.setText("User Management");
+    private void setUsernameLabel() {// set our username label to the users name.
+
         usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
     }
 
@@ -182,5 +170,6 @@ public class ManageUsersController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setUserTV();
+        setUsernameLabel();
     }
 }

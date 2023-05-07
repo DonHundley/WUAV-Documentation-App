@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="650.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageUsersController">
+<AnchorPane prefHeight="650.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageUsersController">
    <children>
       <TableView fx:id="userTV" layoutX="180.0" layoutY="100.0" prefHeight="411.0" prefWidth="591.0" styleClass="table-row-cell" stylesheets="@../../css/style.css">
         <columns>
@@ -20,7 +20,7 @@
       <Button layoutX="289.0" layoutY="540.0" mnemonicParsing="false" onAction="#editUser" styleClass="round-btn" stylesheets="@../../css/style.css" text="Edit User" />
       <Button layoutX="394.0" layoutY="540.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="30.0" prefWidth="81.0" styleClass="round-btn" stylesheets="@../../css/style.css" text="Delete User" />
       <Label fx:id="windowTitleLabel" layoutX="47.0" layoutY="30.0" styleClass="window-title" stylesheets="@../../css/style.css" text="Manage Users" />
-      <Label fx:id="usernameLabel" layoutX="717.0" layoutY="33.0" prefHeight="18.0" prefWidth="60.0" />
+      <Label fx:id="usernameLabel" alignment="CENTER_RIGHT" layoutX="556.0" layoutY="33.0" prefHeight="18.0" prefWidth="256.0" />
       <Button layoutX="813.0" layoutY="28.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" stylesheets="@../../css/style.css" text="Log Out" />
       <Label fx:id="errorLabel" layoutX="181.0" layoutY="593.0" />
    </children>

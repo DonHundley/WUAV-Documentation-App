@@ -23,18 +23,18 @@
                         <Image url="@../../../../../../../Downloads/back-arrow.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="windowTitleLabel" layoutX="111.0" layoutY="32.0" prefHeight="17.0" prefWidth="113.0" />
-                  <TableView fx:id="taskTV" layoutX="111.0" layoutY="103.0" prefHeight="366.0" prefWidth="250.0">
+                  <Label fx:id="windowTitleLabel" layoutX="111.0" layoutY="32.0" prefHeight="46.0" prefWidth="484.0" styleClass="window-title" stylesheets="@../../css/style.css" />
+                  <TableView fx:id="taskTV" layoutX="26.0" layoutY="103.0" onMouseClicked="#taskTVOnMouse" prefHeight="366.0" prefWidth="335.0">
                      <columns>
-                        <TableColumn fx:id="taskName" prefWidth="99.0" text="Task" />
-                        <TableColumn fx:id="taskState" prefWidth="150.0" text="Task State" />
+                        <TableColumn fx:id="taskName" prefWidth="157.0" text="Task" />
+                        <TableColumn fx:id="taskState" prefWidth="177.0" text="Task State" />
                      </columns>
                   </TableView>
                   <Button layoutX="813.0" layoutY="28.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" text="Log Out" />
-                  <Label fx:id="usernameLabel" layoutX="717.0" layoutY="33.0" prefHeight="18.0" prefWidth="60.0" />
-                  <Button layoutX="111.0" layoutY="504.0" mnemonicParsing="false" onAction="#updateTask" prefHeight="30.0" prefWidth="87.0" styleClass="round-btn" text="Update task" />
-                  <Button layoutX="222.0" layoutY="504.0" mnemonicParsing="false" onAction="#addPictures" prefHeight="30.0" prefWidth="139.0" styleClass="round-btn" text="Add pictures to task" />
-                  <Button layoutX="419.0" layoutY="504.0" mnemonicParsing="false" onAction="#createTask" styleClass="round-btn" text="Create Task" />
+                  <Label fx:id="usernameLabel" alignment="CENTER_RIGHT" layoutX="595.0" layoutY="33.0" prefHeight="18.0" prefWidth="211.0" />
+                  <Button layoutX="124.0" layoutY="500.0" mnemonicParsing="false" onAction="#updateTask" prefHeight="30.0" prefWidth="87.0" styleClass="round-btn" text="Update task" />
+                  <Button layoutX="222.0" layoutY="500.0" mnemonicParsing="false" onAction="#addPictures" prefHeight="30.0" prefWidth="139.0" styleClass="round-btn" text="Add pictures to task" />
+                  <Button layoutX="26.0" layoutY="500.0" mnemonicParsing="false" onAction="#createTask" styleClass="round-btn" text="Create Task" />
                   <VBox layoutY="554.0" prefHeight="440.0" prefWidth="950.0">
                      <children>
                         <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="420.0" prefWidth="850.0">
@@ -60,6 +60,7 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#49494a" height="371.0" layoutX="419.0" layoutY="99.0" stroke="BLACK" strokeType="INSIDE" width="280.0" />
                   <Label layoutX="520.0" layoutY="116.0" style="-fx-font-weight: bold;" styleClass="NEwindow-text" text="Description" />
                   <Label fx:id="descriptionLabel" layoutX="451.0" layoutY="151.0" prefHeight="283.0" prefWidth="228.0" style="-fx-text-fill: white;" styleClass="description-text" text=" " />
+                  <Label fx:id="messageLabel" layoutX="419.0" layoutY="507.0" prefHeight="17.0" prefWidth="284.0" />
                </children>
             </AnchorPane>
          </content>

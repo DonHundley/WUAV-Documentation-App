@@ -10,6 +10,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
@@ -22,7 +23,8 @@ import java.util.*;
 
 public class DocumentationController implements Initializable {
 
-    public AnchorPane imagePane;
+    @FXML private AnchorPane imagePane;
+    @FXML private Label messageLabel;
 
     // Tableview
     @FXML private TableView<Task> taskTV;
@@ -44,24 +46,10 @@ public class DocumentationController implements Initializable {
     private Functions functionsModel = new Functions();
 
     // private variables
-    private Project selectedProject=persistenceModel.getSelectedProject();
+    private Project selectedProject;
     //private HashMap<String, Image> images = new HashMap<>();
 
-    /**
-     * We call this when this controller is called from navigation to set our models, tableview, and labels.
-     * @param persistenceModel this is our instance of Persistent from navigation
-     * @param observablesModel this is our instance of Observables from navigation
-     * @param functionsModel this is our instance of Functions from navigation
-     */
-    public void userController(Persistent persistenceModel, Observables observablesModel, Functions functionsModel){
-        this.persistenceModel = persistenceModel;
-        this.functionsModel = functionsModel;
-        this.observablesModel = observablesModel;
 
-        setSelectedProject();
-        setUsernameLabel();
-        setTaskTV();
-    }
 
     /**
      * We use this to set our username label and window title label.
@@ -81,12 +69,6 @@ public class DocumentationController implements Initializable {
         taskName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskName()));
         taskState.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskState()));
 
-        taskTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedTask) -> {
-            persistenceModel.setSelectedTask(selectedTask);
-            setDescriptionLabel();
-            //images.clear();
-            generateImgThumbnails();
-        })));
     }
 
     /**
@@ -231,9 +213,13 @@ public class DocumentationController implements Initializable {
      * @param actionEvent triggered by the update task button.
      */
     @FXML private void updateTask(ActionEvent actionEvent){
+        if (taskTV.getSelectionModel().getSelectedItem() != null){
         try {
+            messageLabel.setText("");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/EditTask.fxml"));
             Parent root = loader.load();
+            EditTaskController controller = loader.getController();
+            controller.setFieldsOnEdit();
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setTitle("Update Task");
@@ -243,6 +229,7 @@ public class DocumentationController implements Initializable {
             String str = "EditTask.fxml";
             taskError(str);
         }
+        }else messageLabel.setText("Please select a task to be updated.");
     }
 
     /**
@@ -251,18 +238,21 @@ public class DocumentationController implements Initializable {
      * @param actionEvent triggered by the add pictures button.
      */
     @FXML private void addPictures(ActionEvent actionEvent){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/AddTaskPictures.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Add Task Pictures");
-            stage.setScene(scene);
-            stage.show();
-        }catch (IOException e){
-            String str = "AddTaskPictures.fxml";
-            taskError(str);
-        }
+        if(taskTV.getSelectionModel().getSelectedItem() != null) {
+            try {
+                messageLabel.setText("");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/AddTaskPictures.fxml"));
+                Parent root = loader.load();
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setTitle("Add Task Pictures");
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                String str = "AddTaskPictures.fxml";
+                taskError(str);
+            }
+        } else messageLabel.setText("Please select a task to add pictures to.");
     }
 
     /**
@@ -304,7 +294,10 @@ public class DocumentationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setUsernameLabel();
         setTaskTV();
+        setSelectedProject();
+        windowTitleLabel.setText("Project Documentation");
     }
 
 
@@ -314,5 +307,17 @@ public class DocumentationController implements Initializable {
         //System.out.println(str);
         //Image image = images.get(str);
         //largeImageView.setImage(image);
+    }
+
+    @FXML private void taskTVOnMouse(MouseEvent mouseEvent) {
+        if(taskTV.getSelectionModel().getSelectedItem() != null){
+            persistenceModel.setSelectedTask(taskTV.getSelectionModel().getSelectedItem());
+            if(persistenceModel.getSelectedTask().getTaskLayout() != null){
+                largeImageView.setImage(persistenceModel.getSelectedTask().getTaskLayout());
+            }
+            setDescriptionLabel();
+            //images.clear();
+            generateImgThumbnails();
+        }
     }
 }

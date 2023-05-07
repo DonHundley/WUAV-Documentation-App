@@ -39,18 +39,15 @@ public class EditTaskController {
     // Variables
     private boolean updatedLayout;
     private String[] states = {"Not Started", "In Progress", "Completed"};
+    private String layoutImageAbsolute;
 
 
     /**
      * This is used to set our fields with relevant information if that information exists.
      * This helps the user see what information already exists in a given task while they are editing it.
-     * @param functionsModel This is used to assure we have the same instance of the functions model.
-     * @param persistenceModel This is used to assure we have the same instance of the persistent model.
      */
-    public void setFieldsOnEdit(Functions functionsModel, Persistent persistenceModel){
-        this.functionsModel = functionsModel;
-        this.selectedTask = persistenceModel.getSelectedTask();
-
+    public void setFieldsOnEdit(){
+        selectedTask = persistenceModel.getSelectedTask();
         setStateSelection();
         setUpdatedLayout(false);
         // This will set the layout preview if there is an image available.
@@ -95,15 +92,16 @@ public class EditTaskController {
 
             try{
                 Path imagePath = FileSystems.getDefault().getPath(file.getPath());
-                layoutImage = new Image(new FileInputStream(imagePath+file.getName()));
+                layoutImage = new Image(new FileInputStream(imagePath.toFile()));
+                layoutImageAbsolute = file.getAbsolutePath();
                 layoutPreview.setImage(layoutImage);
-                layoutTF.setText(layoutImage.getUrl());
+                layoutTF.setText(imagePath.toString());
                 setUpdatedLayout(true);
             }catch (NullPointerException n){
                 String str = "There was a problem with selecting an image. Issue: NullPointerException.";
                 taskError(str);
             }
-        } catch(IOException e){
+        } catch(FileNotFoundException e){
             String str = "There was a problem with selecting an image. Issue: IOException.";
             taskError(str);
         }
@@ -128,7 +126,7 @@ public class EditTaskController {
      */
     @FXML private void editTask(ActionEvent actionEvent){
         if(updatedLayout){
-            selectedTask.setTaskLayout(layoutImage);
+            selectedTask.setTaskLayoutAbsolute(layoutImageAbsolute);
         }
 
         if(!taskDescription.getText().isEmpty()){

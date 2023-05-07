@@ -113,7 +113,8 @@ public class AddTaskPicturesController {
                 String str = "There was a problem with selecting an image. Issue: NullPointerException.";
                 pictureError(str);
             } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                String str = "There was a problem with finding the image. Issue : FileNotFound.";
+                pictureError(str);
             }
 
     }

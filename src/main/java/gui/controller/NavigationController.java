@@ -47,9 +47,9 @@ public class NavigationController {
                 home = "/gui/view/ManageTaskView.fxml";
                 break;
             case "TECHNICIAN":
-                Node t = FXMLLoader.load(getClass().getResource("/gui/view/ManageProjectView.fxml"));
+                Node t = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
                 viewAnchor.getChildren().setAll(t);
-                home = "/gui/view/ManageProjectView.fxml";
+                home = "/gui/view/ManageTaskView.fxml";
                 manageCustomerButton.setVisible(false);
                 manageProjectsButton.setVisible(false);
                 manageUserButton.setVisible(false);
@@ -63,7 +63,8 @@ public class NavigationController {
                 manageUserButton.setVisible(false);
                 break;
             default:
-
+                String str = "User account either has no role or the role is invalid. Please contact an Administrator.";
+                navigationError(str);
 
         }
     }

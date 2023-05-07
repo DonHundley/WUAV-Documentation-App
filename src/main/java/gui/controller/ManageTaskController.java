@@ -35,22 +35,10 @@ public class ManageTaskController extends NavigationController implements Initia
 
 
     /**
-     * We call this when this controller is called from navigation to set our models, tableview, and labels.
-     * @param persistenceModel this is our instance of Persistent from navigation
-     * @param observablesModel this is our instance of Observables from navigation
-     */
-    public void userController(Persistent persistenceModel, Observables observablesModel){
-        this.persistenceModel = persistenceModel;
-        this.observablesModel = observablesModel;
-
-        //setUsernameLabel();
-    }
-
-    /**
      * We use this to set our username label and window title label.
      */
-    private void setUsernameLabel() {// set our username label to the users name and our window title label.
-        //windowTitleLabel.setText("Task Overview");
+    private void setUsernameLabel() {// set our username label to the users name.
+
         usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
 
     }
@@ -104,6 +92,8 @@ public class ManageTaskController extends NavigationController implements Initia
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setUsernameLabel();
+        setUsernameLabel();
         setTaskTV();
     }
 
