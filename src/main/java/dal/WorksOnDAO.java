@@ -1,9 +1,9 @@
 package dal;
 
-import be.Project;
-import be.User;
+import be.*;
 
 import java.sql.*;
+import java.util.*;
 
 public class WorksOnDAO {
 
@@ -46,5 +46,37 @@ public class WorksOnDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    /**
+     * Method to get all project IDs by userID.
+     * Used to make a list of projects for a given technician.
+     */
+    public List<Integer> getProjectIDsByUserID(User user) {
+        List<Integer> projectIDsByUserID = new ArrayList<>();
+
+        try (Connection connection = databaseConnector.getConnection()) {
+            String sql = "SELECT * FROM works_on WHERE userID = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, user.getUserID());
+
+
+            if (pstmt.execute()) {
+                ResultSet resultSet = pstmt.executeQuery();
+                {
+                    while (resultSet.next()) {
+                        int projectID = resultSet.getInt("projectID");
+                        if (!projectIDsByUserID.contains(projectID)) {
+                            projectIDsByUserID.add(projectID);
+                        }
+                    }
+
+                }
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return projectIDsByUserID;
     }
 }

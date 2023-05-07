@@ -12,6 +12,7 @@ public class Observables {
     private ObservableList<UserWrapper> techs = FXCollections.observableArrayList();
     private ObservableList<ProjectWrapper> projects = FXCollections.observableArrayList();
     private ObservableList<Task> allTasks = FXCollections.observableArrayList();
+    private ObservableList<TaskWrapper> tasksByUser = FXCollections.observableArrayList();
     private ObservableList<TaskWrapper> tasksInfo = FXCollections.observableArrayList();
     private ObservableList<Task> tasksByProject = FXCollections.observableArrayList();
     private ObservableList<CustomerWrapper> customerswithWrapper = FXCollections.observableArrayList();
@@ -62,6 +63,9 @@ public class Observables {
     public ObservableList<Customer> getCustomers() {
         return customers;
     }
+    public ObservableList<TaskWrapper> getTasksByUserID(){
+        return tasksByUser;
+    }
 
     public void search(String query) {
         customerswithWrapper.clear();
@@ -103,5 +107,10 @@ public class Observables {
     public void loadCustomers() {
         customers.clear();
         customers.addAll(customerLogic.getCustomers());
+    }
+
+    public void loadProjectsByUser(User user){
+        tasksByUser.clear();
+        tasksByUser.addAll(projectLogic.tasksByUserID(user));
     }
 }
