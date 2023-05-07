@@ -14,7 +14,7 @@ import java.util.*;
 
 public class NEProjectController implements Initializable {
     @FXML
-    private TableView<Customer> NEProjectTV;
+    private TableView<Customer> nEProjectTV;
     @FXML
     private TableColumn<Customer, String> customerName, customerEmail, customerAddress;
     @FXML
@@ -59,7 +59,7 @@ public class NEProjectController implements Initializable {
     }
 
     public void setNEProjectTV() {
-        NEProjectTV.setItems(observablesModel.getCustomers());
+        nEProjectTV.setItems(observablesModel.getCustomers());
         observablesModel.loadCustomers();
 
         customerName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustName()));
@@ -88,7 +88,7 @@ public class NEProjectController implements Initializable {
      */
     private void createProject() {
         if (!projectName.getText().isEmpty()) {
-            project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), NEProjectTV.getSelectionModel().getSelectedItem().getCustID());
+            project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), nEProjectTV.getSelectionModel().getSelectedItem().getCustID());
             functionsModel.createProject(project);
 
             observablesModel.loadProjects();
@@ -104,9 +104,8 @@ public class NEProjectController implements Initializable {
      * This method is used to edit the selected project from our persistent model with updated information.
      */
     private void editProject() {
-
         if(!projectName.getText().isEmpty())
-    {
+        {
         project.setProjName(projectName.getText());
 
         functionsModel.editProject(project);
@@ -114,15 +113,12 @@ public class NEProjectController implements Initializable {
         observablesModel.loadProjects();
         Stage stage = (Stage) createOrEditProject.getScene().getWindow();
         stage.close();
-    }
-     else
-
-    {
+        } else {
         String str = "Please fill in the project name";
         projectError(str);
-    }
+        }
 
-}
+    }
 
     /**
      * Closes the window with an action event.
@@ -140,6 +136,7 @@ public class NEProjectController implements Initializable {
      */
     private void setOnEdit() {
         if (persistentModel.getSelectedProject() != null) {
+            nEProjectTV.setVisible(false);
             windowTitleLabel.setText("Edit Project");
             project = persistentModel.getSelectedProject();
             projectName.setText(project.getProjName());

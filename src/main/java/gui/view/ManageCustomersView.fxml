@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ManageCustomerController">
    <children>
-      <TableView fx:id="customersTV" layoutX="100.0" layoutY="148.0" prefHeight="388.0" prefWidth="756.0">
+      <TableView fx:id="customersTV" layoutX="100.0" layoutY="148.0" onMouseClicked="#onCustomerTVClick" prefHeight="388.0" prefWidth="756.0">
         <columns>
           <TableColumn fx:id="customerAddress" prefWidth="179.0" text="Customer address" />
           <TableColumn fx:id="customerName" prefWidth="176.0" text="Customer" />
@@ -20,9 +20,9 @@
       <Label fx:id="windowTitle" layoutX="100.0" layoutY="22.0" styleClass="window-title" text="Manage Customers" />
       <Label fx:id="usernameLabel" alignment="CENTER_RIGHT" layoutX="568.0" layoutY="33.0" prefHeight="18.0" prefWidth="246.0" text=" " />
       <Button layoutX="813.0" layoutY="28.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" text="Log Out" />
-      <Button layoutX="753.0" layoutY="565.0" mnemonicParsing="false" onAction="#openDocumentButton" prefHeight="30.0" prefWidth="103.0" styleClass="square-btn" text="Project Info" />
+      <Button layoutX="752.0" layoutY="580.0" mnemonicParsing="false" onAction="#openDocumentButton" prefHeight="30.0" prefWidth="103.0" styleClass="square-btn" text="Project Info" />
       <TextField fx:id="searchCustomer" layoutX="706.0" layoutY="106.0" promptText="search by address" />
-      <Button layoutX="100.0" layoutY="580.0" mnemonicParsing="false" onAction="#createCustomer" prefHeight="30.0" prefWidth="97.0" styleClass="round-btn" text="New Customer" />
-      <Button layoutX="245.0" layoutY="580.0" mnemonicParsing="false" onAction="#editCustomer" prefHeight="30.0" prefWidth="97.0" styleClass="round-btn" text="Edit Customer" />
+      <Button fx:id="newCustomerButton" layoutX="100.0" layoutY="580.0" mnemonicParsing="false" onAction="#createCustomer" prefHeight="30.0" prefWidth="97.0" styleClass="round-btn" text="New Customer" />
+      <Button fx:id="editCustomerButton" layoutX="245.0" layoutY="580.0" mnemonicParsing="false" onAction="#editCustomer" prefHeight="30.0" prefWidth="97.0" styleClass="round-btn" text="Edit Customer" />
    </children>
 </AnchorPane>

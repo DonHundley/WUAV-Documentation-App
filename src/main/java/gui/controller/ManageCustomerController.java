@@ -20,6 +20,7 @@ import java.util.*;
 
 public class ManageCustomerController implements Initializable {
 
+
     // Tableview
     @FXML
     private TableView<CustomerWrapper> customersTV;
@@ -41,6 +42,12 @@ public class ManageCustomerController implements Initializable {
     private Label usernameLabel;
     @FXML
     private Label windowTitle;
+
+    // Buttons
+    @FXML
+    private Button newCustomerButton;
+    @FXML
+    private Button editCustomerButton;
 
     // Models
     private Persistent persistenceModel = Persistent.getInstance();
@@ -97,6 +104,10 @@ public class ManageCustomerController implements Initializable {
 
     @FXML
     private void openDocumentButton(ActionEvent actionEvent) {
+        openDocumentation();
+    }
+
+    private void openDocumentation(){
         try {
             persistenceModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/DocumentationView.fxml"));
@@ -106,7 +117,6 @@ public class ManageCustomerController implements Initializable {
             customerError(str);
         }
     }
-
     @FXML
     private void editCustomer(ActionEvent actionEvent) {
         try {
@@ -185,6 +195,11 @@ public class ManageCustomerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if(persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")){
+           editCustomerButton.setVisible(false);
+           newCustomerButton.setVisible(false);
+        }
+
         setCustomerTableView();
         setUsernameLabel();
         searchCustomer.textProperty().addListener(new ChangeListener<String>() {
@@ -193,5 +208,17 @@ public class ManageCustomerController implements Initializable {
                 observablesModel.search(newValue);
             }
         });
+    }
+
+    @FXML private void onCustomerTVClick(MouseEvent mouseEvent) {
+        if(customersTV.getSelectionModel().getSelectedItem() != null){
+            persistenceModel.setSelectedCustomer(customersTV.getSelectionModel().getSelectedItem().getCustomer());
+            persistenceModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
+
+            if(mouseEvent.getClickCount() == 2){
+                openDocumentation();
+            }
+        }
+
     }
 }
