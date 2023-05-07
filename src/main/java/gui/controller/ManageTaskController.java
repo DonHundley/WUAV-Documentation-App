@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.stage.*;
 
 
@@ -38,9 +39,7 @@ public class ManageTaskController extends NavigationController implements Initia
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name.
-
         usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
-
     }
 
 
@@ -97,14 +96,28 @@ public class ManageTaskController extends NavigationController implements Initia
         setTaskTV();
     }
 
-    public void openProjectInfo(ActionEvent actionEvent)  {
+    @FXML private void openProjectInfo(ActionEvent actionEvent)  {
+        openProjectInformation();
+    }
+
+    @FXML private void taskTVOnClick(MouseEvent mouseEvent) {
+        if(taskTV.getSelectionModel().getSelectedItem() != null){
+            persistenceModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
+            persistenceModel.setSelectedTask(taskTV.getSelectionModel().getSelectedItem().getTask());
+            if(mouseEvent.getClickCount() == 2){
+                openProjectInformation();
+            }
+        }
+
+    }
+
+    private void openProjectInformation(){
         try {
             persistenceModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/DocumentationView.fxml"));
             persistenceModel.getViewAnchor().getChildren().setAll(n);
         }  catch (IOException e) {
             errorLabel.setText("Please select an task to see related documentation.");
-            
         }
     }
 }
