@@ -24,6 +24,7 @@ public class Functions {
     public void addTaskPictures(TaskPictures taskPictures){projectLogic.addTaskPictures(taskPictures);}
     public void createTask(Task task){projectLogic.createTask(task);}
     public void updateTask(Task task){projectLogic.updateTask(task);}
+    public void updateLayout(Task task){projectLogic.updateLayout(task);}
 
     /**
      * Project methods

@@ -44,32 +44,44 @@ public class TaskDAO {
     }
 
     /**
-     * Method to update task in database.
+     * Method to update task in database (except the layout that is updated in updateLayout).
      */
     public void updateTask(Task task) {
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "UPDATE task_documentation SET projectID = ?, task_name = ?, layout = ?, description = ?, task_state = ? " + "WHERE documentationID = ?";
+            String sql = "UPDATE task_documentation SET projectID = ?, task_name = ?, description = ?, task_state = ? " + "WHERE documentationID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
-            File layoutAbsolutePath = new File(task.getTaskLayoutAbsolute());
-
-
-
             statement.setInt(1, task.getProjID());
             statement.setString(2, task.getTaskName());
-            FileInputStream inStreamLayout = new FileInputStream(layoutAbsolutePath);
-            statement.setBinaryStream(3, inStreamLayout);
-            statement.setString(4, task.getTaskDesc());
-            statement.setString(5, task.getTaskState());
-            statement.setInt(6, task.getDocID());
+            statement.setString(3, task.getTaskDesc());
+            statement.setString(4, task.getTaskState());
+            statement.setInt(5, task.getDocID());
             statement.executeUpdate();
-            inStreamLayout.close();
+
 
         } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+    }
+
+    /**
+     * Method to update the layout in database
+     * */
+
+    public void updateLayout(Task task) {
+        try(Connection connection = databaseConnector.getConnection()) {
+            String sql = "UPDATE task_documentation SET layout = ? WHERE documentationID = ?";
+            File layoutAbsolutePath = new File(task.getTaskLayoutAbsolute());
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            FileInputStream inStreamLayout = new FileInputStream(layoutAbsolutePath);
+            statement.setBinaryStream(1, inStreamLayout);
+            statement.setInt(2, task.getDocID());
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

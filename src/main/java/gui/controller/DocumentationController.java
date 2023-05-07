@@ -320,4 +320,26 @@ public class DocumentationController implements Initializable {
             generateImgThumbnails();
         }
     }
-}
+
+    public void updateLayout(ActionEvent actionEvent) {
+        if (taskTV.getSelectionModel().getSelectedItem() != null){
+            try {
+                messageLabel.setText("");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/EditLayout.fxml"));
+                Parent root = loader.load();
+                EditLayoutController controller = loader.getController();
+                controller.setLayoutOnEdit();
+                controller.setSelectedProjectForLayout();
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setTitle("Update Layout");
+                stage.setScene(scene);
+                stage.show();
+            }catch (IOException e){
+                String str = "EditLayout.fxml";
+                taskError(str);
+            }
+        }else messageLabel.setText("Please select a task to update the layout.");
+    }
+    }
+

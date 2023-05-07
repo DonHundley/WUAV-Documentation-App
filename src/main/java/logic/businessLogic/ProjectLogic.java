@@ -78,6 +78,14 @@ public class ProjectLogic {
     }
 
     /**
+     * Functions model uses this to edit the layout of a specific task.
+     * * @param task is the Task to be edited.
+     */
+    public void updateLayout(Task task) {
+        taskDAO.updateLayout(task);
+    }
+
+    /**
      * Functions model uses this to create a new task.
      * @param task this is the task to be added to the database.
      */
