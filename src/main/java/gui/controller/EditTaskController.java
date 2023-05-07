@@ -4,6 +4,7 @@ import be.*;
 import gui.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.stage.*;
@@ -15,10 +16,10 @@ import java.util.*;
 
 public class EditTaskController {
 
+
     // FXML
     @FXML private TextArea taskDescription;
 
-    @FXML private TextField layoutTF;
 
     @FXML private ComboBox<String> stateSelection;
     @FXML private Label errorLabel;
@@ -28,18 +29,16 @@ public class EditTaskController {
     private Functions functionsModel = new Functions();
 
     private Persistent persistenceModel = Persistent.getInstance();
+    private Observables observables = Observables.getInstance();
 
-    // Image
-    private Image layoutImage;
-    @FXML private ImageView layoutPreview;
+
 
     // Instance of our task to be edited.
     private Task selectedTask;
 
     // Variables
-    private boolean updatedLayout;
     private String[] states = {"Not Started", "In Progress", "Completed"};
-    private String layoutImageAbsolute;
+
 
 
     /**
@@ -49,11 +48,7 @@ public class EditTaskController {
     public void setFieldsOnEdit(){
         selectedTask = persistenceModel.getSelectedTask();
         setStateSelection();
-        setUpdatedLayout(false);
-        // This will set the layout preview if there is an image available.
-        if(selectedTask.getTaskLayout() != null){
-            layoutPreview.setImage(selectedTask.getTaskLayout());
-        }
+
         // This will set the text field with the currently input description, if there is one.
         if(selectedTask.getTaskDesc() != null){
         taskDescription.setText(selectedTask.getTaskDesc());
@@ -80,60 +75,24 @@ public class EditTaskController {
         selectedTask.setTaskState(stateSelection.getValue());
     }
 
-    /**
-     * This method controls what we are doing with the chosen image file by the user.
-     * It is triggered when the user activates the button to add a layout image.
-     */
-    @FXML private void imageFileExplorer(javafx.event.ActionEvent actionEvent) {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            setFileChooser(fileChooser);
-            File file = fileChooser.showOpenDialog(new Stage());
 
-            try{
-                Path imagePath = FileSystems.getDefault().getPath(file.getPath());
-                layoutImage = new Image(new FileInputStream(imagePath.toFile()));
-                layoutImageAbsolute = file.getAbsolutePath();
-                layoutPreview.setImage(layoutImage);
-                layoutTF.setText(imagePath.toString());
-                setUpdatedLayout(true);
-            }catch (NullPointerException n){
-                String str = "There was a problem with selecting an image. Issue: NullPointerException.";
-                taskError(str);
-            }
-        } catch(FileNotFoundException e){
-            String str = "There was a problem with selecting an image. Issue: IOException.";
-            taskError(str);
-        }
-    }
-
-    /**
-     * Method to configure the file chooser and select which file types are accepted
-     */
-    private static void setFileChooser(FileChooser fileChooser) {
-        fileChooser.setTitle("Select layout diagram Image");
-        fileChooser.setInitialDirectory(
-                new File(System.getProperty("user.home"))
-        );
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image files", "*.jpg", "*.bmp", "*.png", "*.jpeg")
-        );
-    }
 
     /**
      * This will update the selected task with any changes the user has done.
      * @param actionEvent This triggers when the user activates the edit task button.
      */
     @FXML private void editTask(ActionEvent actionEvent){
-        if(updatedLayout){
-            selectedTask.setTaskLayoutAbsolute(layoutImageAbsolute);
-        }
+
 
         if(!taskDescription.getText().isEmpty()){
             selectedTask.setTaskDesc(taskDescription.getText());
         }
-
         functionsModel.updateTask(selectedTask);
+        observables.loadTasksByProject(persistenceModel.getSelectedProject());
+
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 
     /**
@@ -162,11 +121,5 @@ public class EditTaskController {
         }
     }
 
-    /**
-     * sets the boolean updated layout.
-     * @param updatedLayout if true we then the user has either added or changed the layout image to the task.
-     */
-    public void setUpdatedLayout(boolean updatedLayout) {
-        this.updatedLayout = updatedLayout;
-    }
+
 }

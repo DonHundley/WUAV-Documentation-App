@@ -7,6 +7,7 @@ import gui.model.Observables;
 import gui.model.Persistent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
