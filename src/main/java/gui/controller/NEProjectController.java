@@ -2,22 +2,34 @@ package gui.controller;
 
 import be.*;
 import gui.model.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 
 
+import java.net.URL;
 import java.util.*;
 
-public class NEProjectController {
-    @FXML private TextField projectName;
-    @FXML private Label windowTitleLabel;
-    @FXML private Button cancelButton;
+public class NEProjectController implements Initializable {
+    @FXML
+    private TableView<Customer> NEProjectTV;
+    @FXML
+    private TableColumn<Customer, String> customerName, customerEmail, customerAddress;
+    @FXML
+    private TextField projectName;
+    @FXML
+    private Label windowTitleLabel;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button createOrEditProject;
 
     private Project project;
 
     // Model instances
+    private Observables observablesModel = Observables.getInstance();
     private Persistent persistentModel = Persistent.getInstance();
     private Functions functionsModel = new Functions();
 
@@ -28,27 +40,43 @@ public class NEProjectController {
 
     /**
      * This method is used to set our models and choose if we are editing or creating a project.
-     * @param isEdit if true, we are editing a project.
+     *
+     * @param isEdit          if true, we are editing a project.
      * @param persistentModel the instance of the persistent model
-     * @param functionsModel the instance of the functions model
+     * @param functionsModel  the instance of the functions model
      */
-    public void setNEProjectController(Boolean isEdit, Persistent persistentModel, Functions functionsModel){
+    public void setNEProjectController(Boolean isEdit, Persistent persistentModel, Functions functionsModel) {
         this.persistentModel = persistentModel;
         this.functionsModel = functionsModel;
 
         setEdit(isEdit); // sets the boolean to store if we are editing or creating.
-        if(isEdit){ // if we are editing we set all text fields with the current information.
+        if (isEdit) { // if we are editing we set all text fields with the current information.
             setOnEdit();
-        }else {windowTitleLabel.setText("New Project");}
+        } else {
+            windowTitleLabel.setText("New Project");
+        }
+
+    }
+
+    public void setNEProjectTV() {
+        NEProjectTV.setItems(observablesModel.getCustomers());
+        observablesModel.loadCustomers();
+
+        customerName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustName()));
+        customerEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustEmail()));
+        customerAddress.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustAddress()));
+
 
     }
 
     /**
      * This will create or edit a Project based on the isEdit boolean
+     *
      * @param actionEvent triggered when the user activates the create/edit button.
      */
-    @FXML private void createOrEditProject(ActionEvent actionEvent){
-        if(isEdit){
+    @FXML
+    private void createOrEditProject(ActionEvent actionEvent) {
+        if (isEdit) {
             editProject();
         } else {
             createProject();
@@ -58,25 +86,36 @@ public class NEProjectController {
     /**
      * This method is used to create a new project if our isEdit boolean == false.
      */
-    private void createProject(){
-        project = new Project(projectName.getText(), creationDate, persistentModel.getSelectedCustomer().getCustID());
+    private void createProject() {
+
+        project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), NEProjectTV.getSelectionModel().getSelectedItem().getCustID());
         functionsModel.createProject(project);
+
+        observablesModel.loadProjects();
+        Stage stage = (Stage) createOrEditProject.getScene().getWindow();
+        stage.close();
     }
 
     /**
      * This method is used to edit the selected project from our persistent model with updated information.
      */
-    private void editProject(){
+    private void editProject() {
         project.setProjName(projectName.getText());
 
         functionsModel.editProject(project);
+
+        observablesModel.loadProjects();
+        Stage stage = (Stage) createOrEditProject.getScene().getWindow();
+        stage.close();
     }
 
     /**
      * Closes the window with an action event.
+     *
      * @param actionEvent triggers when the user activates the cancel button.
      */
-    @FXML private void cancel(ActionEvent actionEvent){
+    @FXML
+    private void cancel(ActionEvent actionEvent) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
@@ -84,8 +123,8 @@ public class NEProjectController {
     /**
      * If the boolean isEdit == true, we set all the fields with the information from the selected customer.
      */
-    private void setOnEdit(){
-        if(persistentModel.getSelectedProject() != null) {
+    private void setOnEdit() {
+        if (persistentModel.getSelectedProject() != null) {
             windowTitleLabel.setText("Edit Project");
             project = persistentModel.getSelectedProject();
             projectName.setText(project.getProjName());
@@ -97,9 +136,9 @@ public class NEProjectController {
     }
 
 
-
     /**
      * We use this to display an error to the user if there is a problem.
+     *
      * @param str This is the source of the problem so that the user is informed.
      */
     private void projectError(String str) {
@@ -108,7 +147,7 @@ public class NEProjectController {
         alert.setHeaderText(str);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             alert.close();
         } else {
             alert.close();
@@ -117,5 +156,10 @@ public class NEProjectController {
 
     public void setEdit(boolean edit) {
         isEdit = edit;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setNEProjectTV();
     }
 }

@@ -53,8 +53,8 @@ public class ManageCustomerController implements Initializable{
      * We use this to set up the tableview customerTV with relative columns.
      */
     private void setCustomerTableView() {
-        customersTV.setItems(observablesModel.getCustomers());
-        observablesModel.loadCustomers();
+        customersTV.setItems(observablesModel.getCustomersWithWrapper());
+        observablesModel.loadCustomersWithWrapper();
 
         customerAddress.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustAddress()));
         customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));

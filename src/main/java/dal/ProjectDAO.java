@@ -45,14 +45,12 @@ public class ProjectDAO {
      */
     public void updateProject(Project project) {
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "UPDATE project SET project_name = ?, date_created = ?, customerID = ?) " + "WHERE projectID = ?";
+            String sql = "UPDATE project SET project_name = ? " + "WHERE projectID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, project.getProjName());
-            statement.setDate(2, new java.sql.Date(project.getProjDate().getTime()));
-            statement.setInt(3, project.getCustID());
-            statement.setInt(4, project.getProjID());
+            statement.setInt(2, project.getProjID());
             statement.executeUpdate();
 
         } catch (SQLException e) {

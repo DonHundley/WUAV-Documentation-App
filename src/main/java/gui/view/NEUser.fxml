@@ -6,7 +6,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="450.0" prefWidth="600.0" styleClass="NEwindow-background" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NEUserController">
    <children>
       <Label layoutX="90.0" layoutY="102.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" text="*Username" />
@@ -20,7 +19,7 @@
       <TextField fx:id="firstNameTF" layoutX="226.0" layoutY="184.0" prefHeight="25.0" prefWidth="244.0" />
       <TextField fx:id="surnameTF" layoutX="226.0" layoutY="226.0" prefHeight="25.0" prefWidth="244.0" />
       <ComboBox fx:id="accessCB" layoutX="225.0" layoutY="268.0" prefHeight="25.0" prefWidth="244.0" promptText="Select access role" />
-      <Button layoutX="86.0" layoutY="385.0" mnemonicParsing="false" onAction="#createOrEditUser" styleClass="round-btn" stylesheets="@../../css/style.css" text="Create" />
+      <Button fx:id="createOrEditUser" layoutX="86.0" layoutY="385.0" mnemonicParsing="false" onAction="#createOrEditUser" styleClass="round-btn" stylesheets="@../../css/style.css" text="Create" />
       <Button fx:id="cancelButton" layoutX="189.0" layoutY="385.0" mnemonicParsing="false" onAction="#cancel" styleClass="round-btn" stylesheets="@../../css/style.css" text="Cancel" />
    </children>
 </AnchorPane>

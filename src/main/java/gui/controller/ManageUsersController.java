@@ -31,7 +31,7 @@ public class ManageUsersController implements Initializable{
     // Models
     private Persistent persistenceModel = Persistent.getInstance();
     private Observables observablesModel = Observables.getInstance();
-    private Functions functionsModel;
+    private Functions functionsModel = new Functions();
 
     /**
      * We call this when this controller is called from navigation to set our models, tableview, and labels.
@@ -87,6 +87,7 @@ public class ManageUsersController implements Initializable{
             Optional<ButtonType> result = alert.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK){
                 functionsModel.deleteUser(persistenceModel.getSelectedUser());
+                observablesModel.loadUsers();
             } else {
                 alert.close();
             }

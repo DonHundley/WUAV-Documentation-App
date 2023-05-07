@@ -4,6 +4,8 @@ import be.*;
 import gui.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.*;
 
@@ -20,6 +22,7 @@ public class NEUserController {
     @FXML private TextField surnameTF;
     @FXML private Label windowTitleLabel;
     @FXML private Button cancelButton;
+    @FXML private Button createOrEditUser;
 
     // selections for the accessCB
     private String[] accessLevels = {"Admin", "Manager", "Sales", "Technician"};
@@ -28,6 +31,7 @@ public class NEUserController {
     private User user;
 
     // Model instances
+    private Observables observablesModel = Observables.getInstance();
     private Persistent persistentModel = Persistent.getInstance();
     private Functions functionsModel = new Functions();
 
@@ -70,6 +74,10 @@ public class NEUserController {
     private void createUser(){
         user = new User(userNameTF.getText(), passTF.getText(), accessCB.getValue(), firstNameTF.getText(), surnameTF.getText());
         functionsModel.createUser(user);
+        observablesModel.loadUsers();
+        Stage stage = (Stage) createOrEditUser.getScene().getWindow();
+        stage.close();
+
     }
 
     /**
@@ -81,8 +89,10 @@ public class NEUserController {
         user.setAccess(accessCB.getValue());
         user.setFirstName(firstNameTF.getText());
         user.setLastName(surnameTF.getText());
-
         functionsModel.editUser(user);
+        observablesModel.loadUsers();
+        Stage stage = (Stage) createOrEditUser.getScene().getWindow();
+        stage.close();
     }
 
     /**

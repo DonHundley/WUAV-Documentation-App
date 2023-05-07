@@ -45,15 +45,16 @@ public class UserDAO {
      */
     public void updateUser(User user) {
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "UPDATE users SET username = ?, password = ?, name = ?, last_name = ?) " + "WHERE userID = ?";
+            String sql = "UPDATE users SET username = ?, password = ?, access = ?, name = ?, last_name = ?" + " WHERE userID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, user.getUserName());
             statement.setString(2, user.getPassword());
-            statement.setString(3, user.getFirstName());
-            statement.setString(4, user.getLastName());
-            statement.setInt(5, user.getUserID());
+            statement.setString(3, user.getAccess());
+            statement.setString(4, user.getFirstName());
+            statement.setString(5, user.getLastName());
+            statement.setInt(6, user.getUserID());
             statement.executeUpdate();
 
         } catch (SQLException e) {

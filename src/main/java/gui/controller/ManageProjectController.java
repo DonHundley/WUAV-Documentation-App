@@ -204,9 +204,34 @@ public class ManageProjectController implements Initializable{
         }
     }
 
+    /**
+     *  This will open the New Task View.
+     *  We catch the IOException and show the user a crafted alert.
+     * @param actionEvent triggered by the create task button.
+     */
+
+    @FXML private void createTask(ActionEvent actionEvent){
+        try {
+            persistenceModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewTask.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Create Task");
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){
+            String str = "NewTask.fxml";
+            projectError(str);
+        }
+    }
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setProjectTV();
         setTechTV();
     }
+
+
 }

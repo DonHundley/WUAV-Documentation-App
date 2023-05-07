@@ -10,9 +10,10 @@ import javafx.stage.*;
 
 import javax.swing.*;
 
+import java.net.URL;
 import java.util.*;
 
-public class NewTaskController {
+public class NewTaskController implements Initializable{
     
     // FXML
     @FXML private TextField taskName;
@@ -50,6 +51,7 @@ public class NewTaskController {
     }
 
     private void constructTask(){
+        System.out.println(selectedProject);
         if(selectedProject != null && !taskName.getText().equals(null)) {
             Task task = new Task(selectedProject.getProjID(), taskName.getText(), "No description", "Not Started");
             functionsModel.createTask(task);
@@ -85,4 +87,8 @@ public class NewTaskController {
         }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setSelectedProject();
+    }
 }

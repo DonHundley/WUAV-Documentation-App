@@ -14,7 +14,8 @@ public class Observables {
     private ObservableList<Task> allTasks = FXCollections.observableArrayList();
     private ObservableList<TaskWrapper> tasksInfo = FXCollections.observableArrayList();
     private ObservableList<Task> tasksByProject = FXCollections.observableArrayList();
-    private ObservableList<CustomerWrapper> customers = FXCollections.observableArrayList();
+    private ObservableList<CustomerWrapper> customerswithWrapper = FXCollections.observableArrayList();
+    private ObservableList<Customer> customers = FXCollections.observableArrayList();
 
     private UserLogic userLogic=new UserLogic();
     private CustomerLogic customerLogic=new CustomerLogic();
@@ -54,13 +55,17 @@ public class Observables {
         return tasksByProject;
     }
 
-    public ObservableList<CustomerWrapper> getCustomers() {
+    public ObservableList<CustomerWrapper> getCustomersWithWrapper() {
+        return customerswithWrapper;
+    }
+
+    public ObservableList<Customer> getCustomers() {
         return customers;
     }
 
     public void search(String query) {
-        customers.clear();
-        customers.addAll(customerLogic.searchCustomer(query));
+        customerswithWrapper.clear();
+        customerswithWrapper.addAll(customerLogic.searchCustomer(query));
     }
 
     /**
@@ -90,8 +95,13 @@ public class Observables {
         tasksByProject.clear();
         tasksByProject.addAll(projectLogic.getTasksByProject(selectedProject));
     }
+    public void loadCustomersWithWrapper() {
+        customerswithWrapper.clear();
+        customerswithWrapper.addAll(customerLogic.getCustomersWithProjects());
+    }
+
     public void loadCustomers() {
         customers.clear();
-        customers.addAll(customerLogic.getCustomersWithProjects());
+        customers.addAll(customerLogic.getCustomers());
     }
 }
