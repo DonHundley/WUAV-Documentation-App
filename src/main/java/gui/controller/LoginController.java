@@ -47,9 +47,9 @@ public class LoginController implements Initializable{
                             Parent root = loader.load();
                             NavigationController controller = loader.getController();
                             controller.setNavigationController();
+                            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                             Scene scene = new Scene(root);
-                            Stage stage = new Stage();
-                            stage.setTitle("");
+                            stage.setTitle("WUAV Documentation management system.");
                             stage.setScene(scene);
                             stage.show();
                             break;
