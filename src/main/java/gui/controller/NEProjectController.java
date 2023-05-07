@@ -12,7 +12,7 @@ import javafx.stage.*;
 import java.net.URL;
 import java.util.*;
 
-public class NEProjectController implements Initializable {
+public class NEProjectController {
     @FXML
     private TableView<Customer> nEProjectTV;
     @FXML
@@ -40,15 +40,10 @@ public class NEProjectController implements Initializable {
 
     /**
      * This method is used to set our models and choose if we are editing or creating a project.
-     *
      * @param isEdit          if true, we are editing a project.
-     * @param persistentModel the instance of the persistent model
-     * @param functionsModel  the instance of the functions model
      */
-    public void setNEProjectController(Boolean isEdit, Persistent persistentModel, Functions functionsModel) {
-        this.persistentModel = persistentModel;
-        this.functionsModel = functionsModel;
-
+    public void setNEProjectController(Boolean isEdit) {
+        setNEProjectTV();
         setEdit(isEdit); // sets the boolean to store if we are editing or creating.
         if (isEdit) { // if we are editing we set all text fields with the current information.
             setOnEdit();
@@ -65,8 +60,6 @@ public class NEProjectController implements Initializable {
         customerName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustName()));
         customerEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustEmail()));
         customerAddress.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustAddress()));
-
-
     }
 
     /**
@@ -170,8 +163,5 @@ public class NEProjectController implements Initializable {
         isEdit = edit;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setNEProjectTV();
-    }
+
 }

@@ -8,6 +8,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.scene.input.*;
 import javafx.stage.*;
 
 
@@ -49,9 +50,7 @@ public class ManageProjectController implements Initializable {
     private Observables observablesModel = Observables.getInstance();
     private Functions functionsModel = new Functions();
 
-    private void ManageProjectController() {
 
-    }
 
     /**
      * We use this to set our username label and window title label.
@@ -85,13 +84,7 @@ public class ManageProjectController implements Initializable {
         projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
         assignedUserCount.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getTotalTasks()).asObject());
 
-        projectTV.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedProject) ->
-        {
-            if (selectedProject != null) {
-                persistenceModel.setSelectedProject(selectedProject.getProject());
-            }
 
-        });
     }
 
     /**
@@ -105,10 +98,7 @@ public class ManageProjectController implements Initializable {
         techSurname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getLastName()));
         numberOfTasks.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAssignedTasks()).asObject());
 
-        techTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedUser) -> {
-            if(selectedUser!=null){
-            persistenceModel.setSelectedUser(selectedUser.getUser());}
-        })));
+
     }
 
     /**
@@ -164,7 +154,7 @@ public class ManageProjectController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEProject.fxml"));
             Parent root = loader.load();
             NEProjectController controller = loader.getController();
-            controller.setNEProjectController(true, persistenceModel, functionsModel);
+            controller.setNEProjectController(true);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setTitle("Edit Project");
@@ -187,7 +177,7 @@ public class ManageProjectController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEProject.fxml"));
             Parent root = loader.load();
             NEProjectController controller = loader.getController();
-            controller.setNEProjectController(false, persistenceModel, functionsModel);
+            controller.setNEProjectController(false);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setTitle("Create Project");
@@ -249,7 +239,6 @@ public class ManageProjectController implements Initializable {
     @FXML
     private void createTask(ActionEvent actionEvent) {
         try {
-            persistenceModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewTask.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -272,4 +261,11 @@ public class ManageProjectController implements Initializable {
     }
 
 
+    @FXML private void projectTVOnClick(MouseEvent mouseEvent) {
+        persistenceModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
+    }
+
+    @FXML private void techTvOnClick(MouseEvent mouseEvent) {
+        persistenceModel.setSelectedUser(techTV.getSelectionModel().getSelectedItem().getUser());
+    }
 }

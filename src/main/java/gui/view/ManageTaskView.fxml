@@ -16,7 +16,7 @@
             <TableColumn fx:id="customerName" prefWidth="271.0" text="Customer Name" />
         </columns>
       </TableView>
-      <Label fx:id="windowTitleLabel" layoutX="106.0" layoutY="22.0" prefHeight="45.0" prefWidth="333.0" styleClass="window-title" text="Current Projects" />
+      <Label fx:id="windowTitleLabel" layoutX="106.0" layoutY="22.0" prefHeight="45.0" prefWidth="333.0" styleClass="window-title" text="Current Tasks" />
       <Button layoutX="813.0" layoutY="28.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" text="LogOut" />
       <Button layoutX="106.0" layoutY="542.0" mnemonicParsing="false" onAction="#openProjectInfo" prefHeight="30.0" prefWidth="102.0" styleClass="square-btn" text="Project Info" />
       <Label fx:id="usernameLabel" alignment="CENTER_RIGHT" layoutX="597.0" layoutY="33.0" prefHeight="18.0" prefWidth="215.0" text=" " />

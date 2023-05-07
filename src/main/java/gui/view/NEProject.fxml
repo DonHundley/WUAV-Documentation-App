@@ -15,7 +15,7 @@
       <Button fx:id="createOrEditProject" layoutX="92.0" layoutY="385.0" mnemonicParsing="false" onAction="#createOrEditProject" styleClass="round-btn" stylesheets="@../../css/style.css" text="Create" />
       <Button fx:id="cancelButton" layoutX="187.0" layoutY="386.0" mnemonicParsing="false" onAction="#cancel" styleClass="round-btn" stylesheets="@../../css/style.css" text="Cancel" />
       <Label layoutX="287.0" layoutY="390.0" styleClass="NEwindow-text" stylesheets="@../../css/style.css" text="required fields are marked with *" />
-      <TableView fx:id="NEProjectTV" layoutX="40.0" layoutY="170.0" prefHeight="200.0" prefWidth="520.0">
+      <TableView fx:id="nEProjectTV" layoutX="40.0" layoutY="170.0" prefHeight="200.0" prefWidth="520.0">
         <columns>
           <TableColumn fx:id="customerName" prefWidth="180.0" text="Customer Name" />
           <TableColumn fx:id="customerEmail" prefWidth="143.0" text="Customer Email" />
