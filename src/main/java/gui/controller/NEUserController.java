@@ -61,8 +61,10 @@ public class NEUserController {
         setEdit(isEdit); // sets the boolean to store if we are editing or creating.
         if (isEdit) { // if we are editing we set all text fields with the current information.
             setOnEdit();
+            createOrEditUser.setText("Edit");
         } else {
             windowTitleLabel.setText("New User");
+            createOrEditUser.setText("Create");
         }
         setAccessSelection();
     }

@@ -52,6 +52,7 @@ public class NECustomerController {
             setOnEdit();
         } else {
             windowTitleLabel.setText("New Customer");
+            createOrEditCustomer.setText("Create");
         }
 
     }
