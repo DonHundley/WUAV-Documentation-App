@@ -2,6 +2,7 @@ package gui.controller;
 
 import be.*;
 import gui.model.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.*;
 
 
@@ -22,6 +23,9 @@ import java.util.*;
 
 
 public class DocumentationController implements Initializable {
+
+    public MFXButton previousButton;
+    public MFXButton nextButton;
 
     @FXML private Button updateTaskButton;
     @FXML private Button picturesButton;
@@ -52,7 +56,10 @@ public class DocumentationController implements Initializable {
 
     // private variables
     private Project selectedProject;
-    //private HashMap<String, Image> images = new HashMap<>();
+    private HashMap<String, Image> images = new HashMap<>();
+    private List<String> pictureDescriptions = new ArrayList<>();
+    private int descriptionIndex = 0;
+
 
 
 
@@ -99,8 +106,13 @@ public class DocumentationController implements Initializable {
         List<TaskPictures> pics = functionsModel.taskPicturesByDocID(task);
 
         imagePane.getChildren().clear();
+        images.clear();
+        pictureDescriptions.clear();
+
 
         int imgCount = 1;
+        int beforeCount = 1;
+        int afterCount = 1;
         for (TaskPictures picture:pics) {
             if (picture.getBeforePicture() != null){
                 ImageView bImage = new ImageView(picture.getBeforePicture());
@@ -114,6 +126,15 @@ public class DocumentationController implements Initializable {
                 //System.out.println(bImage.getId());
                 //images.put(bImage.getId(), bImage.getImage());
                 imgCount++;
+                if(picture.getBeforeComment() != null){
+                    //pictureDescriptions.add("Before picture " +beforeCount+ " comment:" +picture.getBeforeComment());
+                    images.put("Before picture " +beforeCount+ " comment: " +picture.getBeforeComment(), bImage.getImage());
+                    pictureDescriptions.add("Before picture " +beforeCount+ " comment: " +picture.getBeforeComment());
+                }else {
+                    images.put("Before picture " +beforeCount+ " currently has no comments.", bImage.getImage());
+                    pictureDescriptions.add("Before picture " +beforeCount+ " currently has no comments.");
+                }
+                beforeCount++;
             }
             if (picture.getAfterPicture() != null){
                 ImageView aImage = new ImageView(picture.getAfterPicture());
@@ -127,12 +148,24 @@ public class DocumentationController implements Initializable {
                 //System.out.println(aImage.getId());
                 //images.put(aImage.getId(), aImage.getImage());
                 imgCount++;
+                if(picture.getAfterComment() != null){
+                    //pictureDescriptions.add("After picture " +afterCount+ " comment:" +picture.getAfterComment());
+                    images.put("After picture " +afterCount+ " comment: " +picture.getAfterComment(), aImage.getImage());
+                    pictureDescriptions.add("After picture " +afterCount+ " comment: " +picture.getAfterComment());
+                }else {
+                    images.put("After picture " +afterCount+ " currently has no comments. ", aImage.getImage());
+                    pictureDescriptions.add("After picture " +afterCount+ " currently has no comments. ");
+                }
+                afterCount++;
             }
             if(imgCount == 20){
                 break;
             }
         }
+        descriptionIndex = 0;
     }
+
+    
 
     private int imageLocationX(int imgCount, int imgWidth){
         int getX;
@@ -377,6 +410,32 @@ public class DocumentationController implements Initializable {
         if(taskTV.getSelectionModel().getSelectedItem() != null){
             taskTV.getSelectionModel().clearSelection();
             taskTV.refresh();
+        }
+    }
+
+    public void previousPicture(ActionEvent actionEvent) {
+        if(pictureDescriptions.size() != 0 && images != null){
+            if(descriptionIndex == 0){
+                descriptionIndex = pictureDescriptions.size() -1;
+
+            } else{
+                descriptionIndex = descriptionIndex -1;
+
+            }
+            imageComment.setText(pictureDescriptions.get(descriptionIndex));
+            largeImageView.setImage(images.get(pictureDescriptions.get(descriptionIndex)));
+        }
+    }
+
+    public void nextPicture(ActionEvent actionEvent) {
+        if(pictureDescriptions.size() != 0 && images != null ){
+            if(descriptionIndex == pictureDescriptions.size() -1){
+                descriptionIndex = 0;
+            } else{
+                descriptionIndex = descriptionIndex +1;
+            }
+            imageComment.setText(pictureDescriptions.get(descriptionIndex));
+            largeImageView.setImage(images.get(pictureDescriptions.get(descriptionIndex)));
         }
     }
 }
