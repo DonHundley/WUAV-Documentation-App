@@ -8,6 +8,8 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 
 import java.io.*;
@@ -16,6 +18,7 @@ import java.util.*;
 
 public class ManageUsersController implements Initializable{
 
+    @FXML private AnchorPane anchorUsers;
     // TableView
     @FXML private TableView<User> userTV;
     @FXML private TableColumn<User, String> userName;
@@ -89,33 +92,18 @@ public class ManageUsersController implements Initializable{
      * @param actionEvent When the user activates the New User button, we open a window.
      */
     @FXML private void newUser(ActionEvent actionEvent){
-        try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEUser.fxml"));
-        Parent root = loader.load();
-        NEUserController controller = loader.getController();
-        controller.setNEUserController(false, persistenceModel, functionsModel);
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        stage.setTitle("New user.");
-        stage.setScene(scene);
-        stage.show();
-    }catch (IOException e){
-        loadNEError();
-    }}
+        createUser();
+    }
 
-    /**
-     * We use this method to open our edit user view to the user. If this fails we show the user an alert.
-     * @param actionEvent When the user activates the Edit User button, we open a window.
-     */
-    @FXML private void editUser(ActionEvent actionEvent) {
+    private void createUser(){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEUser.fxml"));
             Parent root = loader.load();
             NEUserController controller = loader.getController();
-            controller.setNEUserController(true, persistenceModel, functionsModel);
+            controller.setNEUserController(false, persistenceModel, functionsModel);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
-            stage.setTitle("Edit user.");
+            stage.setTitle("New user.");
             stage.setScene(scene);
             stage.show();
         }catch (IOException e){
@@ -123,6 +111,31 @@ public class ManageUsersController implements Initializable{
         }
     }
 
+    /**
+     * We use this method to open our edit user view to the user. If this fails we show the user an alert.
+     * @param actionEvent When the user activates the Edit User button, we open a window.
+     */
+    @FXML private void editUser(ActionEvent actionEvent) {
+        updateUser();
+    }
+
+    private void updateUser(){
+        if(userTV.getSelectionModel().getSelectedItem() != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEUser.fxml"));
+                Parent root = loader.load();
+                NEUserController controller = loader.getController();
+                controller.setNEUserController(true, persistenceModel, functionsModel);
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setTitle("Edit user.");
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                loadNEError();
+            }
+        }
+    }
     /**
      * This is what we use to show the user an alert if NEUser.fxml fails.
      * Since we use the same window for new and edit user, we give the user the same alert.
@@ -171,5 +184,25 @@ public class ManageUsersController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         setUserTV();
         setUsernameLabel();
+    }
+
+    @FXML private void usersAnchorOnClick(MouseEvent mouseEvent) {
+        if(userTV.getSelectionModel().getSelectedItem() != null){
+            userTV.getSelectionModel().clearSelection();
+        }
+        userTV.refresh();
+    }
+
+    @FXML private void tvOnClick(MouseEvent mouseEvent) {
+        if(userTV.getSelectionModel().getSelectedItem() != null){
+            if(mouseEvent.getClickCount() == 2){
+                updateUser();
+            }
+        }
+        if(userTV.getSelectionModel().getSelectedItem() == null){
+            if(mouseEvent.getClickCount() == 2){
+                createUser();
+            }
+        }
     }
 }

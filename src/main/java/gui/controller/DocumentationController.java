@@ -23,6 +23,9 @@ import java.util.*;
 
 public class DocumentationController implements Initializable {
 
+    @FXML private Button updateTaskButton;
+    @FXML private Button picturesButton;
+    @FXML private Button layoutButton;
     @FXML private AnchorPane documentationAnchor;
     @FXML private Button createTaskButton;
     @FXML private AnchorPane imagePane;
@@ -307,10 +310,17 @@ public class DocumentationController implements Initializable {
         setSelectedProject();
         setUsernameLabel();
         setTaskTV();
-        if(persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("TECHNICIAN") || persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES") ){
+        if(persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("TECHNICIAN")){
             createTaskButton.setVisible(false);
         }
-        windowTitleLabel.setText("Project Documentation");
+
+        if(persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")){
+            createTaskButton.setVisible(false);
+            layoutButton.setVisible(false);
+            picturesButton.setVisible(false);
+            updateTaskButton.setVisible(false);
+            windowTitleLabel.setText("Customer Documentation");
+        }
     }
 
 

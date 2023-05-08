@@ -11,6 +11,7 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 
 
@@ -21,6 +22,7 @@ import java.util.*;
 public class ManageCustomerController implements Initializable {
 
 
+    @FXML private AnchorPane customerAnchor;
     // Tableview
     @FXML
     private TableView<CustomerWrapper> customersTV;
@@ -234,5 +236,12 @@ public class ManageCustomerController implements Initializable {
             }
         }
 
+    }
+
+    @FXML private void anchorOnClick(MouseEvent mouseEvent) {
+        if(customersTV.getSelectionModel().getSelectedItem() != null){
+            customersTV.getSelectionModel().clearSelection();
+        }
+        customersTV.refresh();
     }
 }

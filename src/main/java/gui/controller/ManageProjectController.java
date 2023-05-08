@@ -9,6 +9,7 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 
 
@@ -20,6 +21,7 @@ import java.util.*;
 
 public class ManageProjectController implements Initializable {
 
+    @FXML private AnchorPane projectAnchor;
     // TableViews
     @FXML
     private TableView<ProjectWrapper> projectTV;
@@ -250,19 +252,23 @@ public class ManageProjectController implements Initializable {
 
     @FXML
     private void createTask(ActionEvent actionEvent) {
+        addTask();
+    }
+
+    private void addTask(){
         if (projectTV.getSelectionModel().getSelectedItem() != null){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewTask.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Create Task");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            String str = "NewTask.fxml";
-            projectError(str);
-        }
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewTask.fxml"));
+                Parent root = loader.load();
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setTitle("Create Task");
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                String str = "NewTask.fxml";
+                projectError(str);
+            }
         }
     }
 
@@ -279,7 +285,7 @@ public class ManageProjectController implements Initializable {
         if(projectTV.getSelectionModel().getSelectedItem() != null){
         persistenceModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
         if(mouseEvent.getClickCount() == 2){
-            editProj();
+            addTask();
         }
         }
 
@@ -294,5 +300,16 @@ public class ManageProjectController implements Initializable {
         if(techTV.getSelectionModel().getSelectedItem() != null) {
             persistenceModel.setSelectedUser(techTV.getSelectionModel().getSelectedItem().getUser());
         }
+    }
+
+    @FXML private void anchorOnClick(MouseEvent mouseEvent) {
+        if(techTV.getSelectionModel().getSelectedItem() != null){
+            techTV.getSelectionModel().clearSelection();
+        }
+        if(projectTV.getSelectionModel().getSelectedItem() != null){
+            projectTV.getSelectionModel().clearSelection();
+        }
+        techTV.refresh();
+        projectTV.refresh();
     }
 }

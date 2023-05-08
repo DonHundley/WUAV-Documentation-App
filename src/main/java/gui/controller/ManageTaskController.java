@@ -8,6 +8,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 
 
@@ -18,6 +19,7 @@ import java.util.*;
 public class ManageTaskController extends NavigationController implements Initializable{
 
 
+    @FXML private AnchorPane taskAnchor;
     @FXML private TableView<TaskWrapper> taskTV;
     @FXML private TableColumn<TaskWrapper, String> projectName;
     @FXML private TableColumn<TaskWrapper, String> taskName;
@@ -130,5 +132,12 @@ public class ManageTaskController extends NavigationController implements Initia
         }  catch (IOException e) {
             errorLabel.setText("Please select an task to see related documentation.");
         }
+    }
+
+    @FXML private void taskAnchorOnClick(MouseEvent mouseEvent) {
+        if(taskTV.getSelectionModel().getSelectedItem() != null){
+            taskTV.getSelectionModel().clearSelection();
+        }
+        taskTV.refresh();
     }
 }
