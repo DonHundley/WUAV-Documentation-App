@@ -23,6 +23,7 @@ import java.util.*;
 
 public class DocumentationController implements Initializable {
 
+    @FXML private AnchorPane documentationAnchor;
     @FXML private Button createTaskButton;
     @FXML private AnchorPane imagePane;
     @FXML private Label messageLabel;
@@ -194,6 +195,10 @@ public class DocumentationController implements Initializable {
      * @param actionEvent triggered by the create task button.
      */
     @FXML private void createTask(ActionEvent actionEvent){
+        newTask();
+    }
+
+    private void newTask(){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewTask.fxml"));
             Parent root = loader.load();
@@ -214,22 +219,26 @@ public class DocumentationController implements Initializable {
      * @param actionEvent triggered by the update task button.
      */
     @FXML private void updateTask(ActionEvent actionEvent){
+        editTask();
+    }
+
+    private void editTask(){
         if (taskTV.getSelectionModel().getSelectedItem() != null){
-        try {
-            messageLabel.setText("");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/EditTask.fxml"));
-            Parent root = loader.load();
-            EditTaskController controller = loader.getController();
-            controller.setFieldsOnEdit();
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Update Task");
-            stage.setScene(scene);
-            stage.show();
-        }catch (IOException e){
-            String str = "EditTask.fxml";
-            taskError(str);
-        }
+            try {
+                messageLabel.setText("");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/EditTask.fxml"));
+                Parent root = loader.load();
+                EditTaskController controller = loader.getController();
+                controller.setFieldsOnEdit();
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setTitle("Update Task");
+                stage.setScene(scene);
+                stage.show();
+            }catch (IOException e){
+                String str = "EditTask.fxml";
+                taskError(str);
+            }
         }else messageLabel.setText("Please select a task to be updated.");
     }
 
@@ -322,7 +331,15 @@ public class DocumentationController implements Initializable {
             setDescriptionLabel();
             //images.clear();
             generateImgThumbnails();
+            if(mouseEvent.getClickCount() == 2){
+                editTask();
+            }
+        } else if (mouseEvent.getClickCount() == 2) {
+            if(persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("MANAGER") || persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("ADMIN")){
+                newTask();
+            }
         }
+
     }
 
     public void updateLayout(ActionEvent actionEvent) {
@@ -345,5 +362,12 @@ public class DocumentationController implements Initializable {
             }
         }else messageLabel.setText("Please select a task to update the layout.");
     }
+
+    @FXML private void anchorOnClick(MouseEvent mouseEvent) {
+        if(taskTV.getSelectionModel().getSelectedItem() != null){
+            taskTV.getSelectionModel().clearSelection();
+            taskTV.refresh();
+        }
     }
+}
 

@@ -56,6 +56,7 @@ public class ManageProjectController implements Initializable {
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name and our window title label.
+        windowTitleLabel.setText("Task Document Manager");
         usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
     }
 
