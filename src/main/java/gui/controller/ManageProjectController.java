@@ -140,6 +140,7 @@ public class ManageProjectController implements Initializable {
             } else {
                 alert.close();
             }
+            observablesModel.loadProjects();
         }
     }
 
@@ -150,6 +151,12 @@ public class ManageProjectController implements Initializable {
      */
     @FXML
     private void editProject(ActionEvent actionEvent) {
+        if(projectTV.getSelectionModel().getSelectedItem() != null){
+        editProj();
+        }
+    }
+
+    private void editProj(){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEProject.fxml"));
             Parent root = loader.load();
@@ -173,6 +180,10 @@ public class ManageProjectController implements Initializable {
      */
     @FXML
     private void createProject(ActionEvent actionEvent) {
+        newProject();
+    }
+
+    private void newProject(){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEProject.fxml"));
             Parent root = loader.load();
@@ -238,6 +249,7 @@ public class ManageProjectController implements Initializable {
 
     @FXML
     private void createTask(ActionEvent actionEvent) {
+        if (projectTV.getSelectionModel().getSelectedItem() != null){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewTask.fxml"));
             Parent root = loader.load();
@@ -249,6 +261,7 @@ public class ManageProjectController implements Initializable {
         } catch (IOException e) {
             String str = "NewTask.fxml";
             projectError(str);
+        }
         }
     }
 
@@ -262,10 +275,23 @@ public class ManageProjectController implements Initializable {
 
 
     @FXML private void projectTVOnClick(MouseEvent mouseEvent) {
+        if(projectTV.getSelectionModel().getSelectedItem() != null){
         persistenceModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
+        if(mouseEvent.getClickCount() == 2){
+            editProj();
+        }
+        }
+
+        if(projectTV.getSelectionModel().getSelectedItem() == null){
+            if(mouseEvent.getClickCount() == 2){
+            newProject();
+            }
+        }
     }
 
     @FXML private void techTvOnClick(MouseEvent mouseEvent) {
-        persistenceModel.setSelectedUser(techTV.getSelectionModel().getSelectedItem().getUser());
+        if(techTV.getSelectionModel().getSelectedItem() != null) {
+            persistenceModel.setSelectedUser(techTV.getSelectionModel().getSelectedItem().getUser());
+        }
     }
 }

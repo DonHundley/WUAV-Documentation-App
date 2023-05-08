@@ -119,6 +119,7 @@ public class ManageCustomerController implements Initializable {
     }
     @FXML
     private void editCustomer(ActionEvent actionEvent) {
+        if(customersTV.getSelectionModel().getSelectedItem() != null){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NECustomer.fxml"));
             Parent root = loader.load();
@@ -133,10 +134,16 @@ public class ManageCustomerController implements Initializable {
             String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
             customerError(str);
         }
+        }
     }
 
     @FXML
     private void createCustomer(ActionEvent actionEvent) {
+        newCustomer();
+    }
+
+    private void newCustomer(){
+        if(!persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NECustomer.fxml"));
             Parent root = loader.load();
@@ -150,6 +157,7 @@ public class ManageCustomerController implements Initializable {
         } catch (IOException e) {
             String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
             customerError(str);
+        }
         }
     }
 
@@ -217,6 +225,12 @@ public class ManageCustomerController implements Initializable {
 
             if(mouseEvent.getClickCount() == 2){
                 openDocumentation();
+            }
+        }
+
+        if(customersTV.getSelectionModel().getSelectedItem() == null){
+            if(mouseEvent.getClickCount() == 2){
+                newCustomer();
             }
         }
 
