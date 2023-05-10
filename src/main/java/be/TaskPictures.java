@@ -47,6 +47,8 @@ public class TaskPictures {
         this.beforeComment = beforeComment;
     }
 
+    public TaskPictures(int docID, String text, String text1, String pictureAbsolute) {
+    }
 
 
     public int getPictureID() {

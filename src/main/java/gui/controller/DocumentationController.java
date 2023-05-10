@@ -394,6 +394,7 @@ public class DocumentationController implements Initializable {
                 EditLayoutController controller = loader.getController();
                 controller.setLayoutOnEdit();
                 controller.setSelectedProjectForLayout();
+                controller.setUpCanvas();
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 stage.setTitle("Update Layout");

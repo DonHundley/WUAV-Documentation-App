@@ -95,6 +95,7 @@ public class EditTaskController {
         stage.close();
     }
 
+
     /**
      * Closes the window with an action event.
      * @param actionEvent triggers when the user activates the cancel button.
