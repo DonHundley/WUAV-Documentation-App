@@ -14,12 +14,12 @@ import java.nio.file.*;
 import java.util.*;
 
 public class AddTaskPicturesController {
-    @FXML private TextArea beforeComment;
-    @FXML private ImageView beforeImageView;
-    @FXML private ImageView afterImageView;
-    @FXML private TextArea afterComment;
-    @FXML private TextField beforeTF;
-    @FXML private TextField afterTF;
+    @FXML private TextArea deviceNameTA;
+    @FXML private TextArea deviceCredTA;
+    @FXML private ImageView pictureImageView;
+
+    @FXML private TextField  pictureTF;
+
     @FXML private Button cancelButton;
 
     // Models
@@ -30,49 +30,26 @@ public class AddTaskPicturesController {
     // Task to have pictures added to
     private Task task = persistenceModel.getSelectedTask();
 
-    private Image beforePicture;
-    private Image afterPicture;
-    private String beforePictureAbsolute;
-    private String afterPictureAbsolute;
+    private Image picture;
+
+    private String pictureAbsolute;
+
 
     /**
-     * We call this when this controller is called from navigation to set our models, tableview, and labels.
-     * @param persistenceModel this is our instance of Persistent from navigation
-     * @param observablesModel this is our instance of Observables from navigation
-     * @param functionsModel this is our instance of Functions from navigation
-     */
-    public void addTaskPicturesController(Persistent persistenceModel, Observables observablesModel, Functions functionsModel){
-        this.persistenceModel = persistenceModel;
-        this.functionsModel = functionsModel;
-        this.observablesModel = observablesModel;
-
-        task = persistenceModel.getSelectedTask();
-        beforeComment.setText("No comment.");
-        afterComment.setText("No comment. ");
-    }
-
-    /**
-     * Opens the filechooser for after pictures.
+     * Opens the filechooser for pictures.
      * @param actionEvent triggers when the user activates the after picture button.
      */
-    @FXML private void openFileChooserAfter(ActionEvent actionEvent){
-        imageFileExplorer(true);
+    @FXML private void openFileChooser(ActionEvent actionEvent){
+        imageFileExplorer();
     }
 
-    /**
-     * Opens the filechooser for the before pictures.
-     * @param actionEvent triggers when the user activates the before picture button.
-     */
-    @FXML private void openFileChooserBefore(ActionEvent actionEvent){
-        imageFileExplorer(false);
-    }
 
     /**
      * Creates a new TaskPictures from the filled fields.
      * @param actionEvent triggered when the user activates the create button.
      */
     @FXML private void createTaskPictures(ActionEvent actionEvent){
-        TaskPictures taskPictures = new TaskPictures(task.getDocID(), afterComment.getText(), beforeComment.getText(), beforePictureAbsolute, afterPictureAbsolute );
+        TaskPictures taskPictures = new TaskPictures(task.getDocID(), deviceNameTA.getText(), deviceCredTA.getText(), pictureAbsolute);
         functionsModel.addTaskPictures(taskPictures);
     }
 
@@ -87,9 +64,8 @@ public class AddTaskPicturesController {
 
     /**
      * This method controls what we are doing with the chosen image file by the user.
-     * @param isAfter true if the picture being added is an after picture.
      */
-    @FXML private void imageFileExplorer(Boolean isAfter) {
+    @FXML private void imageFileExplorer() {
 
             FileChooser fileChooser = new FileChooser();
             setFileChooser(fileChooser);
@@ -98,17 +74,11 @@ public class AddTaskPicturesController {
             try{
                 Path imagePath = FileSystems.getDefault().getPath(file.getPath());
 
-                if(isAfter){
-                    afterPicture = new Image(new FileInputStream(imagePath.toFile()));
-                    afterPictureAbsolute = file.getAbsolutePath();
-                    afterImageView.setImage(afterPicture);
-                    afterTF.setText(imagePath.toString());
-                }else {
-                    beforePicture = new Image(new FileInputStream(imagePath.toFile()));
-                    beforePictureAbsolute = file.getAbsolutePath();
-                    beforeImageView.setImage(beforePicture);
-                    beforeTF.setText(imagePath.toString());
-                }
+                picture = new Image(new FileInputStream(imagePath.toFile()));
+                pictureAbsolute = file.getAbsolutePath();
+                pictureImageView.setImage(picture);
+                pictureTF.setText(imagePath.toString());
+
             }catch (NullPointerException n){
                 String str = "There was a problem with selecting an image. Issue: NullPointerException.";
                 pictureError(str);
