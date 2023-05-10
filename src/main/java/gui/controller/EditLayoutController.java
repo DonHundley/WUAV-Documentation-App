@@ -22,7 +22,12 @@ import javafx.scene.control.Button;
 
 import java.util.Optional;
 
-
+/**
+ * The drawing application used in this controller at its current state takes heavy inspiration from and code snippets from both of these files:
+ * https://math.hws.edu/javanotes/source/chapter5/ShapeDraw.java
+ * https://math.hws.edu/javanotes/source/chapter6/SimplePaint.java
+ * Both of these are resources attained from https://math.hws.edu/javanotes/ which is Introduction to Programming Using Java, a free, on-line textbook for introductory programming that uses Java as the language of instruction.
+ */
 public class EditLayoutController {
 
 
@@ -30,6 +35,7 @@ public class EditLayoutController {
     private BorderPane bPane;
     @FXML
     private Button editLayoutButton, cancelButton;
+    private  Button freeDrawButton;
 
     private Task selectedTask;
     private Project selectedProject;
@@ -62,6 +68,8 @@ public class EditLayoutController {
 
     private boolean dragging;   // This is set to true while the user is drawing.
 
+    private boolean freeHandDrawing; // This is set to true when the user wishes to draw by hand.
+
     @FXML
     private Canvas canvas;  // The canvas on which everything is drawn.
 
@@ -72,24 +80,22 @@ public class EditLayoutController {
 
         /* Create the canvas and draw its content for the first time. */
         g = canvas.getGraphicsContext2D();
-        clearAndDrawPalette();
-        g.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
-        for (int i = 0; i < shapeCount; i++) {
-            Shape s = shapes[i];
-            s.draw(g);
-        }
+        //clearAndDrawPalette();
+        paintCanvas();
         /* Respond to mouse events on the canvas, by calling methods in this class. */
 
         canvas.setOnMousePressed(this::mousePressed);
         canvas.setOnMouseDragged(this::mouseDragged);
         canvas.setOnMouseReleased(this::mouseReleased);
 
-        makeToolPanel(canvas);
+        bPane.setBottom(makeToolPanel(canvas));
     }
 
     private HBox makeToolPanel(Canvas canvas) {
         // Make a pane containing the buttons that are used to add shapes
         // and the pop-up menu for selecting the current color.
+        freeDrawButton = new Button("Free draw");
+        freeDrawButton.setOnAction( (e) -> freeDraw());
         Button ovalButton = new Button("Add an Oval");
         ovalButton.setOnAction( (e) -> addShape( new OvalShape() ) );
         Button rectButton = new Button("Add a Rect");
@@ -97,25 +103,22 @@ public class EditLayoutController {
         Button roundRectButton = new Button("Add a RoundRect");
         roundRectButton.setOnAction( (e) -> addShape( new RoundRectShape() ) );
 
-        /**
-        ComboBox<String> combobox = new ComboBox<>();
-        combobox.setEditable(false);
-        Color[] colors = { Color.RED, Color.GREEN, Color.BLUE, Color.CYAN,
-                Color.MAGENTA, Color.YELLOW, Color.BLACK, Color.WHITE };
-        String[] colorNames = { "Red", "Green", "Blue", "Cyan",
-                "Magenta", "Yellow", "Black", "White" };
-        combobox.getItems().addAll(colorNames);
-        combobox.setValue("Red");
-        combobox.setOnAction(
-                e -> currentColor = colors[combobox.getSelectionModel().getSelectedIndex()] );
-         */
+
         HBox tools = new HBox(10);
+        tools.getChildren().add(freeDrawButton);
         tools.getChildren().add(ovalButton);
         tools.getChildren().add(rectButton);
         tools.getChildren().add(roundRectButton);
-        //tools.getChildren().add(combobox);
+
         tools.setStyle("-fx-border-width: 5px; -fx-border-color: transparent; -fx-background-color: lightgray");
         return tools;
+    }
+
+    private void freeDraw() {
+        freeHandDrawing = !freeHandDrawing;
+        if(freeHandDrawing){
+            freeDrawButton.setDisable(true);
+        }
     }
 
     private void addShape(Shape shape) {
@@ -128,14 +131,21 @@ public class EditLayoutController {
         shapes[shapeCount] = shape;
         shapeCount++;
         paintCanvas();
+        freeHandDrawing = false;
+        freeDrawButton.setDisable(false);
     }
     private void paintCanvas() {
+        int width = (int)canvas.getWidth();    // Width of the canvas.
+        int height = (int)canvas.getHeight();  // Height of the canvas.
+
         // Redraw the shapes.  The entire list of shapes
         // is redrawn whenever the user adds a new shape
         // or moves an existing shape.
         GraphicsContext g = canvas.getGraphicsContext2D();
         g.setFill(Color.WHITE); // Fill with white background.
-        g.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        g.fillRect(0,0,width,height);
+        clearAndDrawPalette();
+
         for (int i = 0; i < shapeCount; i++) {
             Shape s = shapes[i];
             s.draw(g);
@@ -198,6 +208,8 @@ public class EditLayoutController {
         g.setLineWidth(2);
         g.strokeRect(width-54, 2 + currentColorNum*colorSpacing, 52, colorSpacing-1);
 
+
+
     } // end clearAndDrawPalette()
 
 
@@ -248,36 +260,38 @@ public class EditLayoutController {
      * (Or do nothing if user clicks on the border.)
      */
     public void mousePressed(MouseEvent evt) {
-
-        if (dragging == true)  // Ignore mouse presses that occur
-            return;            //    when user is already drawing a curve.
-        //    (This can happen if the user presses
-        //    two mouse buttons at the same time.)
-
         int x = (int) evt.getX();   // x-coordinate where the user clicked.
         int y = (int) evt.getY();   // y-coordinate where the user clicked.
 
-        int width = (int) canvas.getWidth();    // Width of the canvas.
-        int height = (int) canvas.getHeight();  // Height of the canvas.
+        if(freeHandDrawing) {
+            if (dragging == true)  // Ignore mouse presses that occur
+                return;            //    when user is already drawing a curve.
+            //    (This can happen if the user presses
+            //    two mouse buttons at the same time.)
 
-        if (x > width - 53) {
-            // User clicked to the right of the drawing area.
-            // This click is either on the clear button or
-            // on the color palette.
-            if (y > height - 53)
-                clearAndDrawPalette();  //  Clicked on "CLEAR button".
-            else
-                changeColor(y);  // Clicked on the color palette.
-        } else if (x > 3 && x < width - 56 && y > 3 && y < height - 3) {
-            // The user has clicked on the white drawing area.
-            // Start drawing a curve from the point (x,y).
-            prevX = x;
-            prevY = y;
-            dragging = true;
-            g.setLineWidth(2);  // Use a 2-pixel-wide line for drawing.
-            g.setStroke(palette[currentColorNum]);
-        }
 
+
+            int width = (int) canvas.getWidth();    // Width of the canvas.
+            int height = (int) canvas.getHeight();  // Height of the canvas.
+
+            if (x > width - 53) {
+                // User clicked to the right of the drawing area.
+                // This click is either on the clear button or
+                // on the color palette.
+                if (y > height - 53)
+                    clearAndDrawPalette();  //  Clicked on "CLEAR button".
+                else
+                    changeColor(y);  // Clicked on the color palette.
+            } else if (x > 3 && x < width - 56 && y > 3 && y < height - 3) {
+                // The user has clicked on the white drawing area.
+                // Start drawing a curve from the point (x,y).
+                prevX = x;
+                prevY = y;
+                dragging = true;
+                g.setLineWidth(2);  // Use a 2-pixel-wide line for drawing.
+                g.setStroke(palette[currentColorNum]);
+            }
+        }else {
         for (int i = shapeCount - 1; i >= 0; i--) {  // check shapes from front to back
             Shape s = shapes[i];
             if (s.containsPoint(x, y)) {
@@ -295,6 +309,7 @@ public class EditLayoutController {
                 return;
             }
         }
+        }
         } // end mousePressed()
 
 
@@ -303,8 +318,11 @@ public class EditLayoutController {
          * dragging to false.
          */
         public void mouseReleased (MouseEvent evt){
+            if(freeHandDrawing){
             dragging = false;
+            } else{
             shapeBeingDragged = null;
+            }
         }
 
 
@@ -317,7 +335,7 @@ public class EditLayoutController {
          * palette or clear button.
          */
         public void mouseDragged (MouseEvent evt){
-
+        if(freeHandDrawing) {
             if (dragging == false)
                 return;  // Nothing to do because the user isn't drawing.
 
@@ -338,7 +356,17 @@ public class EditLayoutController {
 
             prevX = x;  // Get ready for the next line segment in the curve.
             prevY = y;
-
+        } else {
+            // User has moved the mouse.  Move the dragged shape by the same amount.
+            int x = (int)evt.getX();
+            int y = (int)evt.getY();
+            if (shapeBeingDragged != null) {
+                shapeBeingDragged.moveBy(x - prevDragX, y - prevDragY);
+                prevDragX = x;
+                prevDragY = y;
+                paintCanvas();      // redraw canvas to show shape in new position
+            }
+        }
         } // end mouseDragged()
 
 
