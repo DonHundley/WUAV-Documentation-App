@@ -29,10 +29,8 @@ import java.util.logging.*;
 
 
 /**
- * The drawing application used in this controller at its current state takes heavy inspiration from and code snippets from both of these files:
- * https://math.hws.edu/javanotes/source/chapter5/ShapeDraw.java
- * https://math.hws.edu/javanotes/source/chapter6/SimplePaint.java
- * Both of these are resources attained from https://math.hws.edu/javanotes/ which is Introduction to Programming Using Java, a free, on-line textbook for introductory programming that uses Java as the language of instruction.
+ * The drawing application used in this controller at its current state takes heavy inspiration from https://math.hws.edu/javanotes/
+ * which is Introduction to Programming Using Java, a free, on-line textbook.
  */
 public class EditLayoutController {
 
