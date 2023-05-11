@@ -24,12 +24,12 @@ import java.util.List;
 
 public class PDFHandler {
 
-
+ 
     /**
      * method to export a pdf with text and images to create the documentation report
      **/
     //
-    public static void exportDocumentation(Image image1, Image image2, String comment1, String comment2, Task task, Project project) throws IOException {
+    public static void exportDocumentation(Image image1, Image image2, Task task, Project project) throws IOException {
 
         PDDocument document = Loader.loadPDF(new File("src/main/java/resources/projectDocumentation.pdf"));
         PDPage page = document.getPage(0);
@@ -60,10 +60,10 @@ public class PDFHandler {
 
         y = y - spacing - imageHeight;
 
-        insertImageWithComment(contentStream, document, image1, comment1, x, y, spacing, imageWidth, imageHeight);
+        insertImageWithComment(contentStream, document, image1, x, y, spacing, imageWidth, imageHeight);
 
         y = y - imageHeight - spacing * 2;
-        insertImageWithComment(contentStream, document, image2, comment2, x, y, spacing, imageWidth, imageHeight);
+        insertImageWithComment(contentStream, document, image2, x, y, spacing, imageWidth, imageHeight);
 
         contentStream.close();
         String exportFile = "Doc " + project.getProjName() + ".pdf";
@@ -85,16 +85,12 @@ public class PDFHandler {
     /**
      * method to insert an image with a comment under
      */
-    private static void insertImageWithComment(PDPageContentStream contentStream, PDDocument document, Image image, String comment, float x, float y, float spacing, float imageWidth, float imageHeight) throws IOException {
+    private static void insertImageWithComment(PDPageContentStream contentStream, PDDocument document, Image image, float x, float y, float spacing, float imageWidth, float imageHeight) throws IOException {
         ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "jpg", imageStream);
         PDImageXObject pdImageXObjectImg1 = PDImageXObject.createFromByteArray(document, imageStream.toByteArray(), "");
         contentStream.drawImage(pdImageXObjectImg1, x, y, imageWidth, imageHeight);
-        y = y - spacing;
-        contentStream.beginText();
-        contentStream.newLineAtOffset(x, y);
-        contentStream.showText(comment);
-        contentStream.endText();
+
     }
 
     /**
