@@ -22,29 +22,25 @@ public class PictureDAO {
      */
     public TaskPictures createPicture(TaskPictures taskPictures) {
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "INSERT INTO task_picture(after_picture, before_picture, after_comment, documentationID, before_comment) VALUES (?,?,?,?,?)";
+            String sql = "INSERT INTO task_picture(picture, device_name, documentationID, password) VALUES (?,?,?,?)";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            File beforeInputFile=new File(taskPictures.getBeforeAbsolutePath());
-            File afterInputFile=new File(taskPictures.getAfterAbsolutePath());
+            File InputFile = new File(taskPictures.getPictureAbsolute());
 
 
-            FileInputStream inStreamAfter = new FileInputStream(afterInputFile);
-            statement.setBinaryStream(1, inStreamAfter);
-            FileInputStream inStreamBefore = new FileInputStream(beforeInputFile);
-            statement.setBinaryStream(2, inStreamBefore);
-            statement.setString(3, taskPictures.getAfterComment());
-            statement.setInt(4, taskPictures.getDocID());
-            statement.setString(5, taskPictures.getBeforeComment());
+            FileInputStream inStream = new FileInputStream(InputFile);
+            statement.setBinaryStream(1, inStream);
+            statement.setString(2, taskPictures.getDeviceName());
+            statement.setInt(3, taskPictures.getDocID());
+            statement.setString(4, taskPictures.getPassword());
             statement.execute();
-            inStreamAfter.close();
-            inStreamBefore.close();
+            inStream.close();
 
             ResultSet keys = statement.getGeneratedKeys();
             keys.next();
             int id = keys.getInt(1);
 
-            return new TaskPictures(id, taskPictures.getAfterPicture(), taskPictures.getBeforePicture(), taskPictures.getAfterComment(), taskPictures.getDocID(), taskPictures.getBeforeComment());
+            return new TaskPictures(id, taskPictures.getDocID(), taskPictures.getPictureAbsolute(), taskPictures.getDeviceName(), taskPictures.getPassword());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (FileNotFoundException e) {
@@ -59,20 +55,17 @@ public class PictureDAO {
      */
     public void updatePicture(TaskPictures taskPictures) {
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "UPDATE task_picture SET after_picture = ?, before_picture = ?, after_comment = ?, documentationID = ?, before_comment = ?) " + "WHERE pictureID = ?";
+            String sql = "UPDATE task_picture SET picture = ?, device_name = ?, documentationID = ?, password = ? " + "WHERE pictureID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
-            FileInputStream inStreamAfter = new FileInputStream(new File("taskPictures.getAfterPicture()"));
-            statement.setBinaryStream(1, inStreamAfter);
-            FileInputStream inStreamBefore = new FileInputStream(new File("taskPictures.getBeforePicture()"));
-            statement.setBinaryStream(2, inStreamBefore);
-            statement.setString(3, taskPictures.getAfterComment());
-            statement.setInt(4, taskPictures.getDocID());
-            statement.setString(5, taskPictures.getBeforeComment());
-            statement.setInt(6, taskPictures.getPictureID());
+            FileInputStream inStream = new FileInputStream(new File("taskPictures.getAfterPicture()"));
+            statement.setBinaryStream(1, inStream);
+            statement.setString(2, taskPictures.getDeviceName());
+            statement.setInt(3, taskPictures.getDocID());
+            statement.setString(4, taskPictures.getPassword());
+            statement.setInt(5, taskPictures.getPictureID());
             statement.executeUpdate();
-            inStreamAfter.close();
-            inStreamBefore.close();
+            inStream.close();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -115,14 +108,13 @@ public class PictureDAO {
 
                 while (resultSet.next()) {
                     int id = resultSet.getInt("pictureID");
-                    Image tryingAfterPicture = new Image(resultSet.getBinaryStream("after_picture"));
-                    Image tryingBeforePicture = new Image(resultSet.getBinaryStream("before_picture"));
-                    String afterComment = resultSet.getString("after_comment");
+                    Image picture = new Image(resultSet.getBinaryStream("picture"));
+                    String deviceName = resultSet.getString("device_name");
                     int documentationID = resultSet.getInt("documentationID");
-                    String beforeComment = resultSet.getString("before_comment");
+                    String password = resultSet.getString("password");
 
 
-                    TaskPictures taskPicture = new TaskPictures(id, tryingAfterPicture, tryingBeforePicture, afterComment, documentationID, beforeComment);
+                    TaskPictures taskPicture = new TaskPictures(id, documentationID, deviceName, password, picture);
                     taskPictures.add(taskPicture);
                 }
             }
@@ -147,13 +139,12 @@ public class PictureDAO {
 
                 while (resultSet.next()) {
                     int id = resultSet.getInt("pictureID");
-                    Image tryingAfterPicture = new Image(resultSet.getBinaryStream("after_picture"));
-                    Image tryingBeforePicture = new Image(resultSet.getBinaryStream("before_picture"));
-                    String afterComment = resultSet.getString("after_comment");
+                    Image picture = new Image(resultSet.getBinaryStream("picture"));
+                    String deviceName = resultSet.getString("device_name");
                     int documentationID = resultSet.getInt("documentationID");
-                    String beforeComment = resultSet.getString("before_comment");
+                    String password = resultSet.getString("password");
 
-                    return new TaskPictures(id, tryingAfterPicture, tryingBeforePicture, afterComment, documentationID, beforeComment);
+                    return new TaskPictures(id, documentationID, deviceName, password, picture);
                 }
             }
         } catch (SQLException e) {
@@ -178,13 +169,12 @@ public class PictureDAO {
 
                 while (resultSet.next()) {
                     int id = resultSet.getInt("pictureID");
-                    Image tryingAfterPicture = new Image(resultSet.getBinaryStream("after_picture"));
-                    Image tryingBeforePicture = new Image(resultSet.getBinaryStream("before_picture"));
-                    String afterComment = resultSet.getString("after_comment");
+                    Image picture = new Image(resultSet.getBinaryStream("picture"));
+                    String deviceName = resultSet.getString("device_name");
                     int documentationID = resultSet.getInt("documentationID");
-                    String beforeComment = resultSet.getString("before_comment");
+                    String password = resultSet.getString("password");
 
-                    TaskPictures taskPictures = new TaskPictures(id, tryingAfterPicture, tryingBeforePicture, afterComment, documentationID, beforeComment);
+                    TaskPictures taskPictures = new TaskPictures(id, documentationID, deviceName, password, picture);
                     taskPicturesByDocID.add(taskPictures);
                 }
             }

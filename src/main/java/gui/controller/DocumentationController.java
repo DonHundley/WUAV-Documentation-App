@@ -114,8 +114,8 @@ public class DocumentationController implements Initializable {
         int beforeCount = 1;
         int afterCount = 1;
         for (TaskPictures picture:pics) {
-            if (picture.getBeforePicture() != null){
-                ImageView bImage = new ImageView(picture.getBeforePicture());
+            if (picture.getPicture() != null){
+                ImageView bImage = new ImageView(picture.getPicture());
                 bImage.setFitHeight(150);
                 bImage.setFitWidth(200);
                 bImage.setX(imageLocationX(imgCount, 200));
@@ -126,7 +126,7 @@ public class DocumentationController implements Initializable {
                 //System.out.println(bImage.getId());
                 //images.put(bImage.getId(), bImage.getImage());
                 imgCount++;
-                if(picture.getBeforeComment() != null){
+                /*if(picture.getBeforeComment() != null){
                     //pictureDescriptions.add("Before picture " +beforeCount+ " comment:" +picture.getBeforeComment());
                     images.put("Before picture " +beforeCount+ " comment: " +picture.getBeforeComment(), bImage.getImage());
                     pictureDescriptions.add("Before picture " +beforeCount+ " comment: " +picture.getBeforeComment());
@@ -156,7 +156,7 @@ public class DocumentationController implements Initializable {
                     images.put("After picture " +afterCount+ " currently has no comments. ", aImage.getImage());
                     pictureDescriptions.add("After picture " +afterCount+ " currently has no comments. ");
                 }
-                afterCount++;
+                afterCount++;*/
             }
             if(imgCount == 20){
                 break;

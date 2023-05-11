@@ -22,6 +22,8 @@ public class AddTaskPicturesController {
 
     @FXML private Button cancelButton;
 
+    @FXML private Button createTaskPictures;
+
     // Models
     private Persistent persistenceModel = Persistent.getInstance();
     private Observables observablesModel = Observables.getInstance();
@@ -51,6 +53,9 @@ public class AddTaskPicturesController {
     @FXML private void createTaskPictures(ActionEvent actionEvent){
         TaskPictures taskPictures = new TaskPictures(task.getDocID(), deviceNameTA.getText(), deviceCredTA.getText(), pictureAbsolute);
         functionsModel.addTaskPictures(taskPictures);
+        Stage stage = (Stage) createTaskPictures.getScene().getWindow();
+        stage.close();
+
     }
 
     /**

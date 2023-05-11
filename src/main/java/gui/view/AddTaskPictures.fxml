@@ -9,10 +9,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="650.0" prefHeight="650.0" prefWidth="750.0" styleClass="NEwindow-background" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.AddTaskPicturesController">
+<AnchorPane maxHeight="650.0" prefHeight="650.0" prefWidth="750.0" styleClass="NEwindow-background" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.AddTaskPicturesController">
    <children>
       <Label alignment="CENTER" layoutX="256.0" layoutY="14.0" prefHeight="39.0" prefWidth="421.0" styleClass="NEwindow-title" text="ADD TASK DOCUMENTATION" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-      <Button layoutX="529.0" layoutY="583.0" mnemonicParsing="false" onAction="#createTaskPictures" styleClass="round-btn" text="Add" />
+      <Button fx:id="createTaskPictures" layoutX="529.0" layoutY="583.0" mnemonicParsing="false" onAction="#createTaskPictures" styleClass="round-btn" text="Add" />
       <Button fx:id="cancelButton" layoutX="619.0" layoutY="583.0" mnemonicParsing="false" styleClass="round-btn" text="Cancel" />
       <VBox layoutX="45.0" layoutY="70.0" minHeight="450.0" prefHeight="450.0" prefWidth="650.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="80.0">
          <children>
@@ -25,7 +25,7 @@
                   </VBox>
                   <VBox alignment="CENTER" mouseTransparent="true" prefHeight="100.0" prefWidth="386.0">
                      <children>
-                        <TextField fx:id="PictureTF" alignment="TOP_LEFT" prefHeight="40.0" prefWidth="455.0" />
+                        <TextField fx:id="pictureTF" alignment="TOP_LEFT" prefHeight="40.0" prefWidth="455.0" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="100.0" prefWidth="106.0">
@@ -44,7 +44,7 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: black;">
                      <children>
-                        <ImageView fx:id="PictureImageView" fitHeight="230.0" fitWidth="311.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="pictureImageView" fitHeight="230.0" fitWidth="311.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
                </children>

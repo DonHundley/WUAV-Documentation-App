@@ -6,49 +6,38 @@ public class TaskPictures {
 
     private int pictureID;
 
-    private Image beforePicture;
-
-    private Image afterPicture;
-
+    private Image picture;
     private int docID;
+    private String deviceName;
+    private String password;
 
-    private String afterComment;
-
-    private String beforeComment;
-
-    private String beforeAbsolutePath;
-    private String afterAbsolutePath;
+    private String pictureAbsolute;
 
 
-
-    public TaskPictures(int docID, String afterComment, String beforeComment, String beforeAbsolutePath, String afterAbsolutePath) {
-
+    public TaskPictures(int docID, String deviceName, String password, String pictureAbsolute) {
         this.docID = docID;
-        this.afterComment = afterComment;
-        this.beforeComment = beforeComment;
-        this.beforeAbsolutePath = beforeAbsolutePath;
-        this.afterAbsolutePath = afterAbsolutePath;
+        this.deviceName = deviceName;
+        this.password = password;
+        this.pictureAbsolute = pictureAbsolute;
     }
 
-    public TaskPictures(int pictureID, Image afterPicture, Image beforePicture, String afterComment, int docID, String beforeComment) {
+    public TaskPictures (int pictureID, int docID, String deviceName, String password, String pictureAbsolute) {
         this.pictureID = pictureID;
-        this.beforePicture = beforePicture;
-        this.afterPicture = afterPicture;
         this.docID = docID;
-        this.afterComment = afterComment;
-        this.beforeComment = beforeComment;
+        this.deviceName = deviceName;
+        this.password = password;
+        this.pictureAbsolute = pictureAbsolute;
     }
 
-    public TaskPictures(Image afterPicture, Image beforePicture, String afterComment, int docID, String beforeComment) {
-        this.beforePicture = beforePicture;
-        this.afterPicture = afterPicture;
+    public TaskPictures (int pictureID, int docID, String deviceName, String password, Image picture) {
+        this.pictureID = pictureID;
         this.docID = docID;
-        this.afterComment = afterComment;
-        this.beforeComment = beforeComment;
+        this.deviceName = deviceName;
+        this.password = password;
+        this.picture = picture;
     }
 
-    public TaskPictures(int docID, String text, String text1, String pictureAbsolute) {
-    }
+
 
 
     public int getPictureID() {
@@ -59,22 +48,6 @@ public class TaskPictures {
         this.pictureID = pictureID;
     }
 
-    public Image getBeforePicture() {
-        return beforePicture;
-    }
-
-    public void setBeforePicture(Image beforePicture) {
-        this.beforePicture = beforePicture;
-    }
-
-    public Image getAfterPicture() {
-        return afterPicture;
-    }
-
-    public void setAfterPicture(Image afterPicture) {
-        this.afterPicture = afterPicture;
-    }
-
     public int getDocID() {
         return docID;
     }
@@ -83,35 +56,35 @@ public class TaskPictures {
         this.docID = docID;
     }
 
-    public String getAfterComment() {
-        return afterComment;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setAfterComment(String afterComment) {
-        this.afterComment = afterComment;
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 
-    public String getBeforeComment() {
-        return beforeComment;
+    public String getPassword() {
+        return password;
     }
 
-    public void setBeforeComment(String beforeComment) {
-        this.beforeComment = beforeComment;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getBeforeAbsolutePath() {
-        return beforeAbsolutePath;
+    public String getPictureAbsolute() {
+        return pictureAbsolute;
     }
 
-    public void setBeforeAbsolutePath(String beforeAbsolutePath) {
-        this.beforeAbsolutePath = beforeAbsolutePath;
+    public void setPictureAbsolute(String pictureAbsolute) {
+        this.pictureAbsolute = pictureAbsolute;
     }
 
-    public String getAfterAbsolutePath() {
-        return afterAbsolutePath;
+    public Image getPicture() {
+        return picture;
     }
 
-    public void setAfterAbsolutePath(String afterAbsolutePath) {
-        this.afterAbsolutePath = afterAbsolutePath;
+    public void setPicture(Image picture) {
+        this.picture = picture;
     }
 }
