@@ -1,0 +1,244 @@
+package com.WUAV.gui.controller;
+
+import com.WUAV.be.*;
+import com.WUAV.gui.model.*;
+import javafx.beans.property.*;
+import javafx.beans.value.*;
+import javafx.event.*;
+import javafx.fxml.*;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
+import javafx.stage.*;
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+public class ManageCustomerController implements Initializable {
+
+
+    @FXML private AnchorPane customerAnchor;
+    // Tableview
+    @FXML
+    private TableView<CustomerWrapper> customersTV;
+    @FXML
+    private TableColumn<CustomerWrapper, String> customerEmail;
+    @FXML
+    private TableColumn<CustomerWrapper, String> customerName;
+    @FXML
+    private TableColumn<CustomerWrapper, String> customerAddress;
+    @FXML
+    private TableColumn<CustomerWrapper, String> projectName;
+
+    // TextField
+    @FXML
+    private TextField searchCustomer;
+
+    // Labels
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label windowTitle;
+
+    // Buttons
+    @FXML
+    private Button newCustomerButton;
+    @FXML
+    private Button editCustomerButton;
+
+    // Models
+    private Persistent persistenceModel = Persistent.getInstance();
+    private Observables observablesModel = Observables.getInstance();
+    private Functions functionsModel = new Functions();
+
+
+    /**
+     * We use this to set our username label and window title label.
+     */
+    private void setUsernameLabel() {// set our username label to the users name
+        usernameLabel.setText(persistenceModel.getLoggedInUser().getFirstName() + " " + persistenceModel.getLoggedInUser().getLastName());
+    }
+
+    /**
+     * We use this to set up the tableview customerTV with relative columns.
+     */
+    private void setCustomerTableView() {
+        customersTV.setItems(observablesModel.getCustomersWithWrapper());
+        observablesModel.loadCustomersWithWrapper();
+
+        customerAddress.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustAddress()));
+        customerName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
+        customerEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustEmail()));
+        projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
+
+        customersTV.getSelectionModel().selectedItemProperty().addListener(((((observable, oldValue, selection) -> {
+            if (selection != null) {
+                persistenceModel.setSelectedProject(selection.getProject());
+                persistenceModel.setSelectedCustomer(selection.getCustomer());
+            }
+        }))));
+    }
+
+    @FXML
+    private void openDocumentWindow(MouseEvent mouseEvent) throws IOException {
+        try {
+            if (mouseEvent.getClickCount() == 2) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/WUAV/gui/view/DocumentationView.fxml"));
+                Parent root = loader.load();
+                //DocumentationController controller = loader.getController();
+                //controller.userController(persistenceModel, observablesModel, functionsModel);
+                Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setTitle("Documentation Manager");
+                stage.setScene(scene);
+                stage.show();
+            }
+        } catch (IOException e) {
+            String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+    }
+
+    @FXML
+    private void openDocumentButton(ActionEvent actionEvent) {
+        openDocumentation();
+    }
+
+    private void openDocumentation(){
+        try {
+            persistenceModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
+            Node n = FXMLLoader.load(getClass().getResource("/com/WUAV/gui/view/DocumentationView.fxml"));
+            persistenceModel.getViewAnchor().getChildren().setAll(n);
+        } catch (IOException e) {
+            String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+    }
+    @FXML
+    private void editCustomer(ActionEvent actionEvent) {
+        if(customersTV.getSelectionModel().getSelectedItem() != null){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/WUAV/gui/view/NECustomer.fxml"));
+            Parent root = loader.load();
+            NECustomerController controller = loader.getController();
+            controller.setNEController(true, persistenceModel, functionsModel);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Edit Customer");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+        }
+    }
+
+    @FXML
+    private void createCustomer(ActionEvent actionEvent) {
+        newCustomer();
+    }
+
+    private void newCustomer(){
+        if(!persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/WUAV/gui/view/NECustomer.fxml"));
+            Parent root = loader.load();
+            NECustomerController controller = loader.getController();
+            controller.setNEController(false, persistenceModel, functionsModel);
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("New customer");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+        }
+    }
+
+    /**
+     * This will log the user out and change the view to the login.
+     * We catch the IOException and show the user a crafted alert.
+     *
+     * @param actionEvent triggered by the logout button.
+     */
+    @FXML
+    private void logOut(ActionEvent actionEvent) {
+        try {
+            persistenceModel.setLoggedInUser(null);
+            Parent root = FXMLLoader.load(getClass().getResource("/com/WUAV/gui/view/Login.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("WUAV");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            String str = "There has been an error loading Login.fxml. Please contact system Admin.";
+            customerError(str);
+        }
+    }
+
+    /**
+     * We use this to display an error to the user if there is a problem.
+     *
+     * @param str This is the source of the problem so that the user is informed.
+     */
+    private void customerError(String str) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Error");
+        alert.setHeaderText(str);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            alert.close();
+        } else {
+            alert.close();
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        if(persistenceModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")){
+           editCustomerButton.setVisible(false);
+           newCustomerButton.setVisible(false);
+        }
+
+        setCustomerTableView();
+        setUsernameLabel();
+        searchCustomer.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                observablesModel.search(newValue);
+            }
+        });
+    }
+
+    @FXML private void onCustomerTVClick(MouseEvent mouseEvent) {
+        if(customersTV.getSelectionModel().getSelectedItem() != null){
+            persistenceModel.setSelectedCustomer(customersTV.getSelectionModel().getSelectedItem().getCustomer());
+            persistenceModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
+
+            if(mouseEvent.getClickCount() == 2){
+                openDocumentation();
+            }
+        }
+
+        if(customersTV.getSelectionModel().getSelectedItem() == null){
+            if(mouseEvent.getClickCount() == 2){
+                newCustomer();
+            }
+        }
+
+    }
+
+    @FXML private void anchorOnClick(MouseEvent mouseEvent) {
+        if(customersTV.getSelectionModel().getSelectedItem() != null){
+            customersTV.getSelectionModel().clearSelection();
+        }
+        customersTV.refresh();
+    }
+}
