@@ -12,6 +12,9 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 
 import java.io.*;
+import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class NavigationController {
@@ -40,11 +43,13 @@ public class NavigationController {
                 Node a = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
                 viewAnchor.getChildren().setAll(a);
                 home = "/gui/view/ManageTaskView.fxml";
+                documentationExpired();
                 break;
             case "MANAGER":
                 Node m = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
                 viewAnchor.getChildren().setAll(m);
                 home = "/gui/view/ManageTaskView.fxml";
+                documentationExpired();
                 break;
             case "TECHNICIAN":
                 System.out.println("Loading list");
@@ -110,4 +115,30 @@ public class NavigationController {
         }
     }
 
+    public void documentationExpired() {
+        observablesModel.loadProjects();
+        ArrayList<String> expiredDocumentation = new ArrayList<>();
+        for (ProjectWrapper p : observablesModel.getProjects()) {
+
+            LocalDateTime localDateTime = LocalDateTime.now().minusYears(4); //4 years ago date
+            java.sql.Date dateTime = Date.valueOf(localDateTime.toLocalDate()); //converts to Date
+
+            if (p.getDateCreated().before(dateTime)) {
+                expiredDocumentation.add(p.getProject().getProjName());
+            }
+
+        }
+        if(expiredDocumentation.size() > 0) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Expired Documentation");
+            alert.setHeaderText("Remember to manage the documentation that has been stored for 48+ months:");
+            alert.setContentText(expiredDocumentation.toString().replace("[","").replace("]",""));
+            Optional<ButtonType> result = alert.showAndWait();
+            alert.getContentText();
+            if (result.get() == ButtonType.CLOSE) {
+                alert.close();
+            }
+        }
+
+    }
 }
