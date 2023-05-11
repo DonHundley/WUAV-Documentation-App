@@ -32,22 +32,7 @@ public class PDFHandler {
     private static String comment1 = "comment 1";
     private static String comment2 = "comment 2";
 
-
-    public static void main(String[] args) throws IOException {
-        Platform.startup(() -> {
-            Image image1 = new Image("images/beforeImage1.jpg");
-            Image image2 = new Image("images/afterImage1.jpg");
-            Image layout = new Image("images/layout.png");
-            Customer customer = new Customer("Vestas", "project@vestas.dk", "Siriusvej 6, Esbjerg");
-            Task task = new Task(2, 1, "Whiteboard installation", layout, description, "in progress");
-            Project project = new Project(1, "Implementing Microsoft Whiteboard for Collaboration", Date.valueOf("2023-08-12"), 3);
-            try {
-                exportDocumentation(customer, project, task, image1, image2);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
+    
 
     /**
      * method to export a pdf with text and images to create the documentation report
@@ -55,11 +40,13 @@ public class PDFHandler {
     //
     public static void exportDocumentation(Customer customer, Project project, Task task, Image image1, Image image2) throws IOException {
 
-        PDDocument document = Loader.loadPDF(new File("src/main/java/resources/report-input.pdf"));
+        PDDocument document = Loader.loadPDF(new File("src/main/java/resources/reportBackground-input.pdf"));
         PDPage page = document.getPage(0);
         PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
-        PDFont pdfFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
-        contentStream.setFont(pdfFont, 11);
+
+        PDFont boldFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+        PDFont regularFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+        contentStream.setFont(regularFont, 13);
         float[] color = new float[]{0, 0, 0};
         contentStream.setNonStrokingColor(color[0], color[1], color[2]);
 
@@ -70,34 +57,24 @@ public class PDFHandler {
         float spacing = 50;
         float lineSpacing = 30;
         float x = spacing;
-        float custY = pageHeight - 200;
+        float custY = pageHeight - 170;
 
-        float projY = custY;
-        float projX = (pageWidth - 2 * margin) / 2;
-        float taskY = projY - spacing * 4;
-        float deviceY=projY-lineSpacing*3;
+        float projY = custY-lineSpacing*2;
+        float taskY = projY - spacing * 3;
+        float deviceY=projY-lineSpacing*2;
 
         int imageWidth = 200;
         int imageHeight = 166;
         float imgY=300-imageHeight-spacing*2;
 
 
-        PDFont boldFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
-        PDFont regularFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
 
-        writeCustomerInfo(contentStream, customer, x, custY, lineSpacing);
+        writeCustomerInfo(contentStream, customer, x, custY, lineSpacing,boldFont,regularFont);
 
-        writeProjectInfo(contentStream, project, projX, projY, lineSpacing);
+        writeProjectInfo(contentStream, project, x, projY, lineSpacing, boldFont, regularFont);
         writeDeviceInfo(contentStream, task, x, deviceY, boldFont,regularFont,lineSpacing);
 
         writeTaskInfo(contentStream, task, boldFont, regularFont, 12, page.getMediaBox().getWidth() - margin * 4, x, taskY, lineSpacing);
-
-
-
-
-
-
-
 
         insertImage(contentStream, document, image1, x, imgY, spacing, imageWidth, imageHeight);
 
@@ -116,18 +93,18 @@ public class PDFHandler {
     private static void writeDeviceInfo(PDPageContentStream contentStream, Task task, float x, float deviceY, PDFont boldFont, PDFont regularFont, float lineSpacing) throws IOException {
         contentStream.beginText();
         contentStream.newLineAtOffset(x, deviceY);
-        contentStream.setFont(boldFont, 15);
+        contentStream.setFont(boldFont, 13);
         contentStream.showText("Device name: ");
-        contentStream.setFont(regularFont, 15);
+        contentStream.setFont(regularFont, 13);
         //contentStream.showText(task.getDeviceName());
         contentStream.endText();
 
         deviceY -= lineSpacing;
         contentStream.beginText();
         contentStream.newLineAtOffset(x, deviceY);
-        contentStream.setFont(boldFont, 15);
+        contentStream.setFont(boldFont, 13);
         contentStream.showText("Login credential: ");
-        contentStream.setFont(regularFont, 15);
+        contentStream.setFont(regularFont, 13);
         //contentStream.showText(task.getLoginCred());
         contentStream.endText();
 
@@ -136,17 +113,17 @@ public class PDFHandler {
     /**
      * method to write the customer info on a pdf document
      */
-    private static void writeCustomerInfo(PDPageContentStream contentStream, Customer customer, float x, float custY, float linespacing) throws IOException {
+    private static void writeCustomerInfo(PDPageContentStream contentStream, Customer customer, float x, float custY, float linespacing, PDFont bold,PDFont regular) throws IOException {
         contentStream.beginText();
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+        contentStream.setFont(bold, 12);
         contentStream.newLineAtOffset(x, custY);
         contentStream.showText("Customer: ");
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+        contentStream.setFont(regular, 12);
         contentStream.showText(customer.getCustName());
         contentStream.newLineAtOffset(0, -linespacing);
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+        contentStream.setFont(bold, 12);
         contentStream.showText("Address: ");
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+        contentStream.setFont(regular, 12);
         contentStream.showText(customer.getCustAddress());
         contentStream.endText();
     }
@@ -200,18 +177,18 @@ public class PDFHandler {
     /**
      * method to write the project info on a pdf document
      */
-    private static void writeProjectInfo(PDPageContentStream contentStream, Project project, float x, float projY, float linespacing) throws IOException {
+    private static void writeProjectInfo(PDPageContentStream contentStream, Project project, float x, float projY, float linespacing, PDFont bold, PDFont regular) throws IOException {
         contentStream.beginText();
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+        contentStream.setFont(bold, 12);
         contentStream.newLineAtOffset(x, projY);
         contentStream.showText("Project: ");
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+        contentStream.setFont(regular, 12);
 
         contentStream.showText(project.getProjName());
         contentStream.newLineAtOffset(0, -linespacing);
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+        contentStream.setFont(bold, 12);
         contentStream.showText("Date: ");
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+        contentStream.setFont(regular, 12);
         contentStream.showText(project.getProjDate().toString());
         contentStream.endText();
     }
