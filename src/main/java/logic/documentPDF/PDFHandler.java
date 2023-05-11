@@ -32,7 +32,7 @@ public class PDFHandler {
     private static String comment1 = "comment 1";
     private static String comment2 = "comment 2";
 
-    
+
 
     /**
      * method to export a pdf with text and images to create the documentation report
@@ -67,8 +67,6 @@ public class PDFHandler {
         int imageHeight = 166;
         float imgY=300-imageHeight-spacing*2;
 
-
-
         writeCustomerInfo(contentStream, customer, x, custY, lineSpacing,boldFont,regularFont);
 
         writeProjectInfo(contentStream, project, x, projY, lineSpacing, boldFont, regularFont);
@@ -90,6 +88,10 @@ public class PDFHandler {
         document.close();
     }
 
+
+    /**
+     * method to write the device info on a pdf document
+     */
     private static void writeDeviceInfo(PDPageContentStream contentStream, Task task, float x, float deviceY, PDFont boldFont, PDFont regularFont, float lineSpacing) throws IOException {
         contentStream.beginText();
         contentStream.newLineAtOffset(x, deviceY);
