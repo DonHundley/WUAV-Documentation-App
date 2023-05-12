@@ -3,6 +3,7 @@ package logic.documentPDF;
 import be.Customer;
 import be.Project;
 import be.Task;
+import be.TaskPictures;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
