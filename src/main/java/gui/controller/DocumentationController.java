@@ -2,7 +2,6 @@ package gui.controller;
 
 import be.*;
 import gui.model.*;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.*;
 
 
@@ -70,7 +69,6 @@ public class DocumentationController implements Initializable {
     private List<String> pictureDescriptions = new ArrayList<>();
 
 
-
     /**
      * We use this to set our username label and window title label.
      */
@@ -110,10 +108,11 @@ public class DocumentationController implements Initializable {
         }
     }
 
-    /** this method generates thumbnail images for a list of picture belonging to a specific task and displays them in a pane.
+    /**
+     * this method generates thumbnail images for a list of picture belonging to a specific task and displays them in a pane.
      * A mouse click event is set on each thumbnail to open an image dialog
-     * */
-    private void generateImgThumbnails() {
+     */
+    private List<Image> generateImgThumbnails() {
         Task task = persistenceModel.getSelectedTask();
         List<TaskPictures> pics = functionsModel.taskPicturesByDocID(task);
 
@@ -144,9 +143,12 @@ public class DocumentationController implements Initializable {
                 break;
             }
         }
+        return imageList;
     }
 
-    /** this method handles the click event on the thumbnails image and open an image dialog to see the selected image in a bigger size**/
+    /**
+     * this method handles the click event on the thumbnails image and open an image dialog to see the selected image in a bigger size
+     **/
     private void openImageDialogOnMouseClick(MouseEvent event, Image image, List<Image> imageList) {
         try {
             int selectedIndex = imageList.indexOf(image);
@@ -168,7 +170,7 @@ public class DocumentationController implements Initializable {
         }
     }
 
-
+    /**These methods calculate the X and Y location of images based on their amount and size.**/
     private int imageLocationX(int imgCount, int imgWidth) {
         int getX;
         int spacing;
@@ -225,10 +227,6 @@ public class DocumentationController implements Initializable {
         }
     }
 
-    @FXML
-    private void selectImage(Image image) {
-
-    }
 
     /**
      * This will open the New Task View.
@@ -371,13 +369,6 @@ public class DocumentationController implements Initializable {
     }
 
 
-    public void getSelectedImage(javafx.scene.input.MouseEvent mouseEvent) {
-
-        //String str = imagePane.getScene().getFocusOwner().getId();
-        //System.out.println(str);
-        //Image image = images.get(str);
-        //largeImageView.setImage(image);
-    }
 
     @FXML
     private void taskTVOnMouse(MouseEvent mouseEvent) {
@@ -431,6 +422,38 @@ public class DocumentationController implements Initializable {
     }
 
 
+
+/**method to open the window where it's possible to export the report for the selected task**/
+    @FXML private void openExportReportView(ActionEvent actionEvent) {
+
+        if (taskTV.getSelectionModel().getSelectedItem() != null) {
+            try {
+                Project project = persistenceModel.getSelectedProject();
+                Task task = taskTV.getSelectionModel().getSelectedItem();
+                Customer customer = persistenceModel.getSelectedCustomer();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/ExportReportView.fxml"));
+                Parent root = loader.load();
+                ExportReportViewController controller = loader.getController();
+               List<Image> imageList = generateImgThumbnails();
+                controller.setSelectedTask(task);
+                controller.setSelectedProject(project);
+                controller.setSelectedCustomer(customer);
+                controller.setImages(imageList);
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setTitle("Export Report View");
+                stage.setScene(scene);
+                stage.show();
+
+            } catch (IOException e) {
+                String str = "ExportReportView.fxml";
+                taskError(str);
+            }
+
+        } else {
+            messageLabel.setText("Please select a task to export its report");
+        }
+    }
 }
 
 

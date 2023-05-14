@@ -117,6 +117,7 @@ public class ManageTaskController extends NavigationController implements Initia
         if(taskTV.getSelectionModel().getSelectedItem() != null){
             persistenceModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
             persistenceModel.setSelectedTask(taskTV.getSelectionModel().getSelectedItem().getTask());
+            persistenceModel.setSelectedCustomer(taskTV.getSelectionModel().getSelectedItem().getCustomer());
             if(mouseEvent.getClickCount() == 2){
                 openProjectInformation();
             }
