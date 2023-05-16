@@ -21,7 +21,8 @@ import java.util.*;
 
 public class ManageProjectController implements Initializable {
 
-    @FXML private AnchorPane projectAnchor;
+    @FXML
+    private AnchorPane projectAnchor;
     // TableViews
     @FXML
     private TableView<ProjectWrapper> projectTV;
@@ -115,13 +116,13 @@ public class ManageProjectController implements Initializable {
             if (projectTV.getSelectionModel().getSelectedItem() != null && techTV.getSelectionModel().getSelectedItem() != null) {
                 functionsModel.assignProject(persistenceModel.getSelectedUser(), persistenceModel.getSelectedProject());
                 observablesModel.loadTechs();
-            } }
-        else {
-                String str = "Only projects with tasks can be assigned to a technician";
-                projectError(str);
-
             }
+        } else {
+            String str = "Only projects with tasks can be assigned to a technician";
+            projectError(str);
+
         }
+    }
 
 
     /**
@@ -154,12 +155,12 @@ public class ManageProjectController implements Initializable {
      */
     @FXML
     private void editProject(ActionEvent actionEvent) {
-        if(projectTV.getSelectionModel().getSelectedItem() != null){
-        editProj();
+        if (projectTV.getSelectionModel().getSelectedItem() != null) {
+            editProj();
         }
     }
 
-    private void editProj(){
+    private void editProj() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEProject.fxml"));
             Parent root = loader.load();
@@ -186,7 +187,7 @@ public class ManageProjectController implements Initializable {
         newProject();
     }
 
-    private void newProject(){
+    private void newProject() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NEProject.fxml"));
             Parent root = loader.load();
@@ -255,8 +256,8 @@ public class ManageProjectController implements Initializable {
         addTask();
     }
 
-    private void addTask(){
-        if (projectTV.getSelectionModel().getSelectedItem() != null){
+    private void addTask() {
+        if (projectTV.getSelectionModel().getSelectedItem() != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewTask.fxml"));
                 Parent root = loader.load();
@@ -281,32 +282,35 @@ public class ManageProjectController implements Initializable {
     }
 
 
-    @FXML private void projectTVOnClick(MouseEvent mouseEvent) {
-        if(projectTV.getSelectionModel().getSelectedItem() != null){
-        persistenceModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
-        if(mouseEvent.getClickCount() == 2){
-            addTask();
-        }
+    @FXML
+    private void projectTVOnClick(MouseEvent mouseEvent) {
+        if (projectTV.getSelectionModel().getSelectedItem() != null) {
+            persistenceModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
+            if (mouseEvent.getClickCount() == 2) {
+                addTask();
+            }
         }
 
-        if(projectTV.getSelectionModel().getSelectedItem() == null){
-            if(mouseEvent.getClickCount() == 2){
-            newProject();
+        if (projectTV.getSelectionModel().getSelectedItem() == null) {
+            if (mouseEvent.getClickCount() == 2) {
+                newProject();
             }
         }
     }
 
-    @FXML private void techTvOnClick(MouseEvent mouseEvent) {
-        if(techTV.getSelectionModel().getSelectedItem() != null) {
+    @FXML
+    private void techTvOnClick(MouseEvent mouseEvent) {
+        if (techTV.getSelectionModel().getSelectedItem() != null) {
             persistenceModel.setSelectedUser(techTV.getSelectionModel().getSelectedItem().getUser());
         }
     }
 
-    @FXML private void anchorOnClick(MouseEvent mouseEvent) {
-        if(techTV.getSelectionModel().getSelectedItem() != null){
+    @FXML
+    private void anchorOnClick(MouseEvent mouseEvent) {
+        if (techTV.getSelectionModel().getSelectedItem() != null) {
             techTV.getSelectionModel().clearSelection();
         }
-        if(projectTV.getSelectionModel().getSelectedItem() != null){
+        if (projectTV.getSelectionModel().getSelectedItem() != null) {
             projectTV.getSelectionModel().clearSelection();
         }
         techTV.refresh();

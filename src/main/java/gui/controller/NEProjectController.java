@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 
 
-import java.net.URL;
 import java.util.*;
 
 public class NEProjectController {
@@ -38,9 +37,13 @@ public class NEProjectController {
 
     private Date creationDate;
 
+    //validation
+    int maxProjName = 50;
+
     /**
      * This method is used to set our models and choose if we are editing or creating a project.
-     * @param isEdit          if true, we are editing a project.
+     *
+     * @param isEdit if true, we are editing a project.
      */
     public void setNEProjectController(Boolean isEdit) {
         setNEProjectTV();
@@ -83,12 +86,16 @@ public class NEProjectController {
      */
     private void createProject() {
         if (!projectName.getText().isEmpty()) {
-            project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), nEProjectTV.getSelectionModel().getSelectedItem().getCustID());
-            functionsModel.createProject(project);
+            if (validateProjectNameTFLength()) {
+                project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), nEProjectTV.getSelectionModel().getSelectedItem().getCustID());
+                functionsModel.createProject(project);
 
-            observablesModel.loadProjects();
-            Stage stage = (Stage) createOrEditProject.getScene().getWindow();
-            stage.close();
+                observablesModel.loadProjects();
+                Stage stage = (Stage) createOrEditProject.getScene().getWindow();
+                stage.close();
+            } else {
+                alertProjectNameTF();
+            }
         } else {
             String str = "Please fill in the project name";
             projectError(str);
@@ -99,18 +106,21 @@ public class NEProjectController {
      * This method is used to edit the selected project from our persistent model with updated information.
      */
     private void editProject() {
-        if(!projectName.getText().isEmpty())
-        {
-        project.setProjName(projectName.getText());
+        if (!projectName.getText().isEmpty()) {
+            if (validateProjectNameTFLength()) {
+                project.setProjName(projectName.getText());
 
-        functionsModel.editProject(project);
+                functionsModel.editProject(project);
 
-        observablesModel.loadProjects();
-        Stage stage = (Stage) createOrEditProject.getScene().getWindow();
-        stage.close();
+                observablesModel.loadProjects();
+                Stage stage = (Stage) createOrEditProject.getScene().getWindow();
+                stage.close();
+            } else {
+                alertProjectNameTF();
+            }
         } else {
-        String str = "Please fill in the project name";
-        projectError(str);
+            String str = "Please fill in the project name";
+            projectError(str);
         }
 
     }
@@ -166,4 +176,26 @@ public class NEProjectController {
     }
 
 
+    /**
+     * This method checks if the length of the textfield is bigger than the max length for the field
+     * it returns true if the length is okay, false if it's too long
+     **/
+    private boolean validateProjectNameTFLength() {
+        if (projectName.getText().length() > maxProjName) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertProjectNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Project Name");
+        alert.setContentText("Project name is too long, max is 50 characters.");
+        alert.showAndWait();
+    }
 }

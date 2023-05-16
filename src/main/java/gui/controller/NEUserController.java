@@ -47,6 +47,7 @@ public class NEUserController {
     private boolean isEdit;
 
 
+
     /**
      * This method is used to set our models and choose if we are editing or creating a user.
      *
