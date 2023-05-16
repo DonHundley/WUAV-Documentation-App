@@ -3,6 +3,7 @@ package dal;
 import be.Task;
 import be.TaskPictures;
 import javafx.scene.image.Image;
+import org.apache.logging.log4j.*;
 
 import java.io.*;
 import java.sql.*;
@@ -16,11 +17,15 @@ public class PictureDAO {
     public PictureDAO() {
         databaseConnector = new DatabaseConnector();
     }
+    private static final Logger logger = LogManager.getLogger("debugLogger");
+
 
     /**
      * Method to create picture in the database.
      */
     public TaskPictures createPicture(TaskPictures taskPictures) {
+        int id = 0;
+        logger.info("Opening connection in createPicture()");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO task_picture(picture, device_name, documentationID, password) VALUES (?,?,?,?)";
 
@@ -33,27 +38,28 @@ public class PictureDAO {
             statement.setString(2, taskPictures.getDeviceName());
             statement.setInt(3, taskPictures.getDocID());
             statement.setString(4, taskPictures.getPassword());
+            logger.info("Executing " + sql);
             statement.execute();
             inStream.close();
 
             ResultSet keys = statement.getGeneratedKeys();
             keys.next();
-            int id = keys.getInt(1);
-
-            return new TaskPictures(id, taskPictures.getDocID(), taskPictures.getPictureAbsolute(), taskPictures.getDeviceName(), taskPictures.getPassword());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            id = keys.getInt(1);
+            if(id == 0){
+                logger.warn("The ID for TaskPictures was not set correctly");
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("There has been an issue adding TaskPictures to the database. CLASS: PictureDAO CAUSE: " + e);
         }
+        logger.info("Returning new TaskPictures");
+        return new TaskPictures(id, taskPictures.getDocID(), taskPictures.getPictureAbsolute(), taskPictures.getDeviceName(), taskPictures.getPassword());
     }
 
     /**
      * Method to update picture in the database.
      */
     public void updatePicture(TaskPictures taskPictures) {
+        logger.info("Opening new connection in PictureDAO");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "UPDATE task_picture SET picture = ?, device_name = ?, documentationID = ?, password = ? " + "WHERE pictureID = ?";
 
@@ -64,33 +70,34 @@ public class PictureDAO {
             statement.setInt(3, taskPictures.getDocID());
             statement.setString(4, taskPictures.getPassword());
             statement.setInt(5, taskPictures.getPictureID());
+            logger.info("Executing " + sql);
             statement.executeUpdate();
             inStream.close();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | IOException e) {
+            logger.error("There was an issue updating TaskPictures. CLASS: PictureDAO CAUSE: " + e);
         }
+        logger.info("Pictures update complete.");
     }
 
     /**
      * Method to delete picture from database.
      */
     public void deletePicture(TaskPictures taskPictures) {
+        logger.info("Opening new connection in PictureDAO");
         try (Connection conn = databaseConnector.getConnection()) {
             String sql = "DELETE FROM task_picture WHERE pictureID= ?";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             pstmt.setInt(1, taskPictures.getPictureID());
+            logger.info("Executing " + sql);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error("There has been a problem deleting pictures. CLASS: PictureDAO CAUSE: " + e);
         }
+        logger.info("Picture deletion complete.");
     }
 
     /**
@@ -98,14 +105,15 @@ public class PictureDAO {
      */
     public List<TaskPictures> getAllPictures() {
         ArrayList<TaskPictures> taskPictures = new ArrayList<>();
-
+        logger.info("Opening new connection in PictureDAO.");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM task_picture";
             Statement statement = connection.createStatement();
 
+            logger.info("Executing " + sql);
             if(statement.execute(sql)) {
                 ResultSet resultSet = statement.getResultSet();
-
+                logger.info("Iterating over results of " + sql);
                 while (resultSet.next()) {
                     int id = resultSet.getInt("pictureID");
                     Image picture = new Image(resultSet.getBinaryStream("picture"));
@@ -118,9 +126,13 @@ public class PictureDAO {
                     taskPictures.add(taskPicture);
                 }
             }
+            if(taskPictures.isEmpty()){
+                logger.warn("The list taskPictures is empty!");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("There has been an error creating the list taskPictures. CLASS: PictureDAO CAUSE: " + e);
         }
+        logger.info("Returning list.");
         return taskPictures;
     }
 
@@ -128,15 +140,17 @@ public class PictureDAO {
      * Method to get picture by ID from database.
      */
     public TaskPictures getPictureById(TaskPictures taskPictures) {
+        logger.info("Opening new connection in PictureDAO");
+
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM task_picture WHERE pictureID = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, taskPictures.getPictureID());
-
+            logger.info("Executing statement " + sql);
             if(pstmt.execute(sql)) {
                 ResultSet resultSet = pstmt.getResultSet();
-
+                logger.info("Iterating over results of " + sql);
                 while (resultSet.next()) {
                     int id = resultSet.getInt("pictureID");
                     Image picture = new Image(resultSet.getBinaryStream("picture"));
@@ -148,8 +162,9 @@ public class PictureDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("There has been a problem getting picture by ID. CLASS: PictureDAO CAUSE: " + e);
         }
+        logger.info("Process complete.");
         return null;
     }
 
@@ -158,15 +173,16 @@ public class PictureDAO {
      */
     public List<TaskPictures> getPictureByDocumentID(Task task) {
         ArrayList<TaskPictures> taskPicturesByDocID = new ArrayList<>();
+        logger.info("Opening new connection in PictureDAO");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM task_picture WHERE documentationID = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, task.getDocID());
-
+            logger.info("Executing " + sql);
             if(pstmt.execute()) {
                 ResultSet resultSet = pstmt.getResultSet();
-
+                logger.info("Iterating over results");
                 while (resultSet.next()) {
                     int id = resultSet.getInt("pictureID");
                     Image picture = new Image(resultSet.getBinaryStream("picture"));
@@ -177,10 +193,14 @@ public class PictureDAO {
                     TaskPictures taskPictures = new TaskPictures(id, documentationID, deviceName, password, picture);
                     taskPicturesByDocID.add(taskPictures);
                 }
+                if(taskPicturesByDocID.isEmpty()){
+                    logger.warn("The list is empty!");
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("There has been a problem creating a list of pictures by document ID. CLASS: PictureDAO CAUSE: " + e);
         }
+        logger.info("Returning list.");
         return taskPicturesByDocID;
     }
 }

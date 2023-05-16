@@ -2,6 +2,7 @@ package dal;
 
 import be.*;
 import javafx.scene.image.Image;
+import org.apache.logging.log4j.*;
 
 import java.io.*;
 import java.sql.*;
@@ -16,10 +17,14 @@ public class TaskDAO {
         databaseConnector = new DatabaseConnector();
     }
 
+    private static final Logger logger = LogManager.getLogger("debugLogger");
+
     /**
      * Method to create task in database.
      */
     public Task createTask(Task task) {
+        logger.info("Opening connection in TaskDAO");
+        int id = 0;
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "INSERT INTO task_documentation(projectID, task_name, description, task_state) VALUES (?,?,?,?)";
 
@@ -30,23 +35,29 @@ public class TaskDAO {
             //statement.setBinaryStream(3, inStreamLayout);
             statement.setString(3, task.getTaskDesc());
             statement.setString(4, task.getTaskState());
+            logger.info("Executing " + sql);
             statement.execute();
            // inStreamLayout.close();
 
             ResultSet keys = statement.getGeneratedKeys();
             keys.next();
-            int id = keys.getInt(1);
+            id = keys.getInt(1);
+            if(id == 0){
+                logger.warn("The task has an improper ID");
+            }
 
-            return new Task(id, task.getProjID(), task.getTaskName(), task.getTaskLayout(), task.getTaskDesc(), task.getTaskState());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("There has been a problem creating the task. CLASS: TaskDAO CAUSE: " + e);
         }
+        logger.info("Returning Task, process complete.");
+        return new Task(id, task.getProjID(), task.getTaskName(), task.getTaskLayout(), task.getTaskDesc(), task.getTaskState());
     }
 
     /**
      * Method to update task in database (except the layout that is updated in updateLayout).
      */
     public void updateTask(Task task) {
+        logger.info("Opening connection in TaskDAO");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "UPDATE task_documentation SET projectID = ?, task_name = ?, description = ?, task_state = ? " + "WHERE documentationID = ?";
 
@@ -56,12 +67,14 @@ public class TaskDAO {
             statement.setString(3, task.getTaskDesc());
             statement.setString(4, task.getTaskState());
             statement.setInt(5, task.getDocID());
+            logger.info("Executing " + sql);
             statement.executeUpdate();
 
 
         } catch (SQLException e) {
-        throw new RuntimeException(e);
-    }
+            logger.error("There has been a problem updating the task. CLASS: TaskDAO CAUSE: " + e);
+        }
+        logger.info("Update task complete.");
     }
 
     /**
@@ -69,6 +82,7 @@ public class TaskDAO {
      * */
 
     public void updateLayout(Task task) {
+        logger.info("Opening new connection in TaskDAO");
         try(Connection connection = databaseConnector.getConnection()) {
             String sql = "UPDATE task_documentation SET layout = ? WHERE documentationID = ?";
             File layoutAbsolutePath = new File(task.getTaskLayoutAbsolute());
@@ -77,30 +91,33 @@ public class TaskDAO {
             FileInputStream inStreamLayout = new FileInputStream(layoutAbsolutePath);
             statement.setBinaryStream(1, inStreamLayout);
             statement.setInt(2, task.getDocID());
+            logger.info("Executing " + sql);
             statement.executeUpdate();
         }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        catch (SQLException | FileNotFoundException e) {
+            logger.error("There has been a problem updating the layout. CLASS: TaskDAO CAUSE: " + e);
         }
+        logger.info("Process complete.");
     }
 
     /**
      * Method to delete task from database.
      */
     public void deleteTask(Task task) {
+        logger.info("Opening new connection in TaskDAO");
         try (Connection conn = databaseConnector.getConnection()) {
             String sql = "DELETE FROM task_documentation WHERE documentationID= ?";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             pstmt.setInt(1, task.getDocID());
+            logger.info("Executing " + sql);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error("There has been a problem deleting the task. CLASS: TaskDAO CAUSE: " + e);
         }
+        logger.info("delete task process finished.");
     }
 
     /**
@@ -108,14 +125,14 @@ public class TaskDAO {
      */
     public List<Task> getAllTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
-
+        logger.info("Opening new connection in TaskDAO");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM task_documentation";
             Statement statement = connection.createStatement();
-
+            logger.info("Executing " + sql);
             if (statement.execute(sql)) {
                 ResultSet resultSet = statement.getResultSet();
-
+                logger.info("Iterating over results of " + sql);
                 while (resultSet.next()) {
                     int id = resultSet.getInt("documentationID");
                     int projectID = resultSet.getInt("projectID");
@@ -133,10 +150,14 @@ public class TaskDAO {
                     Task task = new Task(id, projectID, taskName, layout, description, taskState);
                     tasks.add(task);
                 }
+                if(tasks.isEmpty()){
+                    logger.warn("The list of tasks is empty!");
+                }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("There was problem creating a list of tasks. CLASS: TaskDAO CAUSE: " + e);
         }
+        logger.info("Returning list of tasks.");
         return tasks;
     }
 
@@ -144,15 +165,17 @@ public class TaskDAO {
      * Method to get task by ID from database.
      */
     public Task getTaskById(Task task) {
+        logger.info("Opening connection in TaskDAO");
+
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM task_documentation WHERE documentationID = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, task.getDocID());
-
+            logger.info("Executing " + sql);
             if (pstmt.execute(sql)) {
                 ResultSet resultSet = pstmt.getResultSet();
-
+                logger.info("Iterating over results");
                 while (resultSet.next()) {
                     int id = resultSet.getInt("documentationID");
                     int projectID = resultSet.getInt("projectID");
@@ -166,13 +189,14 @@ public class TaskDAO {
 
                     String description = resultSet.getString("description");
                     String taskState = resultSet.getString("task_state");
-
+                    logger.info("Returning task");
                     return new Task(id, projectID, taskName, layout, description, taskState);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("There was problem getting task by ID. CLASS: TaskDAO CAUSE: " + e);
         }
+        logger.info("get task by ID process finished.");
         return null;
     }
 
@@ -181,15 +205,16 @@ public class TaskDAO {
      */
     public List<Task> getTaskByProject(int selectedProjectID) {
         ArrayList<Task> tasksByProject = new ArrayList<>();
+        logger.info("Opening new connection in TaskDAO");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM task_documentation WHERE projectID = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, selectedProjectID);
-
+            logger.info("Executing " + sql);
             if (pstmt.execute()) {
                 ResultSet resultSet = pstmt.getResultSet();
-
+                logger.info("Iterating over results of " + sql);
                 while (resultSet.next()) {
                     int id = resultSet.getInt("documentationID");
                     int projectID = resultSet.getInt("projectID");
@@ -207,17 +232,20 @@ public class TaskDAO {
                     Task task = new Task(id, projectID, taskName, layout, description, taskState);
                     tasksByProject.add(task);
                 }
+                if(tasksByProject.isEmpty()){
+                    logger.warn("The list tasksByProject is empty!");
+                }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("There was a problem creating the list tasksByProject. CLASS: TaskDAO CAUSE: " +e);
         }
+        logger.info("Returning list tasksByProject");
         return tasksByProject;
     }
 
     /**
      * Method to get tasks data together with project and customer (TaskWrapper)
      */
-
     public List<TaskWrapper> getTasksInfo() {
         List<TaskWrapper> taskInfo = new ArrayList<>();
         String sql = "SELECT t.*, p.*, c.* " +
@@ -225,10 +253,12 @@ public class TaskDAO {
                 "JOIN task_documentation t ON p.projectID=t.projectID " +
                 "JOIN customer c ON p.customerID=c.customerID ";
 
+        logger.info("Opening connection in TaskDAO");
         try (Connection connection = databaseConnector.getConnection()) {
             PreparedStatement prepareStatement = connection.prepareStatement(sql);
+            logger.info("Executing " + sql);
             ResultSet resultSet = prepareStatement.executeQuery();
-
+            logger.info("Iterating over results of " + sql);
             while (resultSet.next()) {
                 int id = resultSet.getInt("projectID");
                 String projectName = resultSet.getString("project_name");
@@ -257,13 +287,14 @@ public class TaskDAO {
                 TaskWrapper taskWrapper = new TaskWrapper(project, task, customer);
                 taskInfo.add(taskWrapper);
             }
-
-        return taskInfo;
-
+            if(taskInfo.isEmpty()){
+                logger.warn("The list taskInfo is empty!");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("There has been a problem creating the list taskInfo. CLASS: TaskDAO CAUSE: " + e);
         }
-
+        logger.info("Returning taskInfo, process complete.");
+        return taskInfo;
     }
 
 
