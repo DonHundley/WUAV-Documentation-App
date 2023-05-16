@@ -4,7 +4,9 @@ import be.Customer;
 import be.Project;
 import be.Task;
 import javafx.embed.swing.SwingFXUtils;
+
 import javafx.scene.image.Image;
+
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -16,6 +18,8 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.imageio.ImageIO;
+
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -25,10 +29,6 @@ import java.util.List;
 
 public class PDFHandler {
 
-
-    private static String description = "After completing the installation of the Microsoft Whiteboard, we proceeded to configure the software and test its various features to ensure they were functioning as intended. The process involved checking the connectivity to the network and calibrating the display for optimal performance. Additionally, we ensured that the Whiteboard was compatible with all the necessary software applications and devices to enable seamless collaboration among team members. Finally, we provided comprehensive training on how to use the Whiteboard to maximize its potential. Overall, the project was a success, and we look forward to the benefits it will bring to our team.";
-    private static String comment1 = "comment 1";
-    private static String comment2 = "comment 2";
 
 
 
@@ -150,7 +150,7 @@ public class PDFHandler {
     /**
      * method to write the task name and description on a pdf document
      */
-    private static void writeTaskInfo(PDPageContentStream contentStream, Task task, PDFont boldFont, PDFont regularFont, int fontSize, float maxLineWidth, float x, float taskY, float lineSpacing) throws IOException {
+    private void writeTaskInfo(PDPageContentStream contentStream, Task task, PDFont boldFont, PDFont regularFont, int fontSize, float maxLineWidth, float x, float taskY, float lineSpacing) throws IOException {
 
         contentStream.beginText();
         contentStream.newLineAtOffset(x, taskY);
@@ -184,7 +184,7 @@ public class PDFHandler {
     /**
      * method to write the project info on a pdf document
      */
-    private static void writeProjectInfo(PDPageContentStream contentStream, Project project, float x, float projY, float linespacing, PDFont bold, PDFont regular) throws IOException {
+    private void writeProjectInfo(PDPageContentStream contentStream, Project project, float x, float projY, float linespacing, PDFont bold, PDFont regular) throws IOException {
         contentStream.beginText();
         contentStream.setFont(bold, 12);
         contentStream.newLineAtOffset(x, projY);
@@ -203,7 +203,7 @@ public class PDFHandler {
     /**
      * method to wrap the text so that longer text are displayed properly on the pdf
      */
-    public static List<String> wrapText(String text, PDFont font, int fontSize, float width) throws IOException {
+    private List<String> wrapText(String text, PDFont font, int fontSize, float width) throws IOException {
         List<String> result = new ArrayList<>();
         String[] split = text.split("(?<=\\W)");
         int[] possibleWrapPoints = new int[split.length];
@@ -226,5 +226,8 @@ public class PDFHandler {
     }
 
 
-}
+    }
+
+
+
 

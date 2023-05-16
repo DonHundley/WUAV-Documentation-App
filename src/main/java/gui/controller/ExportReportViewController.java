@@ -33,9 +33,6 @@ public class ExportReportViewController {
     private Image selectedImg2;
 
 
-    // Models
-    private Persistent persistenceModel = Persistent.getInstance();
-    private Observables observablesModel = Observables.getInstance();
     private Functions functionsModel = new Functions();
 
 
