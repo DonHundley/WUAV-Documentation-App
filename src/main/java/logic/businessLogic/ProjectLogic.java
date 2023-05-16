@@ -2,6 +2,7 @@ package logic.businessLogic;
 
 import be.*;
 import dal.*;
+import org.apache.logging.log4j.*;
 
 import java.util.*;
 
@@ -13,6 +14,7 @@ public class ProjectLogic {
     private PictureDAO pictureDAO = new PictureDAO();
     private WorksOnDAO worksOnDAO = new WorksOnDAO();
 
+    private static final Logger logger = LogManager.getLogger("debugLogger");
     /**
      * List of projects.
      *
@@ -138,25 +140,29 @@ public class ProjectLogic {
     }
 
     public List<TaskWrapper> tasksByUserID(User user){
+        logger.info("Creating list in ProjectLogic. tasksByUserID()");
         List<TaskWrapper> tasksByUserID = new ArrayList<>();
         List<Integer> projectIDsByUserIDs = worksOnDAO.getProjectIDsByUserID(user);
         List<TaskWrapper> getTasksInfo = getTasksInfo();
 
+        logger.info("Checking lists projectIDsByUserIDs and getTasksInfo");
+        if(getTasksInfo.isEmpty()){
+            logger.warn("List getTasksInfo is empty!");
+        }
+        if(projectIDsByUserIDs.isEmpty()){
+            logger.warn("List projectIDsByUserIDs is empty!");
+        }
+
+        logger.info("Checking lists complete. Iterating over list projectIDsByUserIDs");
         for (int projectID: projectIDsByUserIDs) {
-
-            System.out.println(worksOnDAO.getProjectIDsByUserID(user).size() + " is the size of projects by userID");
-
-
             for (TaskWrapper project: getTasksInfo
                  ) {
-                System.out.println("checking a project");
                 if(project.getProject().getProjID() == projectID){
-                    System.out.println("Project found");
                     tasksByUserID.add(project);
                 }
             }
         }
-        System.out.println("Process complete");
+        logger.info("Returning list of tasksByUserID, process complete.");
         return tasksByUserID;
     }
     public List<TaskPictures> getTaskPicturesByTask(Task task){return pictureDAO.getPictureByDocumentID(task);}

@@ -2,21 +2,25 @@ package logic.businessLogic;
 
 import be.*;
 import dal.*;
+import org.apache.logging.log4j.*;
 
 import java.util.*;
 
 public class CustomerLogic {
     private CustomerDAO customerDAO = new CustomerDAO();
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     public List<CustomerWrapper> searchCustomer(String query) {
+        logger.info("Creating customer filtered list");
         List<CustomerWrapper> customers = customerDAO.getAllCustomersWithProjects();
         List<CustomerWrapper> filtered = new ArrayList<>();
-
+        logger.info("Checking list for query");
         for(CustomerWrapper c : customers){
             if((""+c.getCustomer().getCustAddress()).toLowerCase().contains(query.toLowerCase())) {
                 filtered.add(c);
             }
         }
+        logger.info("Returning filtered list, process complete.");
         return filtered;
     }
 

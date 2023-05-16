@@ -2,6 +2,7 @@ package logic.businessLogic;
 
 import be.*;
 import dal.*;
+import org.apache.logging.log4j.*;
 
 import java.util.*;
 
@@ -9,7 +10,7 @@ public class UserLogic {
 
 
     private UserDAO userDAO = new UserDAO();
-
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * List of Users.
@@ -62,17 +63,25 @@ public class UserLogic {
 
 
     public HashMap<Integer, Integer> loginInformation(){
-        List<User> allUsers = userDAO.getAllUsers();
+        logger.info("Creating hashmap of login information");
         HashMap<Integer, Integer> loginInfo = new HashMap<>();
+        List<User> allUsers = userDAO.getAllUsers();
+        if(allUsers.isEmpty()){
+            logger.warn("The list of users is empty!");
+        }
+
+        logger.info("Iterating over users");
         for (User user: allUsers) {
-            System.out.println(user.getUserName() + " "+ user.getPassword());
-            System.out.println(allUsers.size());
+            //System.out.println(user.getUserName() + " "+ user.getPassword());
             int k = user.getUserName().hashCode();
             int v = user.getPassword().hashCode();
 
-            System.out.println(k + v);
             loginInfo.put(k, v);
         }
+        if(loginInfo.isEmpty()){
+            logger.warn("There are no accounts to log into!");
+        }
+        logger.info("Hashmap complete, process finished.");
         return loginInfo;
     }
 }
