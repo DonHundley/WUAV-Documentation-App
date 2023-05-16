@@ -40,16 +40,10 @@ public class NavigationController {
         String access = loggedInUser.getAccess().toUpperCase();
         switch (access){
             case "ADMIN":
-                Node a = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
-                viewAnchor.getChildren().setAll(a);
-                home = "/gui/view/ManageTaskView.fxml";
-                documentationExpired();
+                adminManagerLogin();
                 break;
             case "MANAGER":
-                Node m = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
-                viewAnchor.getChildren().setAll(m);
-                home = "/gui/view/ManageTaskView.fxml";
-                documentationExpired();
+                adminManagerLogin();
                 break;
             case "TECHNICIAN":
                 System.out.println("Loading list");
@@ -75,6 +69,13 @@ public class NavigationController {
                 navigationError(str);
 
         }
+    }
+
+    private void adminManagerLogin() throws IOException {
+        Node m = FXMLLoader.load(getClass().getResource("/gui/view/ManageTaskView.fxml"));
+        viewAnchor.getChildren().setAll(m);
+        home = "/gui/view/ManageTaskView.fxml";
+        documentationExpired();
     }
 
     public void home(ActionEvent actionEvent) throws IOException {

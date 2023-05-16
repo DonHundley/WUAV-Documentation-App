@@ -54,7 +54,11 @@ public class LoginController implements Initializable{
                             stage.show();
                             break;
                         } catch (IOException e){
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("There has been a problem loading NavigationView, please contact System administrator.");
 
+                            alert.show();
                         }
                         System.out.println(persistentModel.getLoggedInUser().toString());
 

@@ -54,4 +54,14 @@ public class Customer {
     public void setCustAddress(String custAddress) {
         this.custAddress = custAddress;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "custID=" + custID +
+                ", custName='" + custName + '\'' +
+                ", custEmail='" + custEmail + '\'' +
+                ", custAddress='" + custAddress + '\'' +
+                '}';
+    }
 }
