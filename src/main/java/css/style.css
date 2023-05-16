@@ -104,3 +104,8 @@
     -fx-font-size: 12;
     -fx-text-fill: white;
 }
+
+/*highlight selected images*/
+.selected {
+    -fx-effect: dropshadow(gaussian, rgba(232, 73, 16, 1), 10, 0.5, 0, 0);
+}
