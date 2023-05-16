@@ -36,7 +36,7 @@ public class PDFHandler {
      * method to export a pdf with text and images to create the documentation report
      **/
     //
-    public void exportReport(Customer customer, Project project, Task task, Image image1, Image image2) {
+    public void exportReport(Customer customer, Project project, Task task, Image image1, Image image2, String deviceNames, String devicePasswords) {
         try {
 
             PDDocument document = Loader.loadPDF(new File("src/main/java/resources/ReportBackground/reportBackground-input.pdf"));
@@ -69,7 +69,7 @@ public class PDFHandler {
             writeCustomerInfo(contentStream, customer, x, custY, lineSpacing, boldFont, regularFont);
 
             writeProjectInfo(contentStream, project, x, projY, lineSpacing, boldFont, regularFont);
-            writeDeviceInfo(contentStream, task, x, deviceY, boldFont, regularFont, lineSpacing);
+            writeDeviceInfo(contentStream, task, x, deviceY, boldFont, regularFont, lineSpacing, deviceNames,devicePasswords);
 
             writeTaskInfo(contentStream, task, boldFont, regularFont, 12, page.getMediaBox().getWidth() - margin * 4, x, taskY, lineSpacing);
 
@@ -96,13 +96,13 @@ public class PDFHandler {
     /**
      * method to write the device info on a pdf document
      */
-    private static void writeDeviceInfo(PDPageContentStream contentStream, Task task, float x, float deviceY, PDFont boldFont, PDFont regularFont, float lineSpacing) throws IOException {
+    private static void writeDeviceInfo(PDPageContentStream contentStream, Task task, float x, float deviceY, PDFont boldFont, PDFont regularFont, float lineSpacing, String deviceNames, String devicePasswords) throws IOException {
         contentStream.beginText();
         contentStream.newLineAtOffset(x, deviceY);
         contentStream.setFont(boldFont, 13);
         contentStream.showText("Device name: ");
         contentStream.setFont(regularFont, 13);
-        //contentStream.showText(task.getDeviceName());
+        contentStream.showText(deviceNames);
         contentStream.endText();
 
         deviceY -= lineSpacing;
@@ -111,7 +111,7 @@ public class PDFHandler {
         contentStream.setFont(boldFont, 13);
         contentStream.showText("Login credential: ");
         contentStream.setFont(regularFont, 13);
-        //contentStream.showText(task.getLoginCred());
+        contentStream.showText(devicePasswords);
         contentStream.endText();
 
     }

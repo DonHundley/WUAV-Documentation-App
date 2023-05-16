@@ -3,9 +3,8 @@ package gui.controller;
 import be.Customer;
 import be.Project;
 import be.Task;
+import be.TaskPictures;
 import gui.model.Functions;
-import gui.model.Observables;
-import gui.model.Persistent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -33,7 +32,11 @@ public class ExportReportViewController {
     private Image selectedImg2;
 
 
+    private String deviceNames;
+    private String devicePasswords;
+
     private Functions functionsModel = new Functions();
+
 
 
 /**this method is used to set the thumbnails images int he view.
@@ -148,6 +151,29 @@ public class ExportReportViewController {
         selectedCustomer = customer;
     }
 
+    /**
+     * the method sets the device names and credentials (passwords). It stores the information for the
+     * specific task in two strings appending all the results separated by a comma**/
+    public void setSelectedDeviceNameAndPasswords() {
+        if (selectedTask != null) {
+            List<TaskPictures> taskPictures = functionsModel.taskPicturesByDocID(selectedTask);
+            StringBuilder devicePasswordsBuilder = new StringBuilder();
+            StringBuilder deviceNamesBuilder = new StringBuilder();
+
+            for (TaskPictures taskPicture : taskPictures) {
+                String deviceName = taskPicture.getDeviceName();
+                String devicePassword = taskPicture.getPassword();
+
+                deviceNamesBuilder.append(deviceName).append(", ");
+                devicePasswordsBuilder.append(devicePassword).append(", ");
+            }
+
+            deviceNames = deviceNamesBuilder.toString().substring(0, deviceNamesBuilder.length() - 2);
+            devicePasswords = devicePasswordsBuilder.toString().substring(0, devicePasswordsBuilder.length() - 2);
+
+        }
+    }
+
 
     /**method used to show an alert to the user and warn them of an error**/
     private void exportError(String str) {
@@ -187,7 +213,8 @@ public class ExportReportViewController {
             String str = "Error: file already saved";
             exportError(str);
         } else {
-            functionsModel.exportReport(selectedCustomer, selectedProject, selectedTask, selectedImg1, selectedImg2);
+            setSelectedDeviceNameAndPasswords();
+            functionsModel.exportReport(selectedCustomer, selectedProject, selectedTask, selectedImg1, selectedImg2, deviceNames,devicePasswords);
             String str = "Report for project " + selectedProject.getProjName() + " and task " + selectedTask.getTaskName() + " saved";
             exportConfirmation(str);
         }

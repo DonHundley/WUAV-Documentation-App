@@ -102,7 +102,7 @@ public class Functions {
     /**
      * PDF methods
      **/
-    public void exportReport(Customer customer, Project project, Task task, Image image1, Image image2) {
-        pdfHandler.exportReport(customer,project,task,image1,image2);
+    public void exportReport(Customer customer, Project project, Task task, Image image1, Image image2, String deviceNames, String devicePasswords) {
+        pdfHandler.exportReport(customer,project,task,image1,image2, deviceNames,devicePasswords);
     }
 }
