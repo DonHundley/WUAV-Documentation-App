@@ -86,7 +86,7 @@ public class WorksOnDAO {
             if(projectIDsByUserID.isEmpty()){
                 logger.warn("The method getProjectIDsByUserID in WorksOnDAO has returned an empty list!");
             }
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
             logger.error("There has been a problem creating a list of projects by user ID. CLASS: WorksOnDAO CAUSE: " + e);
         }
         logger.info("Returning list, process complete.");
