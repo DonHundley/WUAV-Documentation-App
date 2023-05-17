@@ -46,6 +46,11 @@ public class NEUserController {
     // True if editing, false if creating a new customer.
     private boolean isEdit;
 
+    //validation
+    int maxUsernameLenght = 10;
+    int maxPasswordLenght = 50;
+    int maxNameLenght = 25;
+    int maxLastNameLenght = 25;
 
 
     /**
@@ -88,15 +93,26 @@ public class NEUserController {
      * This method is used to create a new User if our isEdit boolean == false.
      */
     private void createUser() {
-        if (!userNameTF.getText().isEmpty() && !passTF.getText().isEmpty() && !accessCB.getValue().isEmpty()&& !firstNameTF.getText().isEmpty() && !surnameTF.getText().isEmpty()) {
+        if (!userNameTF.getText().isEmpty() && !passTF.getText().isEmpty() && !accessCB.getValue().isEmpty() && !firstNameTF.getText().isEmpty() && !surnameTF.getText().isEmpty()) {
+            if (!validateUsernameTFLength()) {
+                alertUsernameTF();
+            }
+            if (!validatePasswordTFLength()) {
+                alertPasswordTF();
+            }
+            if (!validateFirstNameTFLength()) {
+                alertFirstNameTF();
+            }
+            if (!validateLastNameTFLength()) {
+                alertLastNameTF();
+            }
             user = new User(userNameTF.getText(), passTF.getText(), accessCB.getValue(), firstNameTF.getText(), surnameTF.getText());
             functionsModel.createUser(user);
             observablesModel.loadUsers();
             Stage stage = (Stage) createOrEditUser.getScene().getWindow();
             stage.close();
-        }
-        else{
-            String str="Please fill in all the fields to create a new user";
+        } else {
+            String str = "Please fill in all the fields to create a new user";
             userError(str);
         }
     }
@@ -105,18 +121,30 @@ public class NEUserController {
      * This method is used to edit the selected User from our persistent model with updated information.
      */
     private void editUser() {
-        if (!userNameTF.getText().isEmpty() && !passTF.getText().isEmpty() && !accessCB.getValue().isEmpty()&& !firstNameTF.getText().isEmpty() && !surnameTF.getText().isEmpty()) {
-        user.setUserName(userNameTF.getText());
-        user.setPassword(passTF.getText());
-        user.setAccess(accessCB.getValue());
-        user.setFirstName(firstNameTF.getText());
-        user.setLastName(surnameTF.getText());
-        functionsModel.editUser(user);
-        observablesModel.loadUsers();
-        Stage stage = (Stage) createOrEditUser.getScene().getWindow();
-        stage.close();
-    } else{
-            String str="Please fill in all the fields to edit a user";
+        if (!userNameTF.getText().isEmpty() && !passTF.getText().isEmpty() && !accessCB.getValue().isEmpty() && !firstNameTF.getText().isEmpty() && !surnameTF.getText().isEmpty()) {
+            if (!validateUsernameTFLength()) {
+                alertUsernameTF();
+            }
+            if (!validatePasswordTFLength()) {
+                alertPasswordTF();
+            }
+            if (!validateFirstNameTFLength()) {
+                alertFirstNameTF();
+            }
+            if (!validateLastNameTFLength()) {
+                alertLastNameTF();
+            }
+            user.setUserName(userNameTF.getText());
+            user.setPassword(passTF.getText());
+            user.setAccess(accessCB.getValue());
+            user.setFirstName(firstNameTF.getText());
+            user.setLastName(surnameTF.getText());
+            functionsModel.editUser(user);
+            observablesModel.loadUsers();
+            Stage stage = (Stage) createOrEditUser.getScene().getWindow();
+            stage.close();
+        } else {
+            String str = "Please fill in all the fields to edit a user";
             userError(str);
         }
     }
@@ -195,5 +223,98 @@ public class NEUserController {
 
     public void setEdit(boolean edit) {
         isEdit = edit;
+    }
+
+
+    /**
+     * This method checks if the length of the textfield is bigger than the max length for the field
+     * it returns true if the length is okay, false if it's too long
+     **/
+    private boolean validateUsernameTFLength() {
+        if (userNameTF.getText().length() > maxUsernameLenght) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * This method checks if the length of the textfield is bigger than the max length for the field
+     * it returns true if the length is okay, false if it's too long
+     **/
+    private boolean validatePasswordTFLength() {
+        if (passTF.getText().length() > maxPasswordLenght) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * This method checks if the length of the textfield is bigger than the max length for the field
+     * it returns true if the length is okay, false if it's too long
+     **/
+    private boolean validateFirstNameTFLength() {
+        if (firstNameTF.getText().length() > maxNameLenght) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * This method checks if the length of the textfield is bigger than the max length for the field
+     * it returns true if the length is okay, false if it's too long
+     **/
+    private boolean validateLastNameTFLength() {
+        if (surnameTF.getText().length() > maxLastNameLenght) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertUsernameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Username");
+        alert.setContentText("Username is too long, max is 10 characters.");
+        alert.showAndWait();
+    }
+
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertPasswordTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Password");
+        alert.setContentText("Password is too long, max is 50 characters.");
+        alert.showAndWait();
+    }
+
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertFirstNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate First Name");
+        alert.setContentText("First Name is too long, max is 25 characters.");
+        alert.showAndWait();
+    }
+
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertLastNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Last Name");
+        alert.setContentText("Last Name is too long, max is 25 characters.");
+        alert.showAndWait();
     }
 }
