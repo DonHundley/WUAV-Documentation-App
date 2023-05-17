@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="projectAnchor" onMouseClicked="#anchorOnClick" prefHeight="650.0" prefWidth="950.0" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.mainViewControllers.ManageProjectController">
+   <children>
+      <TableView fx:id="projectTV" layoutX="29.0" layoutY="149.0" onMouseClicked="#projectTVOnClick" prefHeight="366.0" prefWidth="390.0">
+        <columns>
+          <TableColumn fx:id="projectName" prefWidth="142.39999389648438" text="Project Name" />
+          <TableColumn fx:id="projectDate" prefWidth="137.59999084472656" text="Date" />
+            <TableColumn fx:id="assignedUserCount" prefWidth="109.60003662109375" text="Total tasks" />
+        </columns>
+      </TableView>
+      <TableView fx:id="techTV" layoutX="475.0" layoutY="149.0" onMouseClicked="#techTvOnClick" prefHeight="366.0" prefWidth="430.0">
+        <columns>
+          <TableColumn fx:id="techName" prefWidth="128.0" text="Name" />
+          <TableColumn fx:id="techSurname" prefWidth="154.0" text="Last Name" />
+            <TableColumn fx:id="numberOfTasks" prefWidth="150.0" text="Assigned tasks" />
+        </columns>
+      </TableView>
+      <Label fx:id="windowTitleLabel" layoutX="29.0" layoutY="38.0" styleClass="window-title" text="Manage Projects " />
+      <Button layoutX="29.0" layoutY="541.0" mnemonicParsing="false" onAction="#createProject" prefHeight="30.0" prefWidth="86.0" styleClass="round-btn" text="New Project" />
+      <Button layoutX="122.0" layoutY="541.0" mnemonicParsing="false" onAction="#editProject" prefHeight="30.0" prefWidth="86.0" styleClass="round-btn" text="Edit Project" />
+      <Button layoutX="215.0" layoutY="541.0" mnemonicParsing="false" onAction="#deleteProject" prefHeight="30.0" prefWidth="95.0" styleClass="round-btn" text="Delete Project" />
+      <Button layoutX="773.0" layoutY="541.0" mnemonicParsing="false" onAction="#assignProject" prefHeight="30.0" prefWidth="132.0" styleClass="square-btn" text="Assign Technician" />
+      <Button layoutX="813.0" layoutY="28.0" mnemonicParsing="false" onAction="#logOut" styleClass="round-btn" text="Log Out" />
+      <Label fx:id="usernameLabel" alignment="CENTER_RIGHT" layoutX="588.0" layoutY="33.0" prefHeight="18.0" prefWidth="223.0" />
+      <Button layoutX="333.0" layoutY="541.0" mnemonicParsing="false" onAction="#createTask" prefHeight="30.0" prefWidth="86.0" styleClass="round-btn" stylesheets="@../../../css/style.css" text="New Task" />
+      <Label alignment="CENTER" layoutX="30.0" layoutY="124.0" prefHeight="18.0" prefWidth="390.0" text="Current Projects">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="481.0" layoutY="124.0" prefHeight="18.0" prefWidth="424.0" text="Technicians">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

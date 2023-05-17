@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.mainViewControllers.NavigationController">
+   <children>
+      <AnchorPane fx:id="viewAnchor" layoutX="300.0" prefHeight="650.0" prefWidth="950.0" />
+      <AnchorPane fx:id="navAnchor" layoutX="671.0" layoutY="20.0" maxWidth="-Infinity" prefHeight="650.0" prefWidth="300.0" style="-fx-background-color: #17263A;" stylesheets="@../../../css/style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="imageWUAV" fitHeight="122.0" fitWidth="198.0" layoutX="53.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="53.16822814941406" AnchorPane.topAnchor="26.0">
+               <image>
+                  <Image url="@../../../images/WUAV_logo.png" />
+               </image></ImageView>
+            <VBox layoutX="100.0" layoutY="218.0" prefHeight="427.0" prefWidth="300.0" spacing="40.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="218.0">
+               <children>
+                  <MFXButton alignment="BASELINE_LEFT" depthLevel="LEVEL5" onAction="#home" prefHeight="30.0" prefWidth="265.0" styleClass="NavMenu-text" stylesheets="@../../../css/style.css" text="HOME" />
+                  <MFXButton fx:id="manageProjectsButton" alignment="BASELINE_LEFT" depthLevel="LEVEL5" onAction="#manageProjects" prefHeight="10.0" prefWidth="265.0" styleClass="NavMenu-text" stylesheets="@../../../css/style.css" text="MANAGE PROJECTS" />
+                  <MFXButton fx:id="manageCustomerButton" alignment="BASELINE_LEFT" depthLevel="LEVEL5" onAction="#manageCustomers" prefHeight="30.0" prefWidth="265.0" styleClass="NavMenu-text" stylesheets="@../../../css/style.css" text="MANAGE CUSTOMERS" />
+                  <MFXButton fx:id="manageUserButton" alignment="BASELINE_LEFT" depthLevel="LEVEL5" onAction="#manageUsers" prefHeight="30.0" prefWidth="265.0" styleClass="NavMenu-text" stylesheets="@../../../css/style.css" text="MANAGE USERS" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -18,7 +18,7 @@ public class Main extends Application{
     public void start(Stage stage)  {
         logger.info("Starting program with Login.fxml");
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/mainViews/Login.fxml"));
 
             logger.info("loading root in Main");
 

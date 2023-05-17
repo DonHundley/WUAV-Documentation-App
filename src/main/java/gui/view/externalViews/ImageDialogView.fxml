@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="550.0" prefWidth="750.0" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.externalViewControllers.ImageDialogViewController">
+   <children>
+      <ImageView fx:id="largeImg" fitHeight="366.0" fitWidth="538.0" layoutX="112.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="nextButton" layoutX="660.0" layoutY="263.0" mnemonicParsing="false" onAction="#clickNextImg" styleClass="round-btn" text="Next" />
+      <Button fx:id="previousButton" layoutX="24.0" layoutY="263.0" mnemonicParsing="false" onAction="#clickPreviousImg" styleClass="round-btn" text="Previous" />
+   </children>
+</AnchorPane>
