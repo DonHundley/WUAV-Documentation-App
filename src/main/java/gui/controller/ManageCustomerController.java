@@ -34,6 +34,10 @@ public class ManageCustomerController implements Initializable {
     private TableColumn<CustomerWrapper, String> customerAddress;
     @FXML
     private TableColumn<CustomerWrapper, String> projectName;
+    @FXML
+    private TableColumn<CustomerWrapper, String> postalCode;
+    @FXML
+    private TableColumn<CustomerWrapper, String> city;
 
     // TextField
     @FXML
@@ -72,6 +76,8 @@ public class ManageCustomerController implements Initializable {
         observablesModel.loadCustomersWithWrapper();
 
         customerAddress.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustAddress()));
+        postalCode.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPostalCode().getPostalCode()));
+        city.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPostalCode().getCity()));
         customerName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
         customerEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustEmail()));
         projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));

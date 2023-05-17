@@ -2,6 +2,7 @@ package gui.model;
 
 import be.*;
 import javafx.collections.*;
+import javafx.geometry.Pos;
 import logic.businessLogic.*;
 
 public class Observables {
@@ -17,6 +18,8 @@ public class Observables {
     private ObservableList<Task> tasksByProject = FXCollections.observableArrayList();
     private ObservableList<CustomerWrapper> customerswithWrapper = FXCollections.observableArrayList();
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
+
+    private ObservableList<PostalCode> postalCodes = FXCollections.observableArrayList();
 
     private UserLogic userLogic=new UserLogic();
     private CustomerLogic customerLogic=new CustomerLogic();
@@ -66,6 +69,7 @@ public class Observables {
     public ObservableList<TaskWrapper> getTasksByUserID(){
         return tasksByUser;
     }
+    public ObservableList<PostalCode> getPostalCodes() {return postalCodes;};
 
     public void search(String query) {
         customerswithWrapper.clear();
@@ -112,5 +116,10 @@ public class Observables {
     public void loadProjectsByUser(User user){
         tasksByUser.clear();
         tasksByUser.addAll(projectLogic.tasksByUserID(user));
+    }
+
+    public void loadPostalCodes() {
+        postalCodes.clear();
+        postalCodes.addAll(customerLogic.getAllPostalCodes());
     }
 }

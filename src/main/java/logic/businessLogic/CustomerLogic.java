@@ -10,13 +10,22 @@ public class CustomerLogic {
     private CustomerDAO customerDAO = new CustomerDAO();
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
+    private PostalCodeDAO postalCodeDAO = new PostalCodeDAO();
+
+    /**
+     * @return This returns the list of postal codes created by PostalCodeDAO.
+     */
+    public List<PostalCode> getAllPostalCodes() {
+        return postalCodeDAO.getAllPostalCodes();
+    }
+
     public List<CustomerWrapper> searchCustomer(String query) {
         logger.info("Creating customer filtered list");
         List<CustomerWrapper> customers = customerDAO.getAllCustomersWithProjects();
         List<CustomerWrapper> filtered = new ArrayList<>();
         logger.info("Checking list for query");
         for(CustomerWrapper c : customers){
-            if((""+c.getCustomer().getCustAddress()).toLowerCase().contains(query.toLowerCase())) {
+            if((""+c.getCustomer().getCustAddress()).toLowerCase().contains(query.toLowerCase()) /*|| c.getPostalCode().getPostalCode().contains(query)*/) {
                 filtered.add(c);
             }
         }

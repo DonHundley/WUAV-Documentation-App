@@ -11,10 +11,12 @@
    <children>
       <TableView fx:id="customersTV" layoutX="100.0" layoutY="148.0" onMouseClicked="#onCustomerTVClick" prefHeight="388.0" prefWidth="756.0">
         <columns>
-          <TableColumn fx:id="customerAddress" prefWidth="179.0" text="Customer address" />
-          <TableColumn fx:id="customerName" prefWidth="176.0" text="Customer" />
-            <TableColumn fx:id="customerEmail" prefWidth="174.0" text="Customer email" />
-            <TableColumn fx:id="projectName" prefWidth="220.0" text="Project" />
+          <TableColumn fx:id="customerAddress" prefWidth="161.0" text="Customer address" />
+            <TableColumn fx:id="postalCode" prefWidth="88.0" text="Postal Code" />
+            <TableColumn fx:id="city" prefWidth="118.0" text="City" />
+          <TableColumn fx:id="customerName" prefWidth="201.0" text="Customer" />
+            <TableColumn fx:id="customerEmail" prefWidth="187.0" text="Customer email" />
+            <TableColumn fx:id="projectName" prefWidth="144.0" text="Project" />
         </columns>
       </TableView>
       <Label fx:id="windowTitle" layoutX="100.0" layoutY="22.0" styleClass="window-title" text="Manage Customers" />

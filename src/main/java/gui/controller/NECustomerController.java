@@ -2,6 +2,7 @@ package gui.controller;
 
 import be.*;
 import gui.model.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
@@ -24,6 +25,10 @@ public class NECustomerController {
     private Button cancelButton;
     @FXML
     private Button createOrEditCustomer;
+    @FXML
+    private TableView<PostalCode> postalCodeTV;
+    @FXML
+    private TableColumn<PostalCode, String> postalCode, city;
 
     // Customer instance
     private Customer customer;
@@ -50,7 +55,9 @@ public class NECustomerController {
         setEdit(isEdit); // sets the boolean to store if we are editing or creating.
         if (isEdit) { // if we are editing we set all text fields with the current information.
             setOnEdit();
+            setUpPostalCodeTV();
         } else {
+            setUpPostalCodeTV();
             windowTitleLabel.setText("New Customer");
             createOrEditCustomer.setText("Create");
         }
@@ -75,8 +82,8 @@ public class NECustomerController {
      * This method is used to create a new customer if our isEdit boolean == false.
      */
     private void createCustomer() {
-        if (!customerName.getText().isEmpty() && !customerEmail.getText().isEmpty() && !customerAddress.getText().isEmpty()) {
-            customer = new Customer(customerName.getText(), customerEmail.getText(), customerAddress.getText());
+        if (!customerName.getText().isEmpty() && !customerEmail.getText().isEmpty() && !customerAddress.getText().isEmpty() && postalCodeTV.getSelectionModel().getSelectedItem() != null) {
+            customer = new Customer(customerName.getText(), customerEmail.getText(), customerAddress.getText(), postalCodeTV.getSelectionModel().getSelectedItem().getPostalCode());
             functionsModel.createCustomer(customer);
             observablesModel.loadCustomersWithWrapper();
             Stage stage = (Stage) createOrEditCustomer.getScene().getWindow();
@@ -92,10 +99,11 @@ public class NECustomerController {
      * This method is used to edit the selected customer from our persistent model with updated information.
      */
     private void editCustomer() {
-        if (!customerName.getText().isEmpty() && !customerEmail.getText().isEmpty() && !customerAddress.getText().isEmpty()) {
+        if (!customerName.getText().isEmpty() && !customerEmail.getText().isEmpty() && !customerAddress.getText().isEmpty() && postalCodeTV.getSelectionModel().getSelectedItem() != null) {
             customer.setCustName(customerName.getText());
             customer.setCustAddress(customerAddress.getText());
             customer.setCustEmail(customerEmail.getText());
+            customer.setPostalCode(postalCodeTV.getSelectionModel().getSelectedItem().getPostalCode());
 
             functionsModel.editCustomer(customer);
 
@@ -152,6 +160,18 @@ public class NECustomerController {
         } else {
             alert.close();
         }
+    }
+
+    private void setUpPostalCodeTV() {
+        postalCodeTV.setItems(observablesModel.getPostalCodes());
+        observablesModel.loadPostalCodes();
+
+        postalCode.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPostalCode()));
+        city.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCity()));
+
+       // if(customer.getPostalCode() != null) {
+
+        //}
     }
 
     public void setEdit(boolean edit) {

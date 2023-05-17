@@ -3,6 +3,7 @@ package dal;
 
 import be.Customer;
 import be.CustomerWrapper;
+import be.PostalCode;
 import be.Project;
 import org.apache.logging.log4j.*;
 
@@ -21,12 +22,13 @@ public class CustomerDAO {
     public Customer createCustomer(Customer customer) {
         logger.info("Opening connection to create customer.");
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "INSERT INTO customer(customer_name, customer_email, customer_address) VALUES (?,?,?)";
+            String sql = "INSERT INTO customer(customer_name, customer_email, customer_address, postal_code) VALUES (?,?,?,?)";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, customer.getCustName());
             statement.setString(2, customer.getCustEmail());
             statement.setString(3, customer.getCustAddress());
+            statement.setString(4, customer.getPostalCode());
             logger.info("Executing "+ sql);
             statement.execute();
 
@@ -36,7 +38,7 @@ public class CustomerDAO {
 
             logger.debug("Creating customer." + customer.toString());
             customer.setCustID(id);
-            //return new Customer(id, customer.getCustName(), customer.getCustEmail(), customer.getCustAddress());
+
         } catch (SQLException e) {
             logger.error("There has been an issue adding customer to database. CLASS: CustomerDAO CAUSE: " + e);
         }
@@ -50,15 +52,17 @@ public class CustomerDAO {
     public void updateCustomer(Customer customer) {
         logger.info("Opening connection to update customer.");
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "UPDATE customer SET customer_name = ?, customer_email = ?, customer_address = ? " + "WHERE customerID = ?";
+            String sql = "UPDATE customer SET customer_name = ?, customer_email = ?, customer_address = ?, postal_code = ? " + "WHERE customerID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, customer.getCustName());
             statement.setString(2, customer.getCustEmail());
             statement.setString(3, customer.getCustAddress());
-            statement.setInt(4, customer.getCustID());
+            statement.setString(4, customer.getPostalCode());
+            statement.setInt(5, customer.getCustID());
             logger.info("Executing " + sql);
+
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -94,11 +98,11 @@ public class CustomerDAO {
         ArrayList<Customer> customers = new ArrayList<>();
         logger.info("Opening connection to create list of customers");
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "SELECT * FROM customer";
+            String sql = "SELECT * FROM customer JOIN postal_code ON customer.postal_code = postal_code.postal_code";
             Statement statement = connection.createStatement();
 
             logger.info("Executing " + sql);
-            if(statement.execute(sql)) {
+            if (statement.execute(sql)) {
                 ResultSet resultSet = statement.getResultSet();
                 logger.info("Iterating over result set for " + sql);
                 while (resultSet.next()) {
@@ -106,12 +110,45 @@ public class CustomerDAO {
                     String name = resultSet.getString("customer_name");
                     String email = resultSet.getString("customer_email");
                     String address = resultSet.getString("customer_address");
+                    String postalCode = resultSet.getString("postal_code");
+                    String city = resultSet.getString("city");
 
-                    Customer customer = new Customer(id, name, email, address);
+                    Customer customer = new Customer(id, name, email, address, postalCode, city);
                     customers.add(customer);
                 }
-                if(customers.size() == 0){
+                if (customers.size() == 0) {
                     logger.warn("There are no customers in the list.");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customers;
+    }
+
+    /**
+     * Method to get the customer by ID from database.
+     */
+    public Customer getCustomerById(Customer customer) {
+        try (Connection connection = databaseConnector.getConnection()) {
+            String sql = "SELECT * FROM customer JOIN postal_code ON customer.postal_code = postal_code.postal_code WHERE customerID = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, customer.getCustID());
+
+            if(pstmt.execute(sql)) {
+                ResultSet resultSet = pstmt.getResultSet();
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("customerID");
+                    String name = resultSet.getString("customer_name");
+                    String email = resultSet.getString("customer_email");
+                    String address = resultSet.getString("customer_address");
+                    String postalCode = resultSet.getString("postal_code");
+                    String city = resultSet.getString("city");
+
+                    return new Customer(id, name, email, address, postalCode, city);
                 }
             }
         } catch (SQLException e) {
@@ -129,10 +166,11 @@ public class CustomerDAO {
 
 
         logger.info("opening connection in getAllCustomersWithProjects()");
+        String sql = "SELECT c.*, p.*, pc.* " +
+                "FROM customer c " +
+                "LEFT JOIN project p ON c.customerID = p.customerID " +
+                "LEFT JOIN postal_code pc ON c.postal_code = pc.postal_code";
         try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "SELECT c.*, p.* " +
-                    "FROM customer c " +
-                    "LEFT JOIN project p ON c.customerID = p.customerID";
 
             Statement statement = connection.createStatement();
             logger.info("Executing " + sql);
@@ -145,6 +183,7 @@ public class CustomerDAO {
                             resultSet.getString("customer_name"),
                             resultSet.getString("customer_email"),
                             resultSet.getString("customer_address")
+
                     );
                     Project project = new Project(
                             resultSet.getInt("projectID"),
@@ -152,7 +191,12 @@ public class CustomerDAO {
                             resultSet.getDate("date_created"),
                             resultSet.getInt("customerID")
                     );
-                    CustomerWrapper wrapper = new CustomerWrapper(customer, project);
+
+                    PostalCode postalCode = new PostalCode(
+                            resultSet.getString("postal_code"),
+                            resultSet.getString("city")
+                    );
+                    CustomerWrapper wrapper = new CustomerWrapper(customer, project, postalCode);
                     customersWithProjectsList.add(wrapper);
                 }
                 if(customersWithProjectsList.isEmpty()){

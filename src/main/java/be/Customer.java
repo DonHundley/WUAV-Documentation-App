@@ -10,6 +10,27 @@ public class Customer {
 
     private String custAddress;
 
+    private String postalCode;
+
+    private String city;
+
+    public Customer(int custID, String custName, String custEmail, String custAddress, String postalCode) {
+        this.custID = custID;
+        this.custName = custName;
+        this.custEmail = custEmail;
+        this.custAddress = custAddress;
+        this.postalCode = postalCode;
+    }
+
+    public Customer(int custID, String custName, String custEmail, String custAddress, String postalCode, String city) {
+        this.custID = custID;
+        this.custName = custName;
+        this.custEmail = custEmail;
+        this.custAddress = custAddress;
+        this.postalCode = postalCode;
+        this.city = city;
+    }
+
     public Customer(int custID, String custName, String custEmail, String custAddress) {
         this.custID = custID;
         this.custName = custName;
@@ -17,10 +38,11 @@ public class Customer {
         this.custAddress = custAddress;
     }
 
-    public Customer(String custName, String custEmail, String custAddress) {
+    public Customer(String custName, String custEmail, String custAddress, String postalCode) {
         this.custName = custName;
         this.custEmail = custEmail;
         this.custAddress = custAddress;
+        this.postalCode = postalCode;
     }
 
     public int getCustID() {
@@ -55,6 +77,22 @@ public class Customer {
         this.custAddress = custAddress;
     }
 
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -62,6 +100,8 @@ public class Customer {
                 ", custName='" + custName + '\'' +
                 ", custEmail='" + custEmail + '\'' +
                 ", custAddress='" + custAddress + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", city='" + city + '\'' +
                 '}';
     }
 }
