@@ -24,6 +24,10 @@ public class DocumentationController implements Initializable {
 
 
     @FXML
+    private Label deviceNamesLabel;
+    @FXML
+    private Label deviceCredentialsLabel;
+    @FXML
     private Button updateTaskButton;
     @FXML
     private Button picturesButton;
@@ -66,7 +70,8 @@ public class DocumentationController implements Initializable {
     // private variables
     private Project selectedProject;
     private HashMap<String, Image> images = new HashMap<>();
-    private List<String> pictureDescriptions = new ArrayList<>();
+    private List<String> deviceNames = new ArrayList<>();
+    private List<String> deviceCredentials = new ArrayList<>();
 
 
     /**
@@ -123,9 +128,10 @@ public class DocumentationController implements Initializable {
 
         imagePane.getChildren().clear();
         images.clear();
-        pictureDescriptions.clear();
+        resetDeviceLabels();
 
         int imgCount = 1;
+        int deviceCount = 1;
 
         for (TaskPictures picture : pics) {
             if (picture.getPicture() != null) {
@@ -139,11 +145,52 @@ public class DocumentationController implements Initializable {
                 imgCount++;
 
             }
+            if(picture.getDeviceName() != null){
+                deviceNames.add("Device " + deviceCount + ": " + picture.getDeviceName() + ", ");
+                if(picture.getPassword() != null){
+                    deviceCredentials.add("Device " + deviceCount +": " + picture.getPassword() + ", ");
+                }
+                deviceCount++;
+            }
+
+            setDeviceLabels();
+
             if (imgCount == 20) {
                 break;
             }
         }
         return imageList;
+    }
+
+    private void resetDeviceLabels() {
+        deviceNames.clear();
+        deviceCredentials.clear();
+        deviceNamesLabel.setText("No device names listed.");
+        deviceCredentialsLabel.setText("No device credentials listed.");
+    }
+
+    private void setDeviceLabels() {
+        if(!deviceNames.isEmpty()) {
+            String names = new String();
+            for (String device : deviceNames
+            ) {
+                names = names + device;
+                deviceNamesLabel.setText(names);
+            }
+        }else {
+            deviceNamesLabel.setText("No devices found.");
+        }
+
+        if(!deviceCredentials.isEmpty()){
+            String credentials = new String();
+        for (String credential:deviceCredentials
+             ) {
+            credentials = credentials + credential;
+            deviceCredentialsLabel.setText(credentials);
+        }
+        }else {
+            deviceCredentialsLabel.setText("No device credentials found.");
+        }
     }
 
     /**
