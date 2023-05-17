@@ -122,7 +122,7 @@ public class CustomerDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("There was an error creating a list of customers. CLASS: CustomerDAO CAUSE: " + e);
         }
         return customers;
     }
