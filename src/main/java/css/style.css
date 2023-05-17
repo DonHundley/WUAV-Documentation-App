@@ -107,6 +107,7 @@
 /*highlight selected images*/
 .selected {
     -fx-effect: dropshadow(gaussian, rgba(232, 73, 16, 1), 10, 0.5, 0, 0);
+}
 
 
 
@@ -129,22 +130,22 @@
     -fx-border-color: transparent;
     -fx-padding: 2 0 2 10px;
 }
-.table-row-cell: hover {
+.table-row-cell:hover {
     -fx-background-color: #93f9b911;
     -fx-text-background-color: red;
 }
-.table-row-cell: odd{
+.table-row-cell:odd{
     -fx-background-color: #93f9b911;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
-.table-row-cell: even{
+.table-row-cell:even{
     -fx-background-color: #1dbbdd11;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
 
-.table-row-cell: highlighted {
+.table-row-cell:highlighted {
     -fx-background-color: red;
     -fx-background-radius: 15px;
 }

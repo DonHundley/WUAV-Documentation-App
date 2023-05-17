@@ -127,37 +127,6 @@ public class CustomerDAO {
         return customers;
     }
 
-    /**
-     * Method to get the customer by ID from database.
-     */
-    public Customer getCustomerById(Customer customer) {
-        try (Connection connection = databaseConnector.getConnection()) {
-            String sql = "SELECT * FROM customer JOIN postal_code ON customer.postal_code = postal_code.postal_code WHERE customerID = ?";
-
-            PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, customer.getCustID());
-
-            if(pstmt.execute(sql)) {
-                ResultSet resultSet = pstmt.getResultSet();
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("customerID");
-                    String name = resultSet.getString("customer_name");
-                    String email = resultSet.getString("customer_email");
-                    String address = resultSet.getString("customer_address");
-                    String postalCode = resultSet.getString("postal_code");
-                    String city = resultSet.getString("city");
-
-                    return new Customer(id, name, email, address, postalCode, city);
-                }
-            }
-        } catch (SQLException e) {
-            logger.error("There has been an issue creating a list of customers. CLASS: CustomerDAO CAUSE: " + e);
-        }
-        logger.info("Returning list customers");
-        return customers;
-    }
-
 
     /**method to get all customers and associated projects from the database. this is used to later display in a tableview*/
 
@@ -182,7 +151,9 @@ public class CustomerDAO {
                             resultSet.getInt("customerID"),
                             resultSet.getString("customer_name"),
                             resultSet.getString("customer_email"),
-                            resultSet.getString("customer_address")
+                            resultSet.getString("customer_address"),
+                            resultSet.getString("postal_code"),
+                            resultSet.getString("city")
 
                     );
                     Project project = new Project(

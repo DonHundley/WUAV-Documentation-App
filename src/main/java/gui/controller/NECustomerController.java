@@ -54,8 +54,8 @@ public class NECustomerController {
 
         setEdit(isEdit); // sets the boolean to store if we are editing or creating.
         if (isEdit) { // if we are editing we set all text fields with the current information.
-            setOnEdit();
             setUpPostalCodeTV();
+            setOnEdit();
         } else {
             setUpPostalCodeTV();
             windowTitleLabel.setText("New Customer");
@@ -138,6 +138,12 @@ public class NECustomerController {
             customerName.setText(customer.getCustName());
             customerEmail.setText(customer.getCustEmail());
             customerAddress.setText(customer.getCustAddress());
+            for (PostalCode pc:postalCodeTV.getItems()) {
+                if(pc.getPostalCode().equals(customer.getPostalCode()) && pc.getCity().equals(customer.getCity())) {
+                    postalCodeTV.getSelectionModel().select(pc);
+                    break;
+                }
+            }
         } else {
             String str = "Could not find a customer to be edited. Please contact system admin. Class: NECustomerController.";
             customerError(str);
