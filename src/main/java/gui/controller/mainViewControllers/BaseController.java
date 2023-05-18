@@ -29,8 +29,8 @@ public abstract class BaseController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            String str = "Login.fxml";
-
+           String str = "There has been a problem loading Login.fxml, please contact system Admin.";
+           createWarning(str);
         }
     }
 
