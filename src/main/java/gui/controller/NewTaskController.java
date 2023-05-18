@@ -5,10 +5,9 @@ import gui.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
-import javafx.stage.*;
 
-import javax.swing.*;
+import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 import java.net.URL;
 import java.util.*;
@@ -39,6 +38,8 @@ public class NewTaskController implements Initializable {
     private int maxTaskName = 25;
 
 
+    private static final Logger logger = LogManager.getLogger("debugLogger");
+
     /**
      * This method is used to set our models and which project a task will be added to.
      *
@@ -63,16 +64,20 @@ public class NewTaskController implements Initializable {
     }
 
     private void constructTask() {
+        logger.info("Creating a new Task");
         if (selectedProject != null && !taskName.getText().isEmpty()) {
             if (validateTaskNameTFLength()) {
                 Task task = new Task(selectedProject.getProjID(), taskName.getText(), "No description", "Not Started");
                 functionsModel.createTask(task);
+                logger.info("Task created");
             } else {
                 alertTaskNameTF();
+                logger.warn("Task creation failed: Task name exceeds the maximum length");
             }
         } else {
             String str = "Either the selected project does not exist or a name has not been chosen for the task.";
             newTaskError(str);
+            logger.warn("Task creation failed: empty field for task name");
         }
     }
 

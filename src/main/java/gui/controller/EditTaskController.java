@@ -7,6 +7,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.util.*;
@@ -40,6 +41,8 @@ public class EditTaskController {
     private String[] states = {"Not Started", "In Progress", "Completed"};
 
     int maxDescription = 255;
+    private static final Logger logger = LogManager.getLogger("debugLogger");
+
 
     /**
      * This is used to set our fields with relevant information if that information exists.
@@ -84,23 +87,28 @@ public class EditTaskController {
      */
     @FXML
     private void editTask(ActionEvent actionEvent) {
-
+        logger.info("Editing a task");
 
         if (!taskDescription.getText().isEmpty()) {
             if (validateDescTFLength()) {
                 selectedTask.setTaskDesc(taskDescription.getText());
+
             } else {
                 alertDescriptionTFLength();
+                logger.warn("Task editing failed:task name exceeds the maximum length");
                 return;
             }
             functionsModel.updateTask(selectedTask);
+            logger.info("Task edited");
             observables.loadTasksByProject(persistenceModel.getSelectedProject());
 
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
         } else {
-
+            String str = "No name chosen for the task to edit";
+            taskError(str);
+            logger.warn("Task editing failed: empty field for task name");
         }
     }
 

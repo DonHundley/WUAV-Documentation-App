@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.util.*;
@@ -44,11 +45,13 @@ public class NEUserController {
     // True if editing, false if creating a new customer.
     private boolean isEdit;
 
-    //validation
+    //fields to validate
     int maxUsernameLenght = 10;
     int maxPasswordLenght = 50;
     int maxNameLenght = 25;
     int maxLastNameLenght = 25;
+
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
 
     /**
@@ -91,20 +94,25 @@ public class NEUserController {
      * This method is used to create a new User if our isEdit boolean == false.
      */
     private void createUser() {
+        logger.info("Creating a new User");
         if (validateUserFields()) {
             user = new User(userNameTF.getText(), passTF.getText(), accessCB.getValue(), firstNameTF.getText(), surnameTF.getText());
             functionsModel.createUser(user);
             observablesModel.loadUsers();
             Stage stage = (Stage) createOrEditUser.getScene().getWindow();
             stage.close();
+            logger.info("User created successfully");
+        } else {
+            logger.warn("User creation failed due to invalid fields");
+            warningLoggerForUser();
         }
-
     }
 
     /**
      * This method is used to edit the selected User from our persistent model with updated information.
      */
     private void editUser() {
+        logger.info("Editing of a User");
         if (validateUserFields()) {
             user.setUserName(userNameTF.getText());
             user.setPassword(passTF.getText());
@@ -115,8 +123,13 @@ public class NEUserController {
             observablesModel.loadUsers();
             Stage stage = (Stage) createOrEditUser.getScene().getWindow();
             stage.close();
+            logger.info("User edited successfully");
+        } else {
+            logger.warn("User creation failed due to invalid fields");
+            warningLoggerForUser();
         }
     }
+
 
     /**
      * Closes the window with an action event.
@@ -390,8 +403,8 @@ public class NEUserController {
     private boolean validateUserFields() {
         boolean isValid = true;
 
-        if (userNameTF.getText().isEmpty() || passTF.getText().isEmpty() || accessCB.getSelectionModel().getSelectedItem()==null || firstNameTF.getText().isEmpty() || surnameTF.getText().isEmpty()) {
-            String str = "Please fill in all the fields to create a new user";
+        if (userNameTF.getText().isEmpty() || passTF.getText().isEmpty() || accessCB.getSelectionModel().getSelectedItem() == null || firstNameTF.getText().isEmpty() || surnameTF.getText().isEmpty()) {
+            String str = "Please fill in all the fields";
             userError(str);
             isValid = false;
         } else if (!isUsernameTFValid() && !isPasswordTFValid() && !isFirstNameTFValid() && !isLastNameTFValid()) {
@@ -442,5 +455,27 @@ public class NEUserController {
         }
 
         return isValid;
+    }
+
+    /**
+     * method to log about invalid fields when creating or editing a user
+     **/
+    private void warningLoggerForUser() {
+        if (!isUsernameTFValid()) {
+            logger.warn("Invalid username field: username exceeds the maximum character limit");
+        }
+        if (!isPasswordTFValid()) {
+            logger.warn("Invalid password field: password exceeds the maximum character limit");
+        }
+        if (!isFirstNameTFValid()) {
+            logger.warn("Invalid first name field: first name exceeds the maximum character limit");
+        }
+        if (!isLastNameTFValid()) {
+            logger.warn("Invalid last name field: last name exceeds the maximum character limit");
+        }
+        if (userNameTF.getText().isEmpty() || passTF.getText().isEmpty() || accessCB.getSelectionModel().getSelectedItem() == null || firstNameTF.getText().isEmpty() || surnameTF.getText().isEmpty()) {
+            logger.warn("User creation failed due to one or more empty fields");
+        }
+
     }
 }

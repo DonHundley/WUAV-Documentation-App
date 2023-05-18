@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.util.*;
@@ -39,6 +40,8 @@ public class NEProjectController {
 
     //validation
     int maxProjName = 50;
+
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * This method is used to set our models and choose if we are editing or creating a project.
@@ -85,20 +88,24 @@ public class NEProjectController {
      * This method is used to create a new project if our isEdit boolean == false.
      */
     private void createProject() {
+        logger.info("Creating a new project");
         if (!projectName.getText().isEmpty()) {
             if (validateProjectNameTFLength()) {
                 project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), nEProjectTV.getSelectionModel().getSelectedItem().getCustID());
                 functionsModel.createProject(project);
 
                 observablesModel.loadProjects();
+                logger.info("New project created");
                 Stage stage = (Stage) createOrEditProject.getScene().getWindow();
                 stage.close();
             } else {
                 alertProjectNameTF();
+                logger.warn("Project creation failed: invalid project name length");
             }
         } else {
             String str = "Please fill in the project name";
             projectError(str);
+            logger.warn("Project creation failed: empty project name");
         }
     }
 
@@ -106,6 +113,7 @@ public class NEProjectController {
      * This method is used to edit the selected project from our persistent model with updated information.
      */
     private void editProject() {
+        logger.info("Editing of a project");
         if (!projectName.getText().isEmpty()) {
             if (validateProjectNameTFLength()) {
                 project.setProjName(projectName.getText());
@@ -113,14 +121,17 @@ public class NEProjectController {
                 functionsModel.editProject(project);
 
                 observablesModel.loadProjects();
+                logger.info("Project edited");
                 Stage stage = (Stage) createOrEditProject.getScene().getWindow();
                 stage.close();
             } else {
                 alertProjectNameTF();
+                logger.warn("Project update failed: invalid project name length");
             }
         } else {
             String str = "Please fill in the project name";
             projectError(str);
+            logger.warn("Project update failed: empty project name");
         }
 
     }
