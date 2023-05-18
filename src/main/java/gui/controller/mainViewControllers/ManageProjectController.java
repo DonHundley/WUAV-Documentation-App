@@ -12,6 +12,7 @@ import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.io.*;
@@ -52,12 +53,13 @@ public class ManageProjectController extends BaseController implements Initializ
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
     private UserModel userModel = UserModel.getInstance();
 
-
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name and our window title label.
+        logger.trace("Setting user name label in ManageProjectController.");
         windowTitleLabel.setText("Task Document Manager");
         usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
     }
@@ -66,9 +68,11 @@ public class ManageProjectController extends BaseController implements Initializ
      * We use this to set up the tableview ProjectTV with relative columns and add a listener for selected items.
      */
     private void setProjectTV() {
+        logger.info("setProjectTV() called in " + this.getClass().getName());
         projectTV.setItems(projectModel.getProjects());
         projectModel.loadProjects();
 
+        logger.trace("setting columns for projectTV");
         projectDate.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
         projectDate.setCellFactory(column -> {
             return new TableCell<ProjectWrapper, Date>() {
@@ -87,21 +91,23 @@ public class ManageProjectController extends BaseController implements Initializ
         projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
         assignedUserCount.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getTotalTasks()).asObject());
 
-
+        logger.info("setProjectTV() complete.");
     }
 
     /**
      * We use this to set up the tableview TechTV with relative columns and add a listener for selected items.
      */
     private void setTechTV() {
+        logger.info("setTechTV() called in " + this.getClass().getName());
         techTV.setItems(userModel.getTechs());
         userModel.loadTechs();
 
+        logger.trace("Setting columns for techTV");
         techName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getFirstName()));
         techSurname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getLastName()));
         numberOfTasks.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAssignedTasks()).asObject());
 
-
+        logger.info("setTechTV() complete.");
     }
 
     /**
@@ -111,25 +117,30 @@ public class ManageProjectController extends BaseController implements Initializ
      */
     @FXML
     private void assignProject(ActionEvent actionEvent) {
+        logger.info("assignProject() called in " + this.getClass().getName());
         if (projectTV.getSelectionModel().getSelectedItem().getTotalTasks() > 0) {
             if (projectTV.getSelectionModel().getSelectedItem() != null && techTV.getSelectionModel().getSelectedItem() != null) {
                 projectModel.assignProject(userModel.getSelectedUser(), projectModel.getSelectedProject());
                 userModel.loadTechs();
-            } }
-        else {
-                String str = "Only projects with tasks can be assigned to a technician";
-                super.createWarning(str);
             }
         }
+        else
+        {
+            logger.warn("User attempted to assign a tech to a project without task. User was notified.");
+            String str = "Only projects with tasks can be assigned to a technician";
+            super.createWarning(str);
+        }
+        logger.info("assignProject() complete.");
+    }
 
 
     /**
      * Deletes the selected project.
-     *
      * @param actionEvent triggered when the user activates the delete project button.
      */
     @FXML
     private void deleteProject(ActionEvent actionEvent) {
+        logger.info("deleteProject() called in " + this.getClass().getName());
         if (projectTV.getSelectionModel().getSelectedItem() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Project");
@@ -144,36 +155,9 @@ public class ManageProjectController extends BaseController implements Initializ
             }
             projectModel.loadProjects();
         }
+        logger.info("deleteProject() complete.");
     }
 
-    /**
-     * Opens the edit window for the selected project.
-     *
-     * @param actionEvent triggers when the user activates the edit project button.
-     */
-    @FXML
-    private void editProject(ActionEvent actionEvent) {
-        if(projectTV.getSelectionModel().getSelectedItem() != null){
-        editProj();
-        }
-    }
-
-    private void editProj(){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NEProject.fxml"));
-            Parent root = loader.load();
-            NEProjectController controller = loader.getController();
-            controller.setNEProjectController(true);
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Edit Project");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            String str = "There has been an error loading NEProject.fxml. Please contact system Admin.";
-            super.createWarning(str);
-        }
-    }
 
     /**
      * Opens the new window for the selected project.
@@ -182,30 +166,54 @@ public class ManageProjectController extends BaseController implements Initializ
      */
     @FXML
     private void createProject(ActionEvent actionEvent) {
-        newProject();
+        editProj(false);
     }
 
-    private void newProject(){
+    /**
+     * Opens the edit window for the selected project.
+     * @param actionEvent triggers when the user activates the edit project button.
+     */
+    @FXML
+    private void editProject(ActionEvent actionEvent) {
+        if(projectTV.getSelectionModel().getSelectedItem() != null){
+            editProj(true);
+        }
+    }
+
+
+    /**
+     * This method is called when we wish to edit or create a project.
+     * @param isEdit if true we are editing the project.
+     */
+    private void editProj(boolean isEdit){
+        logger.info("editProj() was called in " + this.getClass().getName());
         try {
+            logger.info("Loading NEProject.fxml");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NEProject.fxml"));
             Parent root = loader.load();
             NEProjectController controller = loader.getController();
-            controller.setNEProjectController(false);
+            controller.setNEProjectController(isEdit);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
-            stage.setTitle("Create Project");
+
+            if(isEdit){
+                stage.setTitle("Edit Project");
+            } else {
+                stage.setTitle("New Project");
+            }
+
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
+            logger.error("There was a problem loading NEProject.fxml. CLASS: ManageProjectController CAUSE: ", e);
             String str = "There has been an error loading NEProject.fxml. Please contact system Admin.";
             super.createWarning(str);
         }
+        logger.info("editProj() complete.");
     }
 
     /**
      * This will log the user out and change the view to the login.
-     * We catch the IOException and show the user a crafted alert.
-     *
      * @param actionEvent triggered by the logout button.
      */
     @FXML
@@ -216,11 +224,8 @@ public class ManageProjectController extends BaseController implements Initializ
 
     /**
      * This will open the New Task View.
-     * We catch the IOException and show the user a crafted alert.
-     *
      * @param actionEvent triggered by the create task button.
      */
-
     @FXML
     private void createTask(ActionEvent actionEvent) {
         addTask();
@@ -228,24 +233,13 @@ public class ManageProjectController extends BaseController implements Initializ
 
     private void addTask(){
         if (projectTV.getSelectionModel().getSelectedItem() != null){
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NewTask.fxml"));
-                Parent root = loader.load();
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
-                stage.setTitle("Create Task");
-                stage.setScene(scene);
-                stage.show();
-            } catch (IOException e) {
-                String str = "There has been a problem loading NewTask.fxml, please contact system Admin.";
-                super.createWarning(str);
-            }
+            super.newTask();
         }
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("Initializing ManageProjectController");
         setUsernameLabel();
         setProjectTV();
         setTechTV();
@@ -253,6 +247,7 @@ public class ManageProjectController extends BaseController implements Initializ
 
 
     @FXML private void projectTVOnClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked projectTV in ManageProjectController.");
         if(projectTV.getSelectionModel().getSelectedItem() != null){
         projectModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
         if(mouseEvent.getClickCount() == 2){
@@ -262,18 +257,20 @@ public class ManageProjectController extends BaseController implements Initializ
 
         if(projectTV.getSelectionModel().getSelectedItem() == null){
             if(mouseEvent.getClickCount() == 2){
-            newProject();
+                editProj(false);
             }
         }
     }
 
     @FXML private void techTvOnClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked techTV in ManageProjectController.");
         if(techTV.getSelectionModel().getSelectedItem() != null) {
             userModel.setSelectedUser(techTV.getSelectionModel().getSelectedItem().getUser());
         }
     }
 
     @FXML private void anchorOnClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked anchorPane in ManageProjectController.");
         if(techTV.getSelectionModel().getSelectedItem() != null){
             techTV.getSelectionModel().clearSelection();
         }

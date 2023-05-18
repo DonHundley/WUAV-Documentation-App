@@ -15,7 +15,7 @@
         </Console>
 
         <!-- File Appenders on need basis -->
-        <RollingFile name="frameworkLog" fileName="app.Log"
+        <RollingFile name="frameworkLog" fileName="appFrameWork.Log"
                      filePattern="logs/app-framework-%d{yyyy-MM-dd}-%i.log">
             <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
@@ -35,7 +35,7 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
-        <RollingFile name="infoLog" fileName="app.Log"
+        <RollingFile name="infoLog" fileName="appInfo.Log"
                      filePattern="logs/app-info-%d{yyyy-MM-dd}-%i.log" >
             <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
@@ -45,7 +45,7 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
-        <RollingFile name="errorLog" fileName="app.Log"
+        <RollingFile name="errorLog" fileName="appError.Log"
                      filePattern="logs/app-error-%d{yyyy-MM-dd}-%i.log" >
             <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
@@ -55,7 +55,7 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
-        <RollingFile name="perfLog" fileName="app.Log"
+        <RollingFile name="perfLog" fileName="appPerf.Log"
                      filePattern="logs/app-perf-%d{yyyy-MM-dd}-%i.log" >
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -64,7 +64,7 @@
             <DefaultRolloverStrategy max="1"/>
         </RollingFile>
 
-        <RollingFile name="traceLog" fileName="app.Log"
+        <RollingFile name="traceLog" fileName="appTrace.Log"
                      filePattern="logs/app-trace-%d{yyyy-MM-dd}-%i.log" >
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -83,6 +83,8 @@
         </Logger>
 
         <Logger name="debugLogger" additivity="false" level="debug">
+            <AppenderRef ref="perfLog" />
+            <AppenderRef ref="traceLog" />
             <AppenderRef ref="debugLog" />
             <AppenderRef ref="infoLog"  />
             <AppenderRef ref="errorLog" />

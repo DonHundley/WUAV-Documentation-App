@@ -15,6 +15,7 @@ import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.io.*;
@@ -75,11 +76,14 @@ public class DocumentationController extends BaseController implements Initializ
     private List<String> deviceNames = new ArrayList<>();
     private List<String> deviceCredentials = new ArrayList<>();
 
+    // logger
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name
+        logger.trace("setting username Label in " + this.getClass().getName());
         windowTitleLabel.setText("Project Task Manager");
         usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
     }
@@ -88,6 +92,7 @@ public class DocumentationController extends BaseController implements Initializ
      * We use this to set our tableview with the observable list from Observables.
      */
     private void setTaskTV() {
+        logger.info("Setting taskTV in "+ this.getClass().getName());
         taskTV.setItems(projectModel.getTasksByProject());
         projectModel.loadTasksByProject();
 
@@ -101,9 +106,11 @@ public class DocumentationController extends BaseController implements Initializ
      * We fetch the selected project from persistent in order to do this, if there is a problem with this, we show an alert.
      */
     private void setSelectedProject() {
+        logger.trace("Setting selected project from "+ this.getClass().getName());
         if (projectModel.getSelectedProject() != null) {
             selectedProject = projectModel.getSelectedProject();
         } else {
+            logger.warn("User may not have selected a project in " + this.getClass().getName() +". User was notified.");
             String str = "An error has occurred, please contact system admin. Project was not selected or does not exist.";
             super.createWarning(str);
         }
@@ -114,13 +121,16 @@ public class DocumentationController extends BaseController implements Initializ
      * A mouse click event is set on each thumbnail to open an image dialog
      */
     private List<Image> generateImgThumbnails() {
+        logger.info("generateImgThumbnails() was called in " + this.getClass().getName());
         Task task = projectModel.getSelectedTask();
+        logger.trace("Creating list in generateImgThumbnails()");
         List<TaskPictures> pics = projectModel.taskPicturesByDocID(task);
-
         List<Image> imageList = new ArrayList<>();
         for (TaskPictures taskPictures : pics) {
             imageList.add(taskPictures.getPicture());
         }
+
+        logger.trace("Clearing appropriate items for image Thumbnails.");
 
         imagePane.getChildren().clear();
         images.clear();
@@ -129,6 +139,7 @@ public class DocumentationController extends BaseController implements Initializ
         int imgCount = 1;
         int deviceCount = 1;
 
+        logger.info("Iterating over all pictures for selected task in generateImgThumbnails()");
         for (TaskPictures picture : pics) {
             if (picture.getPicture() != null) {
                 ImageView bImage = new ImageView(picture.getPicture());
@@ -141,6 +152,9 @@ public class DocumentationController extends BaseController implements Initializ
                 imgCount++;
 
             }
+
+            logger.info("Iterating over all devices for selected task in generateImgThumbnails()");
+
             if(picture.getDeviceName() != null){
                 deviceNames.add("Device " + deviceCount + ": " + picture.getDeviceName() + ", ");
                 if(picture.getPassword() != null){
@@ -149,23 +163,28 @@ public class DocumentationController extends BaseController implements Initializ
                 deviceCount++;
             }
 
+            logger.trace("setting device labels.");
             setDeviceLabels();
 
             if (imgCount == 20) {
                 break;
             }
         }
+        logger.info("Finished generating image thumbnails.");
         return imageList;
     }
 
     private void resetDeviceLabels() {
+        logger.trace("Activated resetDeviceLabels() in " + this.getClass().getName());
         deviceNames.clear();
         deviceCredentials.clear();
         deviceNamesLabel.setText("No device names listed.");
         deviceCredentialsLabel.setText("No device credentials listed.");
+        logger.trace("Device labels reset.");
     }
 
     private void setDeviceLabels() {
+
         if(!deviceNames.isEmpty()) {
             String names = new String();
             for (String device : deviceNames
@@ -187,15 +206,18 @@ public class DocumentationController extends BaseController implements Initializ
         }else {
             deviceCredentialsLabel.setText("No device credentials found.");
         }
+        logger.trace("Device labels set.");
     }
 
     /**
      * this method handles the click event on the thumbnails image and open an image dialog to see the selected image in a bigger size
      **/
     private void openImageDialogOnMouseClick(MouseEvent event, Image image, List<Image> imageList) {
+        logger.info("openImageDialogOnMouseClick() activated in " + this.getClass().getName());
         try {
             int selectedIndex = imageList.indexOf(image);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/externalViews/ImageDialogView.fxml"));
+            logger.info("Loading ImageDialogView.fxml");
             Parent root = loader.load();
             ImageDialogViewController controller = loader.getController();
             controller.setImageList(imageList);
@@ -208,13 +230,16 @@ public class DocumentationController extends BaseController implements Initializ
             stage.show();
 
         } catch (IOException e) {
+            logger.error("There has been an issue loading ImageDialogView.fxml. ClASS: DocumentationController CAUSE: ", e);
             String str = "There has been an issue loading ImageDialogView.fxml, please contact system admin.";
             super.createWarning(str);
         }
+        logger.info("openImageDialogOnMouseClick() complete.");
     }
 
     /**These methods calculate the X and Y location of images based on their amount and size.**/
     private int imageLocationX(int imgCount, int imgWidth) {
+        logger.trace("Determining image X coordinates.");
         int getX;
         int spacing;
         if (imgCount <= 4) {
@@ -245,6 +270,7 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
     private int imageLocationY(int imgCount, int imgHeight) {
+        logger.trace("Determining image y coordinates");
         int getY;
 
         if (imgCount <= 4) {
@@ -268,6 +294,7 @@ public class DocumentationController extends BaseController implements Initializ
         if (projectModel.getSelectedTask().getTaskDesc() != null) {
             descriptionLabel.setText(projectModel.getSelectedTask().getTaskDesc());
         }
+        logger.trace("Description label set in " + this.getClass().getName());
     }
 
 
@@ -279,23 +306,10 @@ public class DocumentationController extends BaseController implements Initializ
      */
     @FXML
     private void createTask(ActionEvent actionEvent) {
-        newTask();
+        super.newTask();
     }
 
-    private void newTask() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NewTask.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Create Task");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            String str = "There has been an issue loading NewTask.fxml, please contact system Admin.";
-            super.createWarning(str);
-        }
-    }
+
 
     /**
      * This will open the edit task view.
@@ -309,9 +323,11 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
     private void editTask() {
+        logger.info("editTask() called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             try {
                 messageLabel.setText("");
+                logger.info("Loading EditTask.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/EditTask.fxml"));
                 Parent root = loader.load();
                 EditTaskController controller = loader.getController();
@@ -322,10 +338,12 @@ public class DocumentationController extends BaseController implements Initializ
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
+                logger.error("There has been a problem loading EditTask.fxml. CLASS: DocumentationController CAUSE: " , e);
                 String str = "There has been an issue loading EditTask.fxml, please contact system Admin.";
                 super.createWarning(str);
             }
         } else messageLabel.setText("Please select a task to be updated.");
+        logger.info("editTask() complete.");
     }
 
     /**
@@ -336,9 +354,11 @@ public class DocumentationController extends BaseController implements Initializ
      */
     @FXML
     private void addPictures(ActionEvent actionEvent) {
+        logger.info("addPictures called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             try {
                 messageLabel.setText("");
+                logger.info("Loading AddTaskPictures.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/AddTaskPictures.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
@@ -347,10 +367,12 @@ public class DocumentationController extends BaseController implements Initializ
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
+                logger.error("There has been a problem loading AddTaskPictures.fxml. CLASS: DocumentationController CAUSE: ", e);
                 String str = "There has been a problem loading AddTaskPictures.fxml, please contact system Admin.";
                 super.createWarning(str);
             }
         } else messageLabel.setText("Please select a task to add pictures to.");
+        logger.info("addPictures() complete.");
     }
 
     /**
@@ -368,6 +390,7 @@ public class DocumentationController extends BaseController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("initializing DocumentationController");
         setSelectedProject();
         setUsernameLabel();
         setTaskTV();
@@ -388,6 +411,7 @@ public class DocumentationController extends BaseController implements Initializ
 
     @FXML
     private void taskTVOnMouse(MouseEvent mouseEvent) {
+        logger.trace("taskTV clicked in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             projectModel.setSelectedTask(taskTV.getSelectionModel().getSelectedItem());
             if (projectModel.getSelectedTask().getTaskLayout() != null) {
@@ -408,9 +432,11 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
     public void updateLayout(ActionEvent actionEvent) {
+        logger.info("updateLayout() called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             try {
                 messageLabel.setText("");
+                logger.info("Loading EditLayout.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/EditLayout.fxml"));
                 Parent root = loader.load();
                 EditLayoutController controller = loader.getController();
@@ -423,14 +449,17 @@ public class DocumentationController extends BaseController implements Initializ
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
+                logger.error("There has been a problem loading EditLayout.fxml. CLASS: DocumentationController CAUSE: ",e);
                 String str = "There has been an issue loading EditLayout.fxml, please contact system Admin";
                 super.createWarning(str);
             }
         } else messageLabel.setText("Please select a task to update the layout.");
+        logger.info("updateLayout() complete.");
     }
 
     @FXML
     private void anchorOnClick(MouseEvent mouseEvent) {
+        logger.trace("User has clicked the anchor pane in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             taskTV.getSelectionModel().clearSelection();
             taskTV.refresh();
@@ -438,15 +467,18 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
 
-
-/**method to open the window where it's possible to export the report for the selected task**/
+    /**
+     * method to open the window where it's possible to export the report for the selected task
+     **/
     @FXML private void openExportReportView(ActionEvent actionEvent) {
-
+        logger.info("openExportReportView called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             try {
+                logger.trace("Collecting selected project, selected item from task tv, and selected customer.");
                 Project project = projectModel.getSelectedProject();
                 Task task = taskTV.getSelectionModel().getSelectedItem();
                 Customer customer = customerModel.getSelectedCustomer();
+                logger.info("Loading ExportReportView.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/externalViews/ExportReportView.fxml"));
                 Parent root = loader.load();
                 ExportReportViewController controller = loader.getController();
@@ -462,6 +494,7 @@ public class DocumentationController extends BaseController implements Initializ
                 stage.show();
 
             } catch (IOException e) {
+                logger.error("There has been an issue loading ExportReportView.fxml. CLASS: DocumentationController CAUSE: ", e);
                 String str = "There has been an issue loading ExportReportView.fxml, please contact system Admin.";
                 super.createWarning(str);
             }
@@ -469,6 +502,7 @@ public class DocumentationController extends BaseController implements Initializ
         } else {
             messageLabel.setText("Please select a task to export its report");
         }
+        logger.info("Method complete.");
     }
 }
 

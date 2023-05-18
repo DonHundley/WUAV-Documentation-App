@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.io.*;
@@ -36,13 +37,14 @@ public class ManageTaskController extends BaseController implements Initializabl
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
     private CustomerModel customerModel = CustomerModel.getInstance();
 
-
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
 
     /**
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name.
+        logger.trace("setting username label in ManageTaskController.");
         usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
     }
 
@@ -54,9 +56,11 @@ public class ManageTaskController extends BaseController implements Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("Initializing ManageTaskController.");
         setUsernameLabel();
 
-        if(authenticationModel.getLoggedInUser().getAccess().toUpperCase().equals("TECHNICIAN"))
+        logger.info("Checking user access in ManageTaskController.");
+        if(authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("TECHNICIAN"))
         {
             User loggedIn = authenticationModel.getLoggedInUser();
             taskTV.setItems(projectModel.getTasksByUserID());
@@ -72,10 +76,13 @@ public class ManageTaskController extends BaseController implements Initializabl
             projectModel.loadTasksInfo();
             customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
         }
+
+        logger.trace("setting column values for taskTV in ManageTaskController");
         projectName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
         taskName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getTask().getTaskName()));
         stateOfTask.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getTask().getTaskState()));
 
+        logger.trace("Initialize complete.");
     }
 
 
@@ -84,6 +91,7 @@ public class ManageTaskController extends BaseController implements Initializabl
     }
 
     @FXML private void taskTVOnClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked taskTV in ManageTaskController");
         if(taskTV.getSelectionModel().getSelectedItem() != null){
             projectModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
             projectModel.setSelectedTask(taskTV.getSelectionModel().getSelectedItem().getTask());
@@ -96,16 +104,20 @@ public class ManageTaskController extends BaseController implements Initializabl
     }
 
     private void openProjectInformation(){
+        logger.info("openProjectinformation() called in ManageTaskController");
         try {
             projectModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
+            logger.info("loading DocumentationView.fxml");
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
             super.getViewPane().getChildren().setAll(n);
         }  catch (IOException e) {
+            logger.warn("User may not have selected a task to see information for, user was informed. Potential problem: " + e);
             errorLabel.setText("Please select an task to see related documentation.");
         }
     }
 
     @FXML private void taskAnchorOnClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked anchor pane in ManageTaskController.");
         if(taskTV.getSelectionModel().getSelectedItem() != null){
             taskTV.getSelectionModel().clearSelection();
         }

@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 import java.io.*;
 import java.net.URL;
@@ -18,7 +19,6 @@ import java.util.*;
 
 public class ManageUsersController extends BaseController implements Initializable{
 
-    @FXML private AnchorPane anchorUsers;
     // TableView
     @FXML private TableView<User> userTV;
     @FXML private TableColumn<User, String> userName;
@@ -31,16 +31,19 @@ public class ManageUsersController extends BaseController implements Initializab
     @FXML private Label windowTitleLabel;
     @FXML private Label errorLabel;
 
+    @FXML private AnchorPane anchorUsers;
+
     // Models
     private UserModel userModel = UserModel.getInstance();
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
 
-
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name.
+        logger.trace("setting username label in ManageUsersController");
         usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
     }
 
@@ -49,17 +52,21 @@ public class ManageUsersController extends BaseController implements Initializab
      * We also add a listener to the tableview to change the currently selected user stored in Persistent.
      */
     private void setUserTV() {
+        logger.info("setUserTV called in ManageUsersController");
         userTV.setItems(userModel.getUsers());
         userModel.loadUsers();
 
+        logger.trace("Setting column values for userTV");
         userName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUserName()));
         firstName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
         surname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
         userRole.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAccess()));
 
+        logger.trace("adding listener to userTV");
         userTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedUser) -> {
             userModel.setSelectedUser(selectedUser);
         })));
+        logger.info("setUserTV() complete.");
     }
 
 
@@ -68,6 +75,7 @@ public class ManageUsersController extends BaseController implements Initializab
      * @param actionEvent This is triggered when the user activates the Delete User button.
      */
     @FXML private void deleteUser(ActionEvent actionEvent){
+        logger.info("deleteUser() called in ManageUsersController");
         if(userModel.getSelectedUser() != null){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm deletion of user.");
@@ -81,8 +89,10 @@ public class ManageUsersController extends BaseController implements Initializab
                 alert.close();
             }
         } else {
+            logger.warn("user did not select a user to be deleted and was informed.");
             errorLabel.setText("No selected user found. Please select a user to delete.");
         }
+        logger.info("deleteUser() complete.");
     }
 
     /**
@@ -90,53 +100,44 @@ public class ManageUsersController extends BaseController implements Initializab
      * @param actionEvent When the user activates the New User button, we open a window.
      */
     @FXML private void newUser(ActionEvent actionEvent){
-        createUser();
+        newOrEditUser(false);
+    }
+    /**
+     * We use this method to open our edit user view to the user. If this fails we show the user an alert.
+     * @param actionEvent When the user activates the Edit User button, we open a window.
+     */
+    @FXML private void editUser(ActionEvent actionEvent) {
+        if(userTV.getSelectionModel().getSelectedItem() != null) {
+            newOrEditUser(true);
+        }
     }
 
-    private void createUser(){
+    private void newOrEditUser(boolean isEdit){
+        logger.info("newOrEditUser() called in ManageUsersController");
         try {
+            logger.info("Loading NEUser.fxml");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NEUser.fxml"));
             Parent root = loader.load();
             NEUserController controller = loader.getController();
             controller.setNEUserController(false);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
-            stage.setTitle("New user.");
+
+            if(!isEdit) {
+                stage.setTitle("New user.");
+            } else {
+                stage.setTitle("Edit User");
+            }
+
             stage.setScene(scene);
             stage.show();
         }catch (IOException e){
+            logger.error("There was a problem loading NEUser.fxml. CLASS: ManageUsersController CAUSE: ",e);
             String str = "There has been a problem loading NEUser.fxml, please contact system Admin.";
             super.createWarning(str);
         }
+        logger.info("newOrEditUser() complete.");
     }
-
-    /**
-     * We use this method to open our edit user view to the user. If this fails we show the user an alert.
-     * @param actionEvent When the user activates the Edit User button, we open a window.
-     */
-    @FXML private void editUser(ActionEvent actionEvent) {
-        updateUser();
-    }
-
-    private void updateUser(){
-        if(userTV.getSelectionModel().getSelectedItem() != null) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NEUser.fxml"));
-                Parent root = loader.load();
-                NEUserController controller = loader.getController();
-                controller.setNEUserController(true);
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
-                stage.setTitle("Edit user.");
-                stage.setScene(scene);
-                stage.show();
-            } catch (IOException e) {
-                String str = "there has been a problem loading NEUser.fxml, please contact system Admin.";
-                super.createWarning(str);
-            }
-        }
-    }
-
 
     /**
      * This method determines what happens when the user clicks logout. If there is a problem we show an alert.
@@ -148,11 +149,13 @@ public class ManageUsersController extends BaseController implements Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("Initializing ManageUsersController");
         setUserTV();
         setUsernameLabel();
     }
 
     @FXML private void usersAnchorOnClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked anchor pane in ManageUsersController");
         if(userTV.getSelectionModel().getSelectedItem() != null){
             userTV.getSelectionModel().clearSelection();
         }
@@ -160,14 +163,15 @@ public class ManageUsersController extends BaseController implements Initializab
     }
 
     @FXML private void tvOnClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked the tableview in ManageUsersController.");
         if(userTV.getSelectionModel().getSelectedItem() != null){
             if(mouseEvent.getClickCount() == 2){
-                updateUser();
+               newOrEditUser(true);
             }
         }
         if(userTV.getSelectionModel().getSelectedItem() == null){
             if(mouseEvent.getClickCount() == 2){
-                createUser();
+                newOrEditUser(false);
             }
         }
     }

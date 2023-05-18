@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.io.*;
@@ -60,10 +61,13 @@ public class ManageCustomerController extends BaseController implements Initiali
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
     private ProjectModel projectModel = ProjectModel.getInstance();
 
+    private static final Logger logger = LogManager.getLogger("debugLogger");
+
     /**
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name
+        logger.trace("Setting username label in " + this.getClass().getName());
         usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
     }
 
@@ -71,9 +75,11 @@ public class ManageCustomerController extends BaseController implements Initiali
      * We use this to set up the tableview customerTV with relative columns.
      */
     private void setCustomerTableView() {
+        logger.info("setCustomerTableView() called in " + this.getClass().getName());
         customersTV.setItems(customerModel.getCustomersWithWrapper());
         customerModel.loadCustomersWithWrapper();
 
+        logger.trace("Setting columns of customersTV");
         customerAddress.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustAddress()));
         postalCode.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPostalCode().getPostalCode()));
         city.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPostalCode().getCity()));
@@ -81,30 +87,14 @@ public class ManageCustomerController extends BaseController implements Initiali
         customerEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().getCustEmail()));
         projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
 
+        logger.trace("adding listener to customersTV");
         customersTV.getSelectionModel().selectedItemProperty().addListener(((((observable, oldValue, selection) -> {
             if (selection != null) {
                 projectModel.setSelectedProject(selection.getProject());
                 customerModel.setSelectedCustomer(selection.getCustomer());
             }
         }))));
-    }
-
-    @FXML
-    private void openDocumentWindow(MouseEvent mouseEvent) throws IOException {
-        try {
-            if (mouseEvent.getClickCount() == 2) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-                Scene scene = new Scene(root);
-                stage.setTitle("Documentation Manager");
-                stage.setScene(scene);
-                stage.show();
-            }
-        } catch (IOException e) {
-            String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
-            super.createWarning(str);
-        }
+        logger.info("setCustomerTableView() complete.");
     }
 
     @FXML
@@ -113,63 +103,60 @@ public class ManageCustomerController extends BaseController implements Initiali
     }
 
     private void openDocumentation(){
+        logger.info("openDocumentation() called in " + this.getClass().getName());
         try {
             projectModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
+            logger.info("Loading DocumentationView.fxml");
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
             super.getViewPane().getChildren().setAll(n);
         } catch (IOException e) {
+            logger.error("There has been a problem loading DocumentationView.fxml. CLASS: ManageCustomerController CAUSE: ", e);
             String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
             super.createWarning(str);
         }
-    }
-    @FXML
-    private void editCustomer(ActionEvent actionEvent) {
-        if(customersTV.getSelectionModel().getSelectedItem() != null){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NECustomer.fxml"));
-            Parent root = loader.load();
-            NECustomerController controller = loader.getController();
-            controller.setNEController(true);
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("Edit Customer");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
-            super.createWarning(str);
-        }
-        }
+        logger.info("openDocumentation() complete.");
     }
 
     @FXML
     private void createCustomer(ActionEvent actionEvent) {
-        newCustomer();
+        openCustomerWindow(false);
+    }
+    @FXML
+    private void editCustomer(ActionEvent actionEvent) {
+        openCustomerWindow(true);
     }
 
-    private void newCustomer(){
-        if(!authenticationModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NECustomer.fxml"));
-            Parent root = loader.load();
-            NECustomerController controller = loader.getController();
-            controller.setNEController(false);
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setTitle("New customer");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
-            super.createWarning(str);
-        }
+    private void openCustomerWindow(boolean isEdit){
+        logger.info("openCustomerWindow called in " + this.getClass().getName());
+        if(customersTV.getSelectionModel().getSelectedItem() != null){
+            try {
+                logger.info("Loading NECustomer.fxml");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NECustomer.fxml"));
+                Parent root = loader.load();
+                NECustomerController controller = loader.getController();
+                controller.setNEController(isEdit);
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+
+                if(isEdit){
+                    stage.setTitle("Edit Customer");
+                } else {
+                    stage.setTitle("New Customer");
+                }
+
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                logger.error("There has been a problem loading NECustomer.fxml. CLASS: ManagerCustomerController CAUSE: ",e);
+                String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
+                super.createWarning(str);
+            }
         }
     }
+
 
     /**
      * This will log the user out and change the view to the login.
-     * We catch the IOException and show the user a crafted alert.
-     *
      * @param actionEvent triggered by the logout button.
      */
     @FXML
@@ -181,6 +168,7 @@ public class ManageCustomerController extends BaseController implements Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("Initializing ManageCustomerController");
         if(authenticationModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")){
            editCustomerButton.setVisible(false);
            newCustomerButton.setVisible(false);
@@ -188,6 +176,7 @@ public class ManageCustomerController extends BaseController implements Initiali
 
         setCustomerTableView();
         setUsernameLabel();
+        logger.info("Adding listener for search customer in ManageCustomersController.");
         searchCustomer.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -197,6 +186,7 @@ public class ManageCustomerController extends BaseController implements Initiali
     }
 
     @FXML private void onCustomerTVClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked customerTV in " + this.getClass().getName());
         if(customersTV.getSelectionModel().getSelectedItem() != null){
             customerModel.setSelectedCustomer(customersTV.getSelectionModel().getSelectedItem().getCustomer());
             projectModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
@@ -208,16 +198,19 @@ public class ManageCustomerController extends BaseController implements Initiali
 
         if(customersTV.getSelectionModel().getSelectedItem() == null){
             if(mouseEvent.getClickCount() == 2){
-                newCustomer();
+                openCustomerWindow(false);
             }
         }
 
     }
 
     @FXML private void anchorOnClick(MouseEvent mouseEvent) {
+        logger.trace("User clicked the anchor pane in " + this.getClass().getName());
         if(customersTV.getSelectionModel().getSelectedItem() != null){
             customersTV.getSelectionModel().clearSelection();
         }
         customersTV.refresh();
     }
+
+
 }
