@@ -116,7 +116,7 @@ public class ManageCustomerController extends BaseController implements Initiali
         try {
             projectModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
-            super.nav.getViewAnchor().getChildren().setAll(n);
+            super.getViewPane().getChildren().setAll(n);
         } catch (IOException e) {
             String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
             super.createWarning(str);

@@ -1,24 +1,21 @@
 package gui.controller.mainViewControllers;
 
+import gui.*;
 import gui.model.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.*;
 
 
 import java.io.*;
-import java.util.*;
 
 public abstract class BaseController {
 
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    NavigationController nav;
-    public void setNavController(NavigationController nav){
-        this.nav = nav;
-    }
-
+    private ViewPane viewPaneClass = ViewPane.getViewPaneInstance();;
     public void logout(ActionEvent actionEvent){
         try {
             authenticationModel.setLoggedInUser(null);
@@ -47,4 +44,8 @@ public abstract class BaseController {
         alert.show();
     }
 
+
+    public AnchorPane getViewPane() {
+        return viewPaneClass.getViewPane();
+    }
 }

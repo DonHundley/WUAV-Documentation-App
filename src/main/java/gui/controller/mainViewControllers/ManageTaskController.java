@@ -99,7 +99,7 @@ public class ManageTaskController extends BaseController implements Initializabl
         try {
             projectModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
-            super.nav.getViewAnchor().getChildren().setAll(n);
+            super.getViewPane().getChildren().setAll(n);
         }  catch (IOException e) {
             errorLabel.setText("Please select an task to see related documentation.");
         }

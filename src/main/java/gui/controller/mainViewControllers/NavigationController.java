@@ -16,14 +16,15 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class NavigationController extends BaseController{
+    @FXML private AnchorPane baseNavAnchor;
     @FXML private AnchorPane navAnchor;
-    @FXML private AnchorPane viewAnchor;
+     //x300 y0
     @FXML private ImageView imageWUAV;
-    @FXML private AnchorPane baseAnchor;
     @FXML private MFXButton manageProjectsButton;
     @FXML private MFXButton manageCustomerButton;
     @FXML private MFXButton manageUserButton;
 
+    private AnchorPane viewAnchor;
 
 
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
@@ -32,7 +33,12 @@ public class NavigationController extends BaseController{
     private String home;
 
     public void setNavigationController() throws IOException {
-        super.setNavController(this);
+        super.getViewPane();
+        viewAnchor = super.getViewPane();
+        baseNavAnchor.getChildren().add(viewAnchor);
+        viewAnchor.setLayoutX(300);
+        viewAnchor.setLayoutY(0);
+
         String access = loggedInUser.getAccess().toUpperCase();
         switch (access){
             case "ADMIN":
