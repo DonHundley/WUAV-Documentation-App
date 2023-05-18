@@ -4,8 +4,6 @@ import be.*;
 import gui.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.*;
 
@@ -93,47 +91,21 @@ public class NEUserController {
      * This method is used to create a new User if our isEdit boolean == false.
      */
     private void createUser() {
-        if (!userNameTF.getText().isEmpty() && !passTF.getText().isEmpty() && !accessCB.getValue().isEmpty() && !firstNameTF.getText().isEmpty() && !surnameTF.getText().isEmpty()) {
-            if (!validateUsernameTFLength()) {
-                alertUsernameTF();
-            }
-            if (!validatePasswordTFLength()) {
-                alertPasswordTF();
-            }
-            if (!validateFirstNameTFLength()) {
-                alertFirstNameTF();
-            }
-            if (!validateLastNameTFLength()) {
-                alertLastNameTF();
-            }
+        if (validateUserFields()) {
             user = new User(userNameTF.getText(), passTF.getText(), accessCB.getValue(), firstNameTF.getText(), surnameTF.getText());
             functionsModel.createUser(user);
             observablesModel.loadUsers();
             Stage stage = (Stage) createOrEditUser.getScene().getWindow();
             stage.close();
-        } else {
-            String str = "Please fill in all the fields to create a new user";
-            userError(str);
         }
+
     }
 
     /**
      * This method is used to edit the selected User from our persistent model with updated information.
      */
     private void editUser() {
-        if (!userNameTF.getText().isEmpty() && !passTF.getText().isEmpty() && !accessCB.getValue().isEmpty() && !firstNameTF.getText().isEmpty() && !surnameTF.getText().isEmpty()) {
-            if (!validateUsernameTFLength()) {
-                alertUsernameTF();
-            }
-            if (!validatePasswordTFLength()) {
-                alertPasswordTF();
-            }
-            if (!validateFirstNameTFLength()) {
-                alertFirstNameTF();
-            }
-            if (!validateLastNameTFLength()) {
-                alertLastNameTF();
-            }
+        if (validateUserFields()) {
             user.setUserName(userNameTF.getText());
             user.setPassword(passTF.getText());
             user.setAccess(accessCB.getValue());
@@ -143,9 +115,6 @@ public class NEUserController {
             observablesModel.loadUsers();
             Stage stage = (Stage) createOrEditUser.getScene().getWindow();
             stage.close();
-        } else {
-            String str = "Please fill in all the fields to edit a user";
-            userError(str);
         }
     }
 
@@ -230,50 +199,33 @@ public class NEUserController {
      * This method checks if the length of the textfield is bigger than the max length for the field
      * it returns true if the length is okay, false if it's too long
      **/
-    private boolean validateUsernameTFLength() {
-        if (userNameTF.getText().length() > maxUsernameLenght) {
-            return false;
-        } else {
-            return true;
-        }
+    private boolean isUsernameTFValid() {
+        return userNameTF.getText().length() <= maxUsernameLenght;
     }
 
     /**
      * This method checks if the length of the textfield is bigger than the max length for the field
      * it returns true if the length is okay, false if it's too long
      **/
-    private boolean validatePasswordTFLength() {
-        if (passTF.getText().length() > maxPasswordLenght) {
-            return false;
-        } else {
-            return true;
-        }
+    private boolean isPasswordTFValid() {
+        return passTF.getText().length() <= maxPasswordLenght;
     }
 
     /**
      * This method checks if the length of the textfield is bigger than the max length for the field
      * it returns true if the length is okay, false if it's too long
      **/
-    private boolean validateFirstNameTFLength() {
-        if (firstNameTF.getText().length() > maxNameLenght) {
-            return false;
-        } else {
-            return true;
-        }
+    private boolean isFirstNameTFValid() {
+        return firstNameTF.getText().length() <= maxNameLenght;
     }
 
     /**
      * This method checks if the length of the textfield is bigger than the max length for the field
      * it returns true if the length is okay, false if it's too long
      **/
-    private boolean validateLastNameTFLength() {
-        if (surnameTF.getText().length() > maxLastNameLenght) {
-            return false;
-        } else {
-            return true;
-        }
+    private boolean isLastNameTFValid() {
+        return surnameTF.getText().length() <= maxLastNameLenght;
     }
-
 
     /**
      * this method shows an alert to the user if the inserted text field length exceeds the max
@@ -281,7 +233,7 @@ public class NEUserController {
     private void alertUsernameTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Validate Username");
-        alert.setContentText("Username is too long, max is 10 characters.");
+        alert.setContentText("Username is too long, max is " + maxUsernameLenght + " characters.");
         alert.showAndWait();
     }
 
@@ -292,7 +244,7 @@ public class NEUserController {
     private void alertPasswordTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Validate Password");
-        alert.setContentText("Password is too long, max is 50 characters.");
+        alert.setContentText("Password is too long, max is " + maxPasswordLenght + " characters.");
         alert.showAndWait();
     }
 
@@ -303,7 +255,7 @@ public class NEUserController {
     private void alertFirstNameTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Validate First Name");
-        alert.setContentText("First Name is too long, max is 25 characters.");
+        alert.setContentText("First Name is too long, max is " + maxNameLenght + " characters.");
         alert.showAndWait();
     }
 
@@ -314,7 +266,181 @@ public class NEUserController {
     private void alertLastNameTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Validate Last Name");
-        alert.setContentText("Last Name is too long, max is 25 characters.");
+        alert.setContentText("Last Name is too long, max is " + maxLastNameLenght + " characters.");
         alert.showAndWait();
+    }
+
+    /**
+     * This method shows an alert to the user if the inserted username and password lengths exceed the max
+     */
+    private void alertUsernameAndPasswordTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Username and Password");
+        alert.setContentText("Username and password are too long, max is " + maxUsernameLenght + " and " + maxPasswordLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+
+    /**
+     * This method shows an alert to the user if the inserted username and first name lengths exceed the max
+     */
+    private void alertUsernameAndFirstNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Username and First Name");
+        alert.setContentText("Username and first name are too long, max is " + maxUsernameLenght + " and " + maxNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+
+    /**
+     * This method shows an alert to the user if the inserted username and last name lengths exceed the max
+     */
+    private void alertUsernameAndLastNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Username and Last Name");
+        alert.setContentText("Username and last name are too long, max is " + maxUsernameLenght + " and " + maxLastNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * This method shows an alert to the user if the inserted password and first name lengths exceed the max
+     */
+    private void alertPasswordAndFirstNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Password and First Name");
+        alert.setContentText("Password and first name are too long, max is " + maxPasswordLenght + " and " + maxNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * This method shows an alert to the user if the inserted password and last name lengths exceed the max
+     */
+    private void alertPasswordAndLastNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Password and Last Name");
+        alert.setContentText("Password and last name are too long, max is " + maxPasswordLenght + " and " + maxLastNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * This method shows an alert to the user if the inserted first name and last name lengths exceed the max
+     */
+    private void alertFirstNameAndLastNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate First Name and Last Name");
+        alert.setContentText("First name and last name are too long, max is " + maxNameLenght + " characters.");
+        alert.showAndWait();
+    }
+
+    /*Combination of 3 fields validation*/
+
+    /**
+     * This method shows an alert to the user if the inserted username, password, and first name lengths exceed the max
+     */
+    private void alertUsernamePasswordAndFirstNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Username, Password, and First Name");
+        alert.setContentText("Username, password, and first name are too long, max is " + maxUsernameLenght + ", " + maxPasswordLenght + ",  and " + maxNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * This method shows an alert to the user if the inserted username, password, and last name lengths exceed the max
+     */
+    private void alertUsernamePasswordAndLastNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Username, Password, and Last Name");
+        alert.setContentText("Username, password, and last name are too long, max is " + maxUsernameLenght + ", " + maxPasswordLenght + ",  and " + maxLastNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * This method shows an alert to the user if the inserted username, first name, and last name lengths exceed the max
+     */
+    private void alertUsernameFirstNameAndLastNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Username, First Name, and Last Name");
+        alert.setContentText("Username, first name, and last name are too long, max is " + maxUsernameLenght + " and " + maxNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * This method shows an alert to the user if the inserted password, first name, and last name lengths exceed the max
+     */
+    private void alertPasswordFirstNameAndLastNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Password, First Name, and Last Name");
+        alert.setContentText("Password, first name, and last name are too long, max is " + maxPasswordLenght + " and " + maxNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * This method shows an alert to the user if the inserted username, password, first name, and last name lengths exceed the max
+     */
+    private void alertUsernamePasswordFirstNameAndLastNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Username, Password, First Name, and Last Name");
+        alert.setContentText("Username, password, first name, and last name are too long, max is " + maxUsernameLenght + ", " + maxPasswordLenght + ", " + maxNameLenght + ", " + maxLastNameLenght + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * method to check all combination of fields and show the corresponding alerts or error message
+     **/
+    private boolean validateUserFields() {
+        boolean isValid = true;
+
+        if (userNameTF.getText().isEmpty() || passTF.getText().isEmpty() || accessCB.getSelectionModel().getSelectedItem()==null || firstNameTF.getText().isEmpty() || surnameTF.getText().isEmpty()) {
+            String str = "Please fill in all the fields to create a new user";
+            userError(str);
+            isValid = false;
+        } else if (!isUsernameTFValid() && !isPasswordTFValid() && !isFirstNameTFValid() && !isLastNameTFValid()) {
+            alertUsernamePasswordFirstNameAndLastNameTF();
+            isValid = false;
+        } else if (!isUsernameTFValid() && !isPasswordTFValid() && !isFirstNameTFValid()) {
+            alertUsernamePasswordAndFirstNameTF();
+            isValid = false;
+        } else if (!isUsernameTFValid() && !isPasswordTFValid() && !isLastNameTFValid()) {
+            alertUsernamePasswordAndLastNameTF();
+            isValid = false;
+        } else if (!isUsernameTFValid() && !isFirstNameTFValid() && !isLastNameTFValid()) {
+            alertUsernameFirstNameAndLastNameTF();
+            isValid = false;
+        } else if (!isPasswordTFValid() && !isFirstNameTFValid() && !isLastNameTFValid()) {
+            alertPasswordFirstNameAndLastNameTF();
+            isValid = false;
+        } else if (!isUsernameTFValid() && !isPasswordTFValid()) {
+            alertUsernameAndPasswordTF();
+            isValid = false;
+        } else if (!isUsernameTFValid() && !isFirstNameTFValid()) {
+            alertUsernameAndFirstNameTF();
+            isValid = false;
+        } else if (!isUsernameTFValid() && !isLastNameTFValid()) {
+            alertUsernameAndLastNameTF();
+            isValid = false;
+        } else if (!isPasswordTFValid() && !isFirstNameTFValid()) {
+            alertPasswordAndFirstNameTF();
+            isValid = false;
+        } else if (!isPasswordTFValid() && !isLastNameTFValid()) {
+            alertPasswordAndLastNameTF();
+            isValid = false;
+        } else if (!isFirstNameTFValid() && !isLastNameTFValid()) {
+            alertFirstNameAndLastNameTF();
+            isValid = false;
+        } else if (!isUsernameTFValid()) {
+            alertUsernameTF();
+            isValid = false;
+        } else if (!isPasswordTFValid()) {
+            alertPasswordTF();
+            isValid = false;
+        } else if (!isFirstNameTFValid()) {
+            alertFirstNameTF();
+            isValid = false;
+        } else if (!isLastNameTFValid()) {
+            alertLastNameTF();
+            isValid = false;
+        }
+
+        return isValid;
     }
 }
