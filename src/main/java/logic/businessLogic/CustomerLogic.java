@@ -19,9 +19,8 @@ public class CustomerLogic {
         return postalCodeDAO.getAllPostalCodes();
     }
 
-    public List<CustomerWrapper> searchCustomer(String query) {
+    public List<CustomerWrapper> searchCustomer(List<CustomerWrapper> customers,String query) {
         logger.info("Creating customer filtered list");
-        List<CustomerWrapper> customers = customerDAO.getAllCustomersWithProjects();
         List<CustomerWrapper> filtered = new ArrayList<>();
         logger.info("Checking list for query");
         for(CustomerWrapper c : customers){

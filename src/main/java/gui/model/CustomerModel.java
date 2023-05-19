@@ -26,7 +26,7 @@ public class CustomerModel {
 
     public void search(String query) {
         customerswithWrapper.clear();
-        customerswithWrapper.addAll(customerLogic.searchCustomer(query));
+        customerswithWrapper.addAll(customerLogic.searchCustomer(customerLogic.getCustomersWithProjects(),query));
     }
 
     /**

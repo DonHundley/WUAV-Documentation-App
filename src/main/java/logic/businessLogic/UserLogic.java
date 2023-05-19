@@ -62,10 +62,10 @@ public class UserLogic {
 
 
 
-    public HashMap<Integer, Integer> loginInformation(){
+    public HashMap<Integer, Integer> loginInformation(List<User> allUsers){
         logger.info("Creating hashmap of login information");
         HashMap<Integer, Integer> loginInfo = new HashMap<>();
-        List<User> allUsers = userDAO.getAllUsers();
+
         if(allUsers.isEmpty()){
             logger.warn("The list of users is empty!");
         }

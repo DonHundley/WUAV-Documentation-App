@@ -139,10 +139,10 @@ public class ProjectLogic {
         worksOnDAO.deleteWork(selectedUser, selectedProject);
     }
 
-    public List<TaskWrapper> tasksByUserID(User user){
+    public List<TaskWrapper> tasksByUserID(List<Integer> projectIDsByUserIDs){
         logger.info("Creating list in ProjectLogic. tasksByUserID()");
         List<TaskWrapper> tasksByUserID = new ArrayList<>();
-        List<Integer> projectIDsByUserIDs = worksOnDAO.getProjectIDsByUserID(user);
+
         List<TaskWrapper> getTasksInfo = getTasksInfo();
 
         logger.info("Checking lists projectIDsByUserIDs and getTasksInfo");
@@ -166,4 +166,8 @@ public class ProjectLogic {
         return tasksByUserID;
     }
     public List<TaskPictures> getTaskPicturesByTask(Task task){return pictureDAO.getPictureByDocumentID(task);}
+
+    public List<Integer> getProjectIDsByUserID(User user){
+        return worksOnDAO.getProjectIDsByUserID(user);
+    }
 }

@@ -28,6 +28,6 @@ public class AuthenticationModel {
         this.loggedInUser = loggedInUser;
     }
     public HashMap<Integer, Integer> userInfo() {
-        return userLogic.loginInformation();
+        return userLogic.loginInformation(userLogic.getUsers());
     }
 }
