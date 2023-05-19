@@ -1,6 +1,7 @@
 package gui.controller.newAndUpdateControllers;
 
 import be.*;
+import gui.controller.mainViewControllers.BaseController;
 import gui.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
@@ -12,7 +13,7 @@ import org.apache.logging.log4j.*;
 
 import java.util.*;
 
-public class EditTaskController {
+public class EditTaskController extends BaseController {
 
 
     // FXML
@@ -31,7 +32,6 @@ public class EditTaskController {
     private ProjectModel projectModel = ProjectModel.getInstance();
 
 
-
     // Instance of our task to be edited.
     private Task selectedTask;
 
@@ -46,7 +46,7 @@ public class EditTaskController {
      * This is used to set our fields with relevant information if that information exists.
      * This helps the user see what information already exists in a given task while they are editing it.
      */
-    public void setFieldsOnEdit(){
+    public void setFieldsOnEdit() {
         selectedTask = projectModel.getSelectedTask();
         setStateSelection();
 
@@ -70,6 +70,7 @@ public class EditTaskController {
 
     /**
      * Changes the state of the task.
+     *
      * @param actionEvent This triggers when the user selects an option in the selected task combobox.
      */
     private void changeState(javafx.event.ActionEvent actionEvent) {
@@ -79,6 +80,7 @@ public class EditTaskController {
 
     /**
      * This will update the selected task with any changes the user has done.
+     *
      * @param actionEvent This triggers when the user activates the edit task button.
      */
     @FXML
@@ -94,16 +96,16 @@ public class EditTaskController {
                 logger.warn("Task editing failed:task name exceeds the maximum length");
                 return;
             }
-            functionsModel.updateTask(selectedTask);
+            projectModel.updateTask();
             logger.info("Task edited");
-            observables.loadTasksByProject(persistenceModel.getSelectedProject());
+            projectModel.loadTasksByProject();
 
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
         } else {
             String str = "No name chosen for the task to edit";
-            taskError(str);
+            super.createWarning(str);
             logger.warn("Task editing failed: empty field for task name");
         }
     }
@@ -111,9 +113,11 @@ public class EditTaskController {
 
     /**
      * Closes the window with an action event.
+     *
      * @param actionEvent triggers when the user activates the cancel button.
      */
-    @FXML private void cancel(ActionEvent actionEvent){
+    @FXML
+    private void cancel(ActionEvent actionEvent) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

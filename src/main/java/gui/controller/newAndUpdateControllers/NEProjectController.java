@@ -91,9 +91,9 @@ public class NEProjectController extends BaseController {
         if (!projectName.getText().isEmpty()) {
             if (validateProjectNameTFLength()) {
                 project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), nEProjectTV.getSelectionModel().getSelectedItem().getCustID());
-                functionsModel.createProject(project);
+                projectModel.createProject(project);
 
-                observablesModel.loadProjects();
+                projectModel.loadProjects();
                 logger.info("New project created");
                 Stage stage = (Stage) createOrEditProject.getScene().getWindow();
                 stage.close();
@@ -103,7 +103,7 @@ public class NEProjectController extends BaseController {
             }
         } else {
             String str = "Please fill in the project name";
-            projectError(str);
+            super.createWarning(str);
             logger.warn("Project creation failed: empty project name");
         }
     }
@@ -117,9 +117,9 @@ public class NEProjectController extends BaseController {
             if (validateProjectNameTFLength()) {
                 project.setProjName(projectName.getText());
 
-                functionsModel.editProject(project);
+                projectModel.editProject(project);
 
-                observablesModel.loadProjects();
+                projectModel.loadProjects();
                 logger.info("Project edited");
                 Stage stage = (Stage) createOrEditProject.getScene().getWindow();
                 stage.close();
@@ -129,7 +129,7 @@ public class NEProjectController extends BaseController {
             }
         } else {
             String str = "Please fill in the project name";
-            projectError(str);
+            super.createWarning(str);
             logger.warn("Project update failed: empty project name");
         }
 

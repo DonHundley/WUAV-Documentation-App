@@ -115,8 +115,8 @@ public class NEUserController extends BaseController {
             user.setAccess(accessCB.getValue());
             user.setFirstName(firstNameTF.getText());
             user.setLastName(surnameTF.getText());
-            functionsModel.editUser(user);
-            observablesModel.loadUsers();
+            userModel.editUser(user);
+            userModel.loadUsers();
             Stage stage = (Stage) createOrEditUser.getScene().getWindow();
             stage.close();
             logger.info("User edited successfully");
@@ -384,7 +384,7 @@ public class NEUserController extends BaseController {
 
         if (userNameTF.getText().isEmpty() || passTF.getText().isEmpty() || accessCB.getSelectionModel().getSelectedItem() == null || firstNameTF.getText().isEmpty() || surnameTF.getText().isEmpty()) {
             String str = "Please fill in all the fields";
-            userError(str);
+            super.createWarning(str);
             isValid = false;
         } else if (!isUsernameTFValid() && !isPasswordTFValid() && !isFirstNameTFValid() && !isLastNameTFValid()) {
             alertUsernamePasswordFirstNameAndLastNameTF();

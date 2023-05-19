@@ -61,7 +61,7 @@ public class NewTaskController extends BaseController implements Initializable {
         if (selectedProject != null && !taskName.getText().isEmpty()) {
             if (validateTaskNameTFLength()) {
                 Task task = new Task(selectedProject.getProjID(), taskName.getText(), "No description", "Not Started");
-                functionsModel.createTask(task);
+                projectModel.createTask(task);
                 logger.info("Task created");
             } else {
                 alertTaskNameTF();
@@ -69,7 +69,7 @@ public class NewTaskController extends BaseController implements Initializable {
             }
         } else {
             String str = "Either the selected project does not exist or a name has not been chosen for the task.";
-            newTaskError(str);
+            super.createWarning(str);
             logger.warn("Task creation failed: empty field for task name");
         }
     }
