@@ -123,12 +123,12 @@ public class ManageCustomerController extends BaseController implements Initiali
     }
     @FXML
     private void editCustomer(ActionEvent actionEvent) {
-        openCustomerWindow(true);
+        if(customersTV.getSelectionModel().getSelectedItem() != null){openCustomerWindow(true);}
     }
 
     private void openCustomerWindow(boolean isEdit){
         logger.info("openCustomerWindow called in " + this.getClass().getName());
-        if(customersTV.getSelectionModel().getSelectedItem() != null){
+
             try {
                 logger.info("Loading NECustomer.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NECustomer.fxml"));
@@ -151,7 +151,7 @@ public class ManageCustomerController extends BaseController implements Initiali
                 String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
                 super.createWarning(str);
             }
-        }
+
     }
 
 
