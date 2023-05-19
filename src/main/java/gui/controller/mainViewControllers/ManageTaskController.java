@@ -111,7 +111,7 @@ public class ManageTaskController extends BaseController implements Initializabl
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
             super.getViewPane().getChildren().setAll(n);
         }  catch (IOException e) {
-            logger.warn("User may not have selected a task to see information for, user was informed. Potential problem: " + e);
+            logger.warn("User may not have selected a task to see information for, user was informed. Potential problem: ", e);
             errorLabel.setText("Please select an task to see related documentation.");
         }
     }

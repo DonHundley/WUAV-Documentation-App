@@ -57,17 +57,19 @@ public class NEUserController extends BaseController {
     /**
      * This method is used to set our models and choose if we are editing or creating a user.
      *
-     * @param isEdit          if true, we are editing a user.
+     * @param isEdit if true, we are editing a user.
      */
     public void setNEUserController(Boolean isEdit) {
-
+        logger.trace("setNEUserController() called.");
         setEdit(isEdit); // sets the boolean to store if we are editing or creating.
         if (isEdit) { // if we are editing we set all text fields with the current information.
             setOnEdit();
             createOrEditUser.setText("Edit");
+            logger.trace("Editing user");
         } else {
             windowTitleLabel.setText("New User");
             createOrEditUser.setText("Create");
+            logger.trace("Creating new user.");
         }
         setAccessSelection();
     }
@@ -160,6 +162,7 @@ public class NEUserController extends BaseController {
      * We add all of our access levels into our access selection combobox and then set the selected value to the current value stored in our selected user if editing.
      */
     private void setAccessSelection() {
+        logger.trace("setting access combobox.");
         for (String level : accessLevels) {
             accessCB.getItems().add(level);
         }
@@ -175,6 +178,7 @@ public class NEUserController extends BaseController {
      * @param actionEvent This triggers when the user selects an option in the access level combobox.
      */
     private void changeAccess(javafx.event.ActionEvent actionEvent) {
+        logger.trace("Changing access level of user.");
         if (isEdit) {
             user.setAccess(accessCB.getValue());
         }

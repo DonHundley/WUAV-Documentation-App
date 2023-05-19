@@ -73,7 +73,7 @@ public abstract class BaseController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            logger.error("There has been a problem loading NewTask.fxml. CLASS: BaseController CAUSE: ", e);
+            logger.error("There has been a problem loading NewTask.fxml.", e);
             String str = "There has been an issue loading NewTask.fxml, please contact system Admin.";
             createWarning(str);
         }

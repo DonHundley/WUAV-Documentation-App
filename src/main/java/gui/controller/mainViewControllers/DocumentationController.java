@@ -230,7 +230,7 @@ public class DocumentationController extends BaseController implements Initializ
             stage.show();
 
         } catch (IOException e) {
-            logger.error("There has been an issue loading ImageDialogView.fxml. ClASS: DocumentationController CAUSE: ", e);
+            logger.error("There has been an issue loading ImageDialogView.fxml.", e);
             String str = "There has been an issue loading ImageDialogView.fxml, please contact system admin.";
             super.createWarning(str);
         }
@@ -338,7 +338,7 @@ public class DocumentationController extends BaseController implements Initializ
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
-                logger.error("There has been a problem loading EditTask.fxml. CLASS: DocumentationController CAUSE: " , e);
+                logger.error("There has been a problem loading EditTask.fxml." , e);
                 String str = "There has been an issue loading EditTask.fxml, please contact system Admin.";
                 super.createWarning(str);
             }
@@ -367,7 +367,7 @@ public class DocumentationController extends BaseController implements Initializ
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
-                logger.error("There has been a problem loading AddTaskPictures.fxml. CLASS: DocumentationController CAUSE: ", e);
+                logger.error("There has been a problem loading AddTaskPictures.fxml.", e);
                 String str = "There has been a problem loading AddTaskPictures.fxml, please contact system Admin.";
                 super.createWarning(str);
             }
@@ -449,7 +449,7 @@ public class DocumentationController extends BaseController implements Initializ
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
-                logger.error("There has been a problem loading EditLayout.fxml. CLASS: DocumentationController CAUSE: ",e);
+                logger.error("There has been a problem loading EditLayout.fxml.",e);
                 String str = "There has been an issue loading EditLayout.fxml, please contact system Admin";
                 super.createWarning(str);
             }
@@ -494,7 +494,7 @@ public class DocumentationController extends BaseController implements Initializ
                 stage.show();
 
             } catch (IOException e) {
-                logger.error("There has been an issue loading ExportReportView.fxml. CLASS: DocumentationController CAUSE: ", e);
+                logger.error("There has been an issue loading ExportReportView.fxml.", e);
                 String str = "There has been an issue loading ExportReportView.fxml, please contact system Admin.";
                 super.createWarning(str);
             }

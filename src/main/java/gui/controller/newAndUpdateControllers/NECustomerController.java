@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.util.*;
@@ -41,23 +42,26 @@ public class NECustomerController extends BaseController {
     // True if editing, false if creating a new customer.
     private boolean isEdit;
 
+    private static final Logger logger = LogManager.getLogger("debugLogger");
     /**
      * This method is used to set our models and choose if we are editing or creating a customer.
      *
      * @param isEdit          if true, we are editing a customer.
      */
     public void setNEController(Boolean isEdit) {
-
+        logger.trace("setNEController() called.");
         setEdit(isEdit); // sets the boolean to store if we are editing or creating.
         if (isEdit) { // if we are editing we set all text fields with the current information.
             setUpPostalCodeTV();
             setOnEdit();
+            logger.trace("Customer is being edited");
         } else {
             setUpPostalCodeTV();
             windowTitleLabel.setText("New Customer");
             createOrEditCustomer.setText("Create");
+            logger.trace("Customer is being created.");
         }
-
+        logger.trace("setNEController() complete.");
     }
 
     /**
@@ -78,6 +82,7 @@ public class NECustomerController extends BaseController {
      * This method is used to create a new customer if our isEdit boolean == false.
      */
     private void createCustomer() {
+        logger.info("Creating customer.");
         if (!customerName.getText().isEmpty() && !customerEmail.getText().isEmpty() && !customerAddress.getText().isEmpty() && postalCodeTV.getSelectionModel().getSelectedItem() != null) {
             customer = new Customer(customerName.getText(), customerEmail.getText(), customerAddress.getText(), postalCodeTV.getSelectionModel().getSelectedItem().getPostalCode());
             customerModel.createCustomer(customer);
@@ -85,16 +90,18 @@ public class NECustomerController extends BaseController {
             Stage stage = (Stage) createOrEditCustomer.getScene().getWindow();
             stage.close();
         } else {
+            logger.warn("Customer creation failed. User informed.");
             String str = "Please fill all the fields to create a customer";
             super.createWarning(str);
-
         }
+        logger.info("Customer creation complete.");
     }
 
     /**
      * This method is used to edit the selected customer from our persistent model with updated information.
      */
     private void editCustomer() {
+        logger.info("Editing customer.");
         if (!customerName.getText().isEmpty() && !customerEmail.getText().isEmpty() && !customerAddress.getText().isEmpty() && postalCodeTV.getSelectionModel().getSelectedItem() != null) {
             customer.setCustName(customerName.getText());
             customer.setCustAddress(customerAddress.getText());
@@ -102,14 +109,14 @@ public class NECustomerController extends BaseController {
             customer.setPostalCode(postalCodeTV.getSelectionModel().getSelectedItem().getPostalCode());
 
             customerModel.editCustomer(customer);
-
             customerModel.loadCustomersWithWrapper();
+            logger.info("Edit successful.");
             Stage stage = (Stage) createOrEditCustomer.getScene().getWindow();
             stage.close();
         } else {
             String str = "Please fill all the fields to edit a customer";
             super.createWarning(str);
-
+            logger.warn("Edit customer failed. User warned.");
         }
     }
 
@@ -141,6 +148,7 @@ public class NECustomerController extends BaseController {
                 }
             }
         } else {
+            logger.warn("Could not find user to be edited for setOnEdit() in NECustomerController.");
             String str = "Could not find a customer to be edited. Please contact system admin. Class: NECustomerController.";
             super.createWarning(str);
         }
@@ -148,6 +156,7 @@ public class NECustomerController extends BaseController {
 
 
     private void setUpPostalCodeTV() {
+        logger.trace("Setting postalCodeTV");
         postalCodeTV.setItems(customerModel.getPostalCodes());
         customerModel.loadPostalCodes();
 

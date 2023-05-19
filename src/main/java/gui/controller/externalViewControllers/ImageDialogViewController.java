@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.apache.logging.log4j.*;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,12 +25,15 @@ public class ImageDialogViewController implements Initializable {
     private ImageView largeImg;
     private int currentImageIndex;
 
-    private List<Image> imageList = new ArrayList<Image>();
+    private List<Image> imageList = new ArrayList<>();
+
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * this method sets the selected image in the image dialog view and updates the current image index
      **/
     public void setSelectedImage(Image image) {
+        logger.trace("setSelectedImage() called");
         largeImg.setImage(image);
         currentImageIndex = getImageIndex(image);
         setCurrentImageIndex(currentImageIndex);
@@ -68,7 +72,7 @@ public class ImageDialogViewController implements Initializable {
     @FXML
     public void clickNextImg(ActionEvent actionEvent) {
         currentImageIndex++;
-
+        logger.trace("Selecting next image.");
         if (currentImageIndex >= imageList.size()) {
             currentImageIndex = 0;
         }
@@ -100,6 +104,7 @@ public class ImageDialogViewController implements Initializable {
     @FXML
     public void clickPreviousImg(ActionEvent actionEvent) {
         currentImageIndex--;
+        logger.trace("Selecting previous image.");
         if (currentImageIndex < 0) {
             currentImageIndex = imageList.size() - 1;
         }
@@ -112,18 +117,15 @@ public class ImageDialogViewController implements Initializable {
 
     }
 
-/** In the initialize method, event handlers are set up for the "Previous" and "Next" buttons**/
+    /**
+     * In the initialize method, event handlers are set up for the "Previous" and "Next" buttons
+     * **/
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("Initializing ImageDialogViewController.");
+        previousButton.setOnAction(this::clickPreviousImg);
 
-        previousButton.setOnAction(event -> {
-            clickPreviousImg(event);
-        });
-
-        nextButton.setOnAction(event -> {
-            clickNextImg(event);
-        });
-
+        nextButton.setOnAction(this::clickNextImg);
     }
 
 }

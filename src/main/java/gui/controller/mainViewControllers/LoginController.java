@@ -59,7 +59,7 @@ public class LoginController extends BaseController implements Initializable{
                             logger.info("User login completed.");
                             break;
                         } catch (IOException e){
-                            logger.error("There has been a problem loading NavigationView.fxml in CLASS: LoginController CAUSE: ",e );
+                            logger.error("There has been a problem loading NavigationView.fxml. ",e );
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Error");
                             alert.setHeaderText("There has been a problem loading NavigationView, please contact System administrator.");

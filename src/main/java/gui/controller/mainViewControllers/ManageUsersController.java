@@ -132,7 +132,7 @@ public class ManageUsersController extends BaseController implements Initializab
             stage.setScene(scene);
             stage.show();
         }catch (IOException e){
-            logger.error("There was a problem loading NEUser.fxml. CLASS: ManageUsersController CAUSE: ",e);
+            logger.error("There was a problem loading NEUser.fxml.",e);
             String str = "There has been a problem loading NEUser.fxml, please contact system Admin.";
             super.createWarning(str);
         }

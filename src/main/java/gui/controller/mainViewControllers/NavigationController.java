@@ -66,7 +66,7 @@ public class NavigationController extends BaseController{
                     super.createWarning(str);
             }
         }catch (IOException e){
-            logger.error("There has been a problem loading the appropriate view file for access level " + access + ". Cause: ", e);
+            logger.error("There has been a problem loading the appropriate view file for access level " + access + ".", e);
         }
         logger.info("setNavigationController() complete.");
     }
@@ -122,7 +122,7 @@ public class NavigationController extends BaseController{
         try {
             n = FXMLLoader.load(getClass().getResource(home));
         } catch (IOException e) {
-            logger.error("There was a problem loading " + home + " CAUSE: " , e);
+            logger.error("There was a problem loading " + home + ". " , e);
         }
         viewAnchor.getChildren().setAll(n);
         logger.trace("home() complete.");
@@ -138,7 +138,7 @@ public class NavigationController extends BaseController{
         try {
             n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/ManageProjectView.fxml"));
         } catch (IOException e) {
-            logger.error("There was a problem loading ManageProjectView.fxml. CAUSE: ",e);
+            logger.error("There was a problem loading ManageProjectView.fxml.",e);
         }
         viewAnchor.getChildren().setAll(n);
         logger.trace("manageProjects() complete.");
@@ -154,7 +154,7 @@ public class NavigationController extends BaseController{
         try {
             n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/ManageCustomersView.fxml"));
         } catch (IOException e) {
-            logger.error("There was a problem loading ManageCustomersView.fxml. CAUSE: ", e);
+            logger.error("There was a problem loading ManageCustomersView.fxml.", e);
         }
         viewAnchor.getChildren().setAll(n);
         logger.trace("manageCustomers() complete.");
@@ -170,7 +170,7 @@ public class NavigationController extends BaseController{
         try {
             n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/ManageUsersView.fxml"));
         } catch (IOException e) {
-            logger.error("There has been a problem loading ManageUsersView.fxml. CAUSE: ",e);
+            logger.error("There has been a problem loading ManageUsersView.fxml.",e);
         }
         viewAnchor.getChildren().setAll(n);
         logger.trace("manageUsers() complete.");

@@ -49,7 +49,7 @@ public class PictureDAO {
                 logger.warn("The ID for TaskPictures was not set correctly");
             }
         } catch (SQLException | IOException e) {
-            logger.error("There has been an issue adding TaskPictures to the database. CLASS: PictureDAO CAUSE: " + e);
+            logger.error("There has been an issue adding TaskPictures to the database.", e);
         }
         logger.info("Returning new TaskPictures");
         return new TaskPictures(id, taskPictures.getDocID(), taskPictures.getPictureAbsolute(), taskPictures.getDeviceName(), taskPictures.getPassword());
@@ -75,7 +75,7 @@ public class PictureDAO {
             inStream.close();
 
         } catch (SQLException | IOException e) {
-            logger.error("There was an issue updating TaskPictures. CLASS: PictureDAO CAUSE: " + e);
+            logger.error("There was an issue updating TaskPictures.", e);
         }
         logger.info("Pictures update complete.");
     }
@@ -95,7 +95,7 @@ public class PictureDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("There has been a problem deleting pictures. CLASS: PictureDAO CAUSE: " + e);
+            logger.error("There has been a problem deleting pictures." , e);
         }
         logger.info("Picture deletion complete.");
     }
@@ -130,7 +130,7 @@ public class PictureDAO {
                 logger.warn("The list taskPictures is empty!");
             }
         } catch (SQLException e) {
-            logger.error("There has been an error creating the list taskPictures. CLASS: PictureDAO CAUSE: " + e);
+            logger.error("There has been an error creating the list taskPictures." , e);
         }
         logger.info("Returning list.");
         return taskPictures;
@@ -162,7 +162,7 @@ public class PictureDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem getting picture by ID. CLASS: PictureDAO CAUSE: " + e);
+            logger.error("There has been a problem getting picture by ID.", e);
         }
         logger.info("Process complete.");
         return null;
@@ -198,7 +198,7 @@ public class PictureDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem creating a list of pictures by document ID. CLASS: PictureDAO CAUSE: " + e);
+            logger.error("There has been a problem creating a list of pictures by document ID." , e);
         }
         logger.info("Returning list.");
         return taskPicturesByDocID;

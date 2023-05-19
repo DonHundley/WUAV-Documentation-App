@@ -39,18 +39,13 @@ public class NewTaskController extends BaseController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
-    /**
-     * This method is used to set our models and which project a task will be added to.
-     */
-    public void setNewTaskController() {
-        setSelectedProject();
-        windowTitleLabel.setText("New User");
-    }
 
     private void setSelectedProject() {
+        logger.trace("Setting selected project for new Task.");
         if (projectModel.getSelectedProject() != null) {
             this.selectedProject = projectModel.getSelectedProject();
         } else {
+            logger.warn("There was a problem finding the project for setSelectedProject() in NewTaskController.");
             String str = "Selected project could not be found, please contact system admin. Error location: NewTaskController.";
             super.createWarning(str);
         }
@@ -94,6 +89,7 @@ public class NewTaskController extends BaseController implements Initializable {
 
     @FXML
     private void createTask(ActionEvent actionEvent) {
+        logger.trace("Creating new task.");
         constructTask();
         projectModel.loadProjects();
         Stage stage = (Stage) createTask.getScene().getWindow();

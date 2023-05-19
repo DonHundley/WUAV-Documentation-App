@@ -110,7 +110,7 @@ public class ManageCustomerController extends BaseController implements Initiali
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
             super.getViewPane().getChildren().setAll(n);
         } catch (IOException e) {
-            logger.error("There has been a problem loading DocumentationView.fxml. CLASS: ManageCustomerController CAUSE: ", e);
+            logger.error("There has been a problem loading DocumentationView.fxml.", e);
             String str = "There has been an error loading DocumentationView.fxml. Please contact system Admin.";
             super.createWarning(str);
         }
@@ -147,7 +147,7 @@ public class ManageCustomerController extends BaseController implements Initiali
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
-                logger.error("There has been a problem loading NECustomer.fxml. CLASS: ManagerCustomerController CAUSE: ",e);
+                logger.error("There has been a problem loading NECustomer.fxml.",e);
                 String str = "There has been an error loading NECustomer.fxml. Please contact system Admin.";
                 super.createWarning(str);
             }

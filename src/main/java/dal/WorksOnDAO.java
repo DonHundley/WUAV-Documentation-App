@@ -30,7 +30,7 @@ public class WorksOnDAO {
             statement.execute();
 
         } catch (SQLException e) {
-            logger.error("There has been a problem creating work for the user. CLASS: WorksOnDAO CAUSE: " + e);
+            logger.error("There has been a problem creating work for the user. ", e);
         }
         logger.info("createWork process complete.");
     }
@@ -51,7 +51,7 @@ public class WorksOnDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("There has been a problem deleting work from the user.");
+            logger.error("There has been a problem deleting work from the user.",e);
         }
         logger.info("The delete work process is complete.");
     }
@@ -87,7 +87,7 @@ public class WorksOnDAO {
                 logger.warn("The method getProjectIDsByUserID in WorksOnDAO has returned an empty list!");
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem creating a list of projects by user ID. CLASS: WorksOnDAO CAUSE: " + e);
+            logger.error("There has been a problem creating a list of projects by user ID.", e);
         }
         logger.info("Returning list, process complete.");
         return projectIDsByUserID;

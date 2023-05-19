@@ -45,7 +45,7 @@ public class UserDAO {
             }
 
         } catch (SQLException e) {
-            logger.error("There has been a problem creating the user. CLASS: UserDAO CAUSE: " + e);
+            logger.error("There has been a problem creating the user." , e);
         }
         logger.info("Returning new user, process complete.");
         return new User(id, user.getUserName(), user.getPassword(), user.getAccess(), user.getFirstName(), user.getLastName());
@@ -71,7 +71,7 @@ public class UserDAO {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("There has been a problem updating the user. CLASS: UserDAO CAUSE: " + e);
+            logger.error("There has been a problem updating the user." , e);
         }
         logger.info("Update user process finished.");
     }
@@ -91,7 +91,7 @@ public class UserDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("There was a problem deleting the user. CLASS: UserDAO CAUSE: " + e);
+            logger.error("There was a problem deleting the user." ,e);
         }
         logger.info("User deletion process finished.");
     }
@@ -127,7 +127,7 @@ public class UserDAO {
                 logger.warn("The list of users is empty!");
             }
         } catch (SQLException e) {
-            logger.error("There has beeen a problem creating a list of users. CLASS: UserDAO CAUSE: " + e);
+            logger.error("There has beeen a problem creating a list of users." , e);
         }
         logger.info("Returning list of users, process finished.");
         return users;
@@ -161,7 +161,7 @@ public class UserDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem getting user by ID. CLASS: UserDAO CAUSE: " + e);
+            logger.error("There has been a problem getting user by ID. " ,e);
         }
         logger.info("Get user by ID process complete.");
         return null;
@@ -196,7 +196,7 @@ public class UserDAO {
                 logger.warn("The list of technicians is empty!");
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem fetching a list of technicians. CLASS: UserDAO CAUSE: " + e);
+            logger.error("There has been a problem fetching a list of technicians." , e);
         }
         logger.info("Returning list of technicians, process complete.");
         return technicians;
@@ -240,7 +240,7 @@ public class UserDAO {
                 logger.warn("getTechWithAssignedTasks() in UserDAO has created an empty list!");
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem creating the list of techs with tasks. CLASS: UserDAO CAUSE: " + e);
+            logger.error("There has been a problem creating the list of techs with tasks. " , e);
         }
         logger.info("returning list of users, process finished.");
         return users;

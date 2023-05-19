@@ -8,6 +8,7 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
 import java.io.*;
@@ -35,6 +36,7 @@ public class AddTaskPicturesController extends BaseController {
 
     private String pictureAbsolute;
 
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * Opens the filechooser for pictures.
@@ -50,11 +52,12 @@ public class AddTaskPicturesController extends BaseController {
      * @param actionEvent triggered when the user activates the create button.
      */
     @FXML private void createTaskPictures(ActionEvent actionEvent){
+        logger.trace("createTaskPictures() called.");
         TaskPictures taskPictures = new TaskPictures(task.getDocID(), deviceNameTA.getText(), deviceCredTA.getText(), pictureAbsolute);
         projectModel.addTaskPictures(taskPictures);
         Stage stage = (Stage) createTaskPictures.getScene().getWindow();
         stage.close();
-
+        logger.trace("createTaskPictures() complete.");
     }
 
     /**
@@ -70,11 +73,12 @@ public class AddTaskPicturesController extends BaseController {
      * This method controls what we are doing with the chosen image file by the user.
      */
     @FXML private void imageFileExplorer() {
-
+            logger.info("Choosing a file.");
             FileChooser fileChooser = new FileChooser();
             setFileChooser(fileChooser);
             File file = fileChooser.showOpenDialog(new Stage());
 
+            logger.info("fetching selected file.");
             try{
                 Path imagePath = FileSystems.getDefault().getPath(file.getPath());
 
@@ -84,13 +88,15 @@ public class AddTaskPicturesController extends BaseController {
                 pictureTF.setText(imagePath.toString());
 
             }catch (NullPointerException n){
+                logger.error("File chooser null pointer", n);
                 String str = "There was a problem with selecting an image. Issue: NullPointerException.";
                 super.createWarning(str);
             } catch (FileNotFoundException e) {
+                logger.error("file not found for file chooser", e);
                 String str = "There was a problem with finding the image. Issue : FileNotFound.";
                 super.createWarning(str);
             }
-
+            logger.info("imageFileExplorer() complete.");
     }
 
     /**

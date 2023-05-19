@@ -28,6 +28,7 @@ public class EditTaskController extends BaseController {
     @FXML
     private Button cancelButton;
 
+
     // Model
     private ProjectModel projectModel = ProjectModel.getInstance();
 
@@ -47,6 +48,7 @@ public class EditTaskController extends BaseController {
      * This helps the user see what information already exists in a given task while they are editing it.
      */
     public void setFieldsOnEdit() {
+        logger.trace("setting fields for task to be edited.");
         selectedTask = projectModel.getSelectedTask();
         setStateSelection();
 
@@ -54,18 +56,20 @@ public class EditTaskController extends BaseController {
         if (selectedTask.getTaskDesc() != null) {
             taskDescription.setText(selectedTask.getTaskDesc());
         }
-
+        logger.trace("fields set.");
     }
 
     /**
      * We add all of our states into our state selection combobox and then set the selected value to the current value stored in our selectedTask.
      */
     private void setStateSelection() {
+        logger.trace("Selecting task state.");
         for (String state : states) {
             stateSelection.getItems().add(state);
         }
         stateSelection.setValue(selectedTask.getTaskState());
         stateSelection.setOnAction(this::changeState);
+        logger.trace("State changed.");
     }
 
     /**

@@ -40,7 +40,7 @@ public class CustomerDAO {
             customer.setCustID(id);
 
         } catch (SQLException e) {
-            logger.error("There has been an issue adding customer to database. CLASS: CustomerDAO CAUSE: " + e);
+            logger.error("There has been an issue adding customer to database.", e);
         }
         logger.info("Returning customer");
         return customer;
@@ -66,7 +66,7 @@ public class CustomerDAO {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("There has been an issue updating the customer. CLASS: CustomerDAO CAUSE: " + e);
+            logger.error("There has been an issue updating the customer.", e);
         }
         logger.info("update customer is complete.");
     }
@@ -86,7 +86,7 @@ public class CustomerDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("There has been an issue deleting the customer. CLASS: CustomerDAO CAUSE: " + e);
+            logger.error("There has been an issue deleting the customer.", e);
         }
         logger.info("delete customer is complete.");
     }
@@ -122,7 +122,7 @@ public class CustomerDAO {
             }
 
         } catch (SQLException e) {
-            logger.error("There was an error creating a list of customers. CLASS: CustomerDAO CAUSE: " + e);
+            logger.error("There was an error creating a list of customers." , e);
         }
         return customers;
     }
@@ -175,7 +175,7 @@ public class CustomerDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem creating a list of customers with projects. CLASS: CustomerDAO CAUSE: " + e);
+            logger.error("There has been a problem creating a list of customers with projects.", e);
         }
         logger.info("Returning list customersWithProjectsList");
         return customersWithProjectsList;

@@ -43,7 +43,7 @@ public class ProjectDAO {
             }
 
         } catch (SQLException e) {
-            logger.info("There has been a problem creating the project. CLASS: ProjectDAO CAUSE: " +e);
+            logger.error("There has been a problem creating the project.",e);
         }
         logger.info("Returning the new Project.");
         return new Project(id, project.getProjName(), project.getProjDate(), project.getCustID());
@@ -65,7 +65,7 @@ public class ProjectDAO {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("There has been a problem updating the project. CLASS: ProjectDAO CAUSE: " + e );
+            logger.error("There has been a problem updating the project.", e );
         }
         logger.info("Update project process finished.");
     }
@@ -85,7 +85,7 @@ public class ProjectDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("There has been a problem deleting the project. CLASS: ProjectDAO CAUSE : " + e);
+            logger.error("There has been a problem deleting the project.", e);
         }
         logger.info("delete project process complete.");
     }
@@ -117,7 +117,7 @@ public class ProjectDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem creating a list of projects. CLASS: ProjectDAO CAUSE: " +e);
+            logger.error("There has been a problem creating a list of projects.",e);
         }
         logger.info("Returning list of projects.");
         return projects;
@@ -147,7 +147,7 @@ public class ProjectDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem getting project by ID. CLASS: ProjectDAO CAUSE: " + e);
+            logger.error("There has been a problem getting project by ID.", e);
         }
         logger.info("Get project by ID process finished.");
         return null;
@@ -188,7 +188,7 @@ public class ProjectDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("There has been a problem creating the list of projects with task count. CLASS: ProjectDAO CAUSE: " +e);
+            logger.error("There has been a problem creating the list of projects with task count.",e);
         }
         logger.info("Returning list");
         return list;

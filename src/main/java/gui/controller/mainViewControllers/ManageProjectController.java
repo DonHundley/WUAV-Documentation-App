@@ -207,7 +207,7 @@ public class ManageProjectController extends BaseController implements Initializ
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            logger.error("There was a problem loading NEProject.fxml. CLASS: ManageProjectController CAUSE: ", e);
+            logger.error("There was a problem loading NEProject.fxml.", e);
             String str = "There has been an error loading NEProject.fxml. Please contact system Admin.";
             super.createWarning(str);
         }
