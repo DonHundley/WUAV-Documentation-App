@@ -209,39 +209,39 @@ public class NEUserController {
 
 
     /**
-     * This method checks if the length of the textfield is bigger than the max length for the field
-     * it returns true if the length is okay, false if it's too long
+     * This method checks if the length of the username textfield is bigger than the max length for the field
+     * it returns true if the length is accepted
      **/
     private boolean isUsernameTFValid() {
         return userNameTF.getText().length() <= maxUsernameLenght;
     }
 
     /**
-     * This method checks if the length of the textfield is bigger than the max length for the field
-     * it returns true if the length is okay, false if it's too long
+     * This method checks if the length of the password textfield is bigger than the max length for the field
+     * it returns true if the length is accepted
      **/
     private boolean isPasswordTFValid() {
         return passTF.getText().length() <= maxPasswordLenght;
     }
 
     /**
-     * This method checks if the length of the textfield is bigger than the max length for the field
-     * it returns true if the length is okay, false if it's too long
+     * This method checks if the length of the first name textfield is bigger than the max length for the field
+     * it returns true if the length is accepted
      **/
     private boolean isFirstNameTFValid() {
         return firstNameTF.getText().length() <= maxNameLenght;
     }
 
     /**
-     * This method checks if the length of the textfield is bigger than the max length for the field
-     * it returns true if the length is okay, false if it's too long
+     * This method checks if the length of the lasname textfield is bigger than the max length for the field
+     * it returns true if the length is accepted
      **/
     private boolean isLastNameTFValid() {
         return surnameTF.getText().length() <= maxLastNameLenght;
     }
 
     /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
+     * this method shows an alert to the user if the inserted username text field length exceeds the max
      **/
     private void alertUsernameTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -252,7 +252,7 @@ public class NEUserController {
 
 
     /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
+     * this method shows an alert to the user if the inserted password text field length exceeds the max
      **/
     private void alertPasswordTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -263,7 +263,7 @@ public class NEUserController {
 
 
     /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
+     * this method shows an alert to the user if the inserted first name text field length exceeds the max
      **/
     private void alertFirstNameTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -274,7 +274,7 @@ public class NEUserController {
 
 
     /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
+     * this method shows an alert to the user if the inserted last name text field length exceeds the max
      **/
     private void alertLastNameTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -284,7 +284,7 @@ public class NEUserController {
     }
 
     /**
-     * This method shows an alert to the user if the inserted username and password lengths exceed the max
+     * This method shows an alert to the user if the inserted username and password text field lengths exceed the max
      */
     private void alertUsernameAndPasswordTF() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
