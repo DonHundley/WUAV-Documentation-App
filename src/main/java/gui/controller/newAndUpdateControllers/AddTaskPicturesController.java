@@ -13,7 +13,6 @@ import org.apache.logging.log4j.*;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.*;
 
 public class AddTaskPicturesController extends BaseController {
     @FXML private TextArea deviceNameTA;
@@ -38,6 +37,11 @@ public class AddTaskPicturesController extends BaseController {
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
+    //validation fields
+
+    int maxDeviceNameLength = 100;
+    int maxDeviceCredLength = 100;
+
     /**
      * Opens the filechooser for pictures.
      * @param actionEvent triggers when the user activates the after picture button.
@@ -51,13 +55,20 @@ public class AddTaskPicturesController extends BaseController {
      * Creates a new TaskPictures from the filled fields.
      * @param actionEvent triggered when the user activates the create button.
      */
-    @FXML private void createTaskPictures(ActionEvent actionEvent){
-        logger.trace("createTaskPictures() called.");
-        TaskPictures taskPictures = new TaskPictures(task.getDocID(), deviceNameTA.getText(), deviceCredTA.getText(), pictureAbsolute);
-        projectModel.addTaskPictures(taskPictures);
-        Stage stage = (Stage) createTaskPictures.getScene().getWindow();
-        stage.close();
-        logger.trace("createTaskPictures() complete.");
+    @FXML
+    private void createTaskPictures(ActionEvent actionEvent) {
+        logger.info("Creating Task Picture");
+        if (validateTaskPictureFields()) {
+            TaskPictures taskPictures = new TaskPictures(task.getDocID(), deviceNameTA.getText(), deviceCredTA.getText(), pictureAbsolute);
+            projectModel.addTaskPictures(taskPictures);
+            Stage stage = (Stage) createTaskPictures.getScene().getWindow();
+            stage.close();
+            logger.info("Task picture created");
+        } else {
+            logger.info("Task picture not created due to invalid fields");
+            warningLoggerForTaskPicture();
+        }
+
     }
 
     /**
@@ -112,4 +123,118 @@ public class AddTaskPicturesController extends BaseController {
         );
     }
 
+
+    /**
+     * This method checks if the length of the device name textfield is bigger than the max length for the field
+     * it returns true if the length is valid
+     **/
+    private boolean isDeviceNameTFValid() {
+        return deviceNameTA.getText().length() <= maxDeviceNameLength;
+    }
+
+    /**
+     * This method checks if the length of the credentials textfield is bigger than the max length for the field
+     * it returns true if the length is valid
+     **/
+    private boolean isDeviceCredTFValid() {
+        return deviceCredTA.getText().length() <= maxDeviceCredLength;
+    }
+
+
+    /**
+     * This method checks if the picture textfield is empty
+     * it returns true if it's present, false if it's empty
+     **/
+    private boolean isPictureValid() {
+        if (pictureTF.getText().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertDeviceNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate device name");
+        alert.setContentText("Device name is too long, max is " + maxDeviceNameLength + " characters.");
+        alert.showAndWait();
+    }
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertDeviceCredTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate device credentials");
+        alert.setContentText("Device credential is too long, max is " + maxDeviceCredLength + " characters.");
+        alert.showAndWait();
+    }
+
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertDeviceNameAndCredTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate device name and credentials");
+        alert.setContentText("Device name and credential are too long, max is " + maxDeviceNameLength + " and " + maxDeviceCredLength + " characters respectively.");
+        alert.showAndWait();
+    }
+
+    /**
+     * this method shows an alert to the user if a picture is not selected
+     **/
+    private void alertNoPicture() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate picture");
+        alert.setContentText("No picture selected, please select one");
+        alert.showAndWait();
+    }
+
+
+
+
+
+    /**
+     * method to check all combination of fields and show the corresponding alerts or error message
+     **/
+    private boolean validateTaskPictureFields() {
+        boolean isValid = true;
+
+        if (isPictureValid()) {
+
+            if (!isDeviceCredTFValid() && !isDeviceNameTFValid()) {
+                alertDeviceNameAndCredTF();
+                isValid = false;
+            } else if (!isDeviceNameTFValid()) {
+                alertDeviceNameTF();
+                isValid = false;
+            } else if (!isDeviceCredTFValid()) {
+                alertDeviceCredTF();
+                isValid = false;
+            }
+        } else {
+            alertNoPicture();
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    private void warningLoggerForTaskPicture() {
+        if (!isDeviceCredTFValid()) {
+            logger.warn("Invalid device credential field: credential exceeds the maximum character limit");
+        }
+        if (!isDeviceNameTFValid()) {
+            logger.warn("Invalid device name field: device name exceeds the maximum character limit");
+
+        }
+        if (!isPictureValid()) {
+            logger.warn("No picture inserted when adding new task documentation");
+        }
+    }
 }
