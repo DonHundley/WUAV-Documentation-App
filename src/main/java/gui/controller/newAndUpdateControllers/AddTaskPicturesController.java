@@ -13,7 +13,6 @@ import org.apache.logging.log4j.*;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.*;
 
 public class AddTaskPicturesController extends BaseController {
     @FXML
@@ -46,8 +45,8 @@ public class AddTaskPicturesController extends BaseController {
 
     //validation fields
 
-    int maxDeviceNameLength=100;
-    int maxDeviceCredLength=100;
+    int maxDeviceNameLength = 100;
+    int maxDeviceCredLength = 100;
 
     /**
      * Opens the filechooser for pictures.
@@ -150,6 +149,21 @@ public class AddTaskPicturesController extends BaseController {
         return deviceCredTA.getText().length() <= maxDeviceCredLength;
     }
 
+
+    /**
+     * This method checks if the picture textfield is empty
+     * it returns true if it's present, false if it's empty
+     **/
+    private boolean isPictureValid() {
+        if (pictureTF.getText().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
     /**
      * this method shows an alert to the user if the inserted text field length exceeds the max
      **/
@@ -182,9 +196,9 @@ public class AddTaskPicturesController extends BaseController {
     }
 
     /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
+     * this method shows an alert to the user if a picture is not selected
      **/
-    private void alertNoPictureTF() {
+    private void alertNoPicture() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Validate picture");
         alert.setContentText("No picture selected, please select one");
@@ -193,26 +207,30 @@ public class AddTaskPicturesController extends BaseController {
 
 
 
+
+
     /**
      * method to check all combination of fields and show the corresponding alerts or error message
      **/
     private boolean validateTaskPictureFields() {
         boolean isValid = true;
-       if (pictureTF.getText().isEmpty()) {
-            alertNoPictureTF();
-            isValid = false;
-        }
-        if (!isDeviceCredTFValid() && !isDeviceNameTFValid()) {
-            alertDeviceNameAndCredTF();
-            isValid = false;
-        } else if (!isDeviceNameTFValid()) {
-            alertDeviceNameTF();
-            isValid = false;
-        } else if (!isDeviceCredTFValid()) {
-            alertDeviceCredTF();
-            isValid = false;
-        }
 
+        if (isPictureValid()) {
+
+            if (!isDeviceCredTFValid() && !isDeviceNameTFValid()) {
+                alertDeviceNameAndCredTF();
+                isValid = false;
+            } else if (!isDeviceNameTFValid()) {
+                alertDeviceNameTF();
+                isValid = false;
+            } else if (!isDeviceCredTFValid()) {
+                alertDeviceCredTF();
+                isValid = false;
+            }
+        } else {
+            alertNoPicture();
+            isValid = false;
+        }
         return isValid;
     }
 
@@ -223,6 +241,9 @@ public class AddTaskPicturesController extends BaseController {
         if (!isDeviceNameTFValid()) {
             logger.warn("Invalid device name field: device name exceeds the maximum character limit");
 
+        }
+        if (!isPictureValid()) {
+            logger.warn("No picture inserted when adding new task documentation");
         }
     }
 }
