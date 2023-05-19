@@ -68,7 +68,7 @@ public class ProjectModel {
 
     public void loadProjectsByUser(User user){
         tasksByUser.clear();
-        tasksByUser.addAll(projectLogic.tasksByUserID(projectLogic.getProjectIDsByUserID(user)));
+        tasksByUser.addAll(projectLogic.tasksByUserID(projectLogic.getProjectIDsByUserID(user), projectLogic.getTasksInfo()));
     }
 
     /**

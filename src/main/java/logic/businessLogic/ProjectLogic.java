@@ -139,11 +139,10 @@ public class ProjectLogic {
         worksOnDAO.deleteWork(selectedUser, selectedProject);
     }
 
-    public List<TaskWrapper> tasksByUserID(List<Integer> projectIDsByUserIDs){
+    public List<TaskWrapper> tasksByUserID(List<Integer> projectIDsByUserIDs, List<TaskWrapper> getTasksInfo){
         logger.info("Creating list in ProjectLogic. tasksByUserID()");
         List<TaskWrapper> tasksByUserID = new ArrayList<>();
 
-        List<TaskWrapper> getTasksInfo = getTasksInfo();
 
         logger.info("Checking lists projectIDsByUserIDs and getTasksInfo");
         if(getTasksInfo.isEmpty()){
