@@ -30,8 +30,6 @@ import java.util.List;
 public class PDFHandler {
 
 
-
-
     /**
      * method to export a pdf with text and images to create the documentation report
      **/
@@ -69,7 +67,7 @@ public class PDFHandler {
             writeCustomerInfo(contentStream, customer, x, custY, lineSpacing, boldFont, regularFont);
 
             writeProjectInfo(contentStream, project, x, projY, lineSpacing, boldFont, regularFont);
-            writeDeviceInfo(contentStream, task, x, deviceY, boldFont, regularFont, lineSpacing, deviceNames,devicePasswords);
+            writeDeviceInfo(contentStream, task, x, deviceY, boldFont, regularFont, lineSpacing, deviceNames, devicePasswords);
 
             writeTaskInfo(contentStream, task, boldFont, regularFont, 12, page.getMediaBox().getWidth() - margin * 4, x, taskY, lineSpacing);
 
@@ -82,7 +80,7 @@ public class PDFHandler {
             contentStream.close();
 
             String folderPath = "src/main/java/resources/Reports/";
-            String exportFile = folderPath+"Report " + project.getProjName() + ".pdf";
+            String exportFile = folderPath + "Report " + project.getProjName() + ".pdf";
             document.save(exportFile);
             document.close();
         } catch (IOException e) {
@@ -90,7 +88,6 @@ public class PDFHandler {
         }
 
     }
-
 
 
     /**
@@ -119,7 +116,7 @@ public class PDFHandler {
     /**
      * method to write the customer info on a pdf document
      */
-    private static void writeCustomerInfo(PDPageContentStream contentStream, Customer customer, float x, float custY, float linespacing, PDFont bold,PDFont regular) throws IOException {
+    private static void writeCustomerInfo(PDPageContentStream contentStream, Customer customer, float x, float custY, float linespacing, PDFont bold, PDFont regular) throws IOException {
         contentStream.beginText();
         contentStream.setFont(bold, 12);
         contentStream.newLineAtOffset(x, custY);
@@ -130,7 +127,7 @@ public class PDFHandler {
         contentStream.setFont(bold, 12);
         contentStream.showText("Address: ");
         contentStream.setFont(regular, 12);
-        contentStream.showText(customer.getCustAddress());
+        contentStream.showText(customer.getCustAddress() + ", " + customer.getPostalCode() + " " + customer.getCity());
         contentStream.endText();
     }
 
@@ -140,7 +137,7 @@ public class PDFHandler {
      */
     private static void insertImage(PDPageContentStream contentStream, PDDocument document, Image image, float x, float y, float spacing, float imageWidth, float imageHeight) throws IOException {
         ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
-        if(image!=null) {
+        if (image != null) {
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "jpg", imageStream);
             PDImageXObject pdImageXObjectImg1 = PDImageXObject.createFromByteArray(document, imageStream.toByteArray(), "");
             contentStream.drawImage(pdImageXObjectImg1, x, y, imageWidth, imageHeight);
@@ -226,7 +223,7 @@ public class PDFHandler {
     }
 
 
-    }
+}
 
 
 
