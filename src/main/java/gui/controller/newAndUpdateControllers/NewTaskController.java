@@ -6,10 +6,9 @@ import gui.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
-import javafx.stage.*;
 
-import javax.swing.*;
+import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 import java.net.URL;
 import java.util.*;
@@ -34,6 +33,12 @@ public class NewTaskController extends BaseController implements Initializable {
     // The project to have a task added.
     private Project selectedProject;
 
+    //variables for input validation
+    private int maxTaskName = 25;
+
+
+    private static final Logger logger = LogManager.getLogger("debugLogger");
+
     /**
      * This method is used to set our models and which project a task will be added to.
      */
@@ -52,13 +57,39 @@ public class NewTaskController extends BaseController implements Initializable {
     }
 
     private void constructTask() {
+        logger.info("Creating a new Task");
         if (selectedProject != null && !taskName.getText().isEmpty()) {
-            Task task = new Task(selectedProject.getProjID(), taskName.getText(), "No description", "Not Started");
-            projectModel.createTask(task);
+            if (validateTaskNameTFLength()) {
+                Task task = new Task(selectedProject.getProjID(), taskName.getText(), "No description", "Not Started");
+                functionsModel.createTask(task);
+                logger.info("Task created");
+            } else {
+                alertTaskNameTF();
+                logger.warn("Task creation failed: Task name exceeds the maximum length");
+            }
         } else {
             String str = "Either the selected project does not exist or a name has not been chosen for the task.";
-            super.createWarning(str);
+            newTaskError(str);
+            logger.warn("Task creation failed: empty field for task name");
         }
+    }
+
+/** This method checks if the length of the textfield is bigger than the max length for the field
+ * it returns true if the length is okay, false if it's too long**/
+    private boolean validateTaskNameTFLength() {
+        if (taskName.getText().length() > maxTaskName) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**this method shows an alert to the user if the inserted text field length exceeds the max **/
+    private void alertTaskNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Task Name");
+        alert.setContentText("Task name is too long, max is 25 characters.");
+        alert.showAndWait();
     }
 
     @FXML

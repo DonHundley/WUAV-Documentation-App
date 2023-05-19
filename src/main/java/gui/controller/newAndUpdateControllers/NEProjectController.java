@@ -8,9 +8,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
+import org.apache.logging.log4j.*;
 
 
-import java.net.URL;
 import java.util.*;
 
 public class NEProjectController extends BaseController {
@@ -37,6 +37,11 @@ public class NEProjectController extends BaseController {
     private boolean isEdit;
 
     private Date creationDate;
+
+    //validation
+    int maxProjName = 50;
+
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * This method is used to set our models and choose if we are editing or creating a project.
@@ -82,16 +87,24 @@ public class NEProjectController extends BaseController {
      * This method is used to create a new project if our isEdit boolean == false.
      */
     private void createProject() {
+        logger.info("Creating a new project");
         if (!projectName.getText().isEmpty()) {
-            project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), nEProjectTV.getSelectionModel().getSelectedItem().getCustID());
-            projectModel.createProject(project);
+            if (validateProjectNameTFLength()) {
+                project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), nEProjectTV.getSelectionModel().getSelectedItem().getCustID());
+                functionsModel.createProject(project);
 
-            projectModel.loadProjects();
-            Stage stage = (Stage) createOrEditProject.getScene().getWindow();
-            stage.close();
+                observablesModel.loadProjects();
+                logger.info("New project created");
+                Stage stage = (Stage) createOrEditProject.getScene().getWindow();
+                stage.close();
+            } else {
+                alertProjectNameTF();
+                logger.warn("Project creation failed: invalid project name length");
+            }
         } else {
             String str = "Please fill in the project name";
-            super.createWarning(str);
+            projectError(str);
+            logger.warn("Project creation failed: empty project name");
         }
     }
 
@@ -99,18 +112,27 @@ public class NEProjectController extends BaseController {
      * This method is used to edit the selected project from our persistent model with updated information.
      */
     private void editProject() {
-        if(!projectName.getText().isEmpty()) {
-            project.setProjName(projectName.getText());
+        logger.info("Editing of a project");
+        if (!projectName.getText().isEmpty()) {
+            if (validateProjectNameTFLength()) {
+                project.setProjName(projectName.getText());
 
-            projectModel.editProject(project);
+                functionsModel.editProject(project);
 
-            projectModel.loadProjects();
-            Stage stage = (Stage) createOrEditProject.getScene().getWindow();
-            stage.close();
+                observablesModel.loadProjects();
+                logger.info("Project edited");
+                Stage stage = (Stage) createOrEditProject.getScene().getWindow();
+                stage.close();
+            } else {
+                alertProjectNameTF();
+                logger.warn("Project update failed: invalid project name length");
+            }
         } else {
             String str = "Please fill in the project name";
-            super.createWarning(str);
+            projectError(str);
+            logger.warn("Project update failed: empty project name");
         }
+
     }
 
     /**
@@ -148,4 +170,26 @@ public class NEProjectController extends BaseController {
     }
 
 
+    /**
+     * This method checks if the length of the textfield is bigger than the max length for the field
+     * it returns true if the length is okay, false if it's too long
+     **/
+    private boolean validateProjectNameTFLength() {
+        if (projectName.getText().length() > maxProjName) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * this method shows an alert to the user if the inserted text field length exceeds the max
+     **/
+    private void alertProjectNameTF() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validate Project Name");
+        alert.setContentText("Project name is too long, max is 50 characters.");
+        alert.showAndWait();
+    }
 }
