@@ -97,7 +97,7 @@ public class NECustomerController extends BaseController {
             logger.info("Customer created successfully");
         }
         else{
-            logger.warn("Customer creation failed due to invalid fields: one or more fields are empty");
+            logger.warn("Customer creation failed due to invalid fields");
             warningLoggerForCustomer();
         }
     }
@@ -120,7 +120,7 @@ public class NECustomerController extends BaseController {
             stage.close();
             logger.info("Customer updated successfully");
         } else {
-            logger.warn("Customer update failed due to invalid fields: one or more fields are empty");
+            logger.warn("Customer update failed due to invalid fields");
             warningLoggerForCustomer();
 
         }
