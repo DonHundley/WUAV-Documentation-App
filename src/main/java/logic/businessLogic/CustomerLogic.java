@@ -24,7 +24,7 @@ public class CustomerLogic {
         List<CustomerWrapper> filtered = new ArrayList<>();
         logger.info("Checking list for query");
         for(CustomerWrapper c : customers){
-            if((""+c.getCustomer().getCustAddress()).toLowerCase().contains(query.toLowerCase()) /*|| c.getPostalCode().getPostalCode().contains(query)*/) {
+            if((""+c.getCustomer().getCustAddress()).toLowerCase().contains(query.toLowerCase()) || c.getPostalCode().getPostalCode().contains(query)) {
                 filtered.add(c);
             }
         }
