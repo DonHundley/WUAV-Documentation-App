@@ -433,15 +433,13 @@ public class DocumentationController extends BaseController implements Initializ
 
     public void updateLayout(ActionEvent actionEvent) {
         logger.info("updateLayout() called in " + this.getClass().getName());
-        if (taskTV.getSelectionModel().getSelectedItem() != null) {
+        if (taskTV.getSelectionModel().getSelectedItem() != null && projectModel.getSelectedTask() != null) {
             try {
                 messageLabel.setText("");
                 logger.info("Loading EditLayout.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/EditLayout.fxml"));
                 Parent root = loader.load();
                 EditLayoutController controller = loader.getController();
-                controller.setLayoutOnEdit();
-                controller.setSelectedProjectForLayout();
                 controller.setUpCanvas();
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
