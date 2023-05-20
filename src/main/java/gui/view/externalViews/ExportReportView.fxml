@@ -8,7 +8,7 @@
 <AnchorPane prefHeight="650.0" prefWidth="950.0" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.externalViewControllers.ExportReportViewController">
    <children>
       <Label layoutX="265.0" layoutY="22.0" styleClass="window-title" text="Export Report" />
-      <Label layoutX="79.0" layoutY="119.0" style="-fx-font-size: 16;" styleClass="window-title" text="Select up to 2 images to include int the report:" />
+      <Label layoutX="79.0" layoutY="119.0" style="-fx-font-size: 16;" styleClass="window-title" text="Select up to 2 images to include in the report:" />
       <Button layoutX="99.0" layoutY="557.0" mnemonicParsing="false" onAction="#ExportReport" styleClass="round-btn" text="Export" />
       <FlowPane layoutX="73.0" layoutY="173.0" prefHeight="358.0" prefWidth="383.0">
          <children>
@@ -16,5 +16,6 @@
          </children>
       </FlowPane>
       <Label fx:id="noImagesFoundLabel" layoutX="85.0" layoutY="156.0" prefHeight="17.0" prefWidth="243.0" />
+      <Button fx:id="cancelButton" layoutX="227.0" layoutY="557.0" mnemonicParsing="false" onAction="#cancel" styleClass="round-btn" text="Cancel" />
    </children>
 </AnchorPane>

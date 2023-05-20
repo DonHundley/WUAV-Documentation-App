@@ -80,7 +80,7 @@ public class PDFHandler {
             contentStream.close();
 
             String folderPath = "src/main/java/resources/Reports/";
-            String exportFile = folderPath + "Report " + project.getProjName() + ".pdf";
+            String exportFile = folderPath + "Report " + project.getProjName() + "-" + task.getTaskName() + ".pdf";
             document.save(exportFile);
             document.close();
         } catch (IOException e) {
@@ -94,22 +94,26 @@ public class PDFHandler {
      * method to write the device info on a pdf document
      */
     private static void writeDeviceInfo(PDPageContentStream contentStream, Task task, float x, float deviceY, PDFont boldFont, PDFont regularFont, float lineSpacing, String deviceNames, String devicePasswords) throws IOException {
-        contentStream.beginText();
-        contentStream.newLineAtOffset(x, deviceY);
-        contentStream.setFont(boldFont, 13);
-        contentStream.showText("Device name: ");
-        contentStream.setFont(regularFont, 13);
-        contentStream.showText(deviceNames);
-        contentStream.endText();
 
-        deviceY -= lineSpacing;
-        contentStream.beginText();
-        contentStream.newLineAtOffset(x, deviceY);
-        contentStream.setFont(boldFont, 13);
-        contentStream.showText("Login credential: ");
-        contentStream.setFont(regularFont, 13);
-        contentStream.showText(devicePasswords);
-        contentStream.endText();
+        if (deviceNames != null) {
+            contentStream.beginText();
+            contentStream.newLineAtOffset(x, deviceY);
+            contentStream.setFont(boldFont, 13);
+            contentStream.showText("Device name: ");
+            contentStream.setFont(regularFont, 13);
+            contentStream.showText(deviceNames);
+            contentStream.endText();
+        }
+        if (devicePasswords != null) {
+            deviceY -= lineSpacing;
+            contentStream.beginText();
+            contentStream.newLineAtOffset(x, deviceY);
+            contentStream.setFont(boldFont, 13);
+            contentStream.showText("Login credential: ");
+            contentStream.setFont(regularFont, 13);
+            contentStream.showText(devicePasswords);
+            contentStream.endText();
+        }
 
     }
 
