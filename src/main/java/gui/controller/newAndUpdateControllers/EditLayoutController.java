@@ -324,7 +324,7 @@ public class EditLayoutController {
         }
 
         projectModel.updateLayout();
-        projectModel.loadTasksByProject();
+        projectModel.loadAllProjLists();
 
         logger.info("Layout creation process finished.");
 

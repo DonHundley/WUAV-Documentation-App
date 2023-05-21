@@ -97,7 +97,7 @@ public class NEProjectController extends BaseController {
                 project = new Project(projectName.getText(), java.sql.Date.valueOf(java.time.LocalDate.now()), nEProjectTV.getSelectionModel().getSelectedItem().getCustID());
                 projectModel.createProject(project);
 
-                projectModel.loadProjects();
+                projectModel.loadAllProjLists();
                 logger.info("New project created");
                 Stage stage = (Stage) createOrEditProject.getScene().getWindow();
                 stage.close();
@@ -123,7 +123,7 @@ public class NEProjectController extends BaseController {
 
                 projectModel.editProject(project);
 
-                projectModel.loadProjects();
+                projectModel.loadAllProjLists();
                 logger.info("Project edited");
                 Stage stage = (Stage) createOrEditProject.getScene().getWindow();
                 stage.close();
