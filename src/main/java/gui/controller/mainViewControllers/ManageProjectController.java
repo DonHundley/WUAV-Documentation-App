@@ -120,14 +120,13 @@ public class ManageProjectController extends BaseController implements Initializ
     @FXML
     private void assignProject(ActionEvent actionEvent) {
         logger.info("assignProject() called in " + this.getClass().getName());
-        if (projectTV.getSelectionModel().getSelectedItem().getTotalTasks() > 0) {
-            if (projectTV.getSelectionModel().getSelectedItem() != null && techTV.getSelectionModel().getSelectedItem() != null) {
+        if (projectTV.getSelectionModel().getSelectedItem() != null && techTV.getSelectionModel().getSelectedItem() != null) {
+            if (projectTV.getSelectionModel().getSelectedItem().getTotalTasks() > 0) {
                 projectModel.assignProject(userModel.getSelectedUser(), projectModel.getSelectedProject());
                 userModel.loadTechs();
                 projectModel.loadAllProjLists();
             }
-        }
-        else
+        } else
         {
             logger.warn("User attempted to assign a tech to a project without task. User was notified.");
             String str = "Only projects with tasks can be assigned to a technician";

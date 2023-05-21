@@ -99,7 +99,7 @@ public class ManageCustomerController extends BaseController implements Initiali
 
     @FXML
     private void openDocumentButton(ActionEvent actionEvent) {
-        if(customersTV.getSelectionModel().getSelectedItem().getProject() != null){
+        if(customersTV.getSelectionModel().getSelectedItem() != null){
         openDocumentation();}
     }
 
