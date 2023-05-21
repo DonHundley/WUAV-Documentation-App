@@ -61,6 +61,7 @@ public class AddTaskPicturesController extends BaseController {
         if (validateTaskPictureFields()) {
             TaskPictures taskPictures = new TaskPictures(task.getDocID(), deviceNameTA.getText(), deviceCredTA.getText(), pictureAbsolute);
             projectModel.addTaskPictures(taskPictures);
+            projectModel.loadAllProjLists();
             Stage stage = (Stage) createTaskPictures.getScene().getWindow();
             stage.close();
             logger.info("Task picture created");

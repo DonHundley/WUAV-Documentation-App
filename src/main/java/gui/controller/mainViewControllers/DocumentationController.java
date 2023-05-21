@@ -94,7 +94,7 @@ public class DocumentationController extends BaseController implements Initializ
     private void setTaskTV() {
         logger.info("Setting taskTV in "+ this.getClass().getName());
         taskTV.setItems(projectModel.getTasksByProject());
-        projectModel.loadTasksByProject();
+        projectModel.loadAllProjLists();
 
         taskName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskName()));
         taskState.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskState()));

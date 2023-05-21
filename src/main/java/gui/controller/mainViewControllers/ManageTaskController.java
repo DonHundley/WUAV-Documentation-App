@@ -73,7 +73,7 @@ public class ManageTaskController extends BaseController implements Initializabl
 
         }else {
             taskTV.setItems(projectModel.getTasksInfo());
-            projectModel.loadTasksInfo();
+            projectModel.loadAllProjLists();
             customerName.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getCustomer().getCustName()));
         }
 
@@ -87,7 +87,9 @@ public class ManageTaskController extends BaseController implements Initializabl
 
 
     @FXML private void openProjectInfo(ActionEvent actionEvent)  {
-        openProjectInformation();
+        if(taskTV.getSelectionModel().getSelectedItem() != null){
+            openProjectInformation();
+        }
     }
 
     @FXML private void taskTVOnClick(MouseEvent mouseEvent) {

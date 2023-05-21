@@ -49,6 +49,13 @@ public class ProjectModel {
     /**
      * These methods load our lists.
      */
+
+    public void loadAllProjLists(){
+        loadAllTasks();
+        loadProjects();
+        loadTasksByProject();
+        loadTasksInfo();
+    }
     public void loadProjects() {
         projects.clear();
         projects.addAll(projectLogic.getProjectsWithTaskCount());
@@ -62,8 +69,9 @@ public class ProjectModel {
         tasksInfo.addAll(projectLogic.getTasksInfo());
     }
     public void loadTasksByProject(){
+        if(selectedProject != null){
         tasksByProject.clear();
-        tasksByProject.addAll(projectLogic.getTasksByProject(selectedProject));
+        tasksByProject.addAll(projectLogic.getTasksByProject(selectedProject));}
     }
 
     public void loadProjectsByUser(User user){

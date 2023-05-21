@@ -72,7 +72,7 @@ public class ManageProjectController extends BaseController implements Initializ
     private void setProjectTV() {
         logger.info("setProjectTV() called in " + this.getClass().getName());
         projectTV.setItems(projectModel.getProjects());
-        projectModel.loadProjects();
+        projectModel.loadAllProjLists();
 
         logger.trace("setting columns for projectTV");
         projectDate.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
@@ -124,6 +124,7 @@ public class ManageProjectController extends BaseController implements Initializ
             if (projectTV.getSelectionModel().getSelectedItem() != null && techTV.getSelectionModel().getSelectedItem() != null) {
                 projectModel.assignProject(userModel.getSelectedUser(), projectModel.getSelectedProject());
                 userModel.loadTechs();
+                projectModel.loadAllProjLists();
             }
         }
         else
@@ -155,7 +156,7 @@ public class ManageProjectController extends BaseController implements Initializ
             } else {
                 alert.close();
             }
-            projectModel.loadProjects();
+            projectModel.loadAllProjLists();
         }
         logger.info("deleteProject() complete.");
     }

@@ -57,6 +57,7 @@ public class NewTaskController extends BaseController implements Initializable {
             if (validateTaskNameTFLength()) {
                 Task task = new Task(selectedProject.getProjID(), taskName.getText(), "No description", "Not Started");
                 projectModel.createTask(task);
+                projectModel.loadAllProjLists();
                 logger.info("Task created");
             } else {
                 alertTaskNameTF();

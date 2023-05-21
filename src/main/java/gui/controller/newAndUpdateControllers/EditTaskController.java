@@ -102,7 +102,7 @@ public class EditTaskController extends BaseController {
             }
             projectModel.updateTask();
             logger.info("Task edited");
-            projectModel.loadTasksByProject();
+            projectModel.loadAllProjLists();
 
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
