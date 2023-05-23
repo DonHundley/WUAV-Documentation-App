@@ -23,9 +23,10 @@ public class ProjectLogic {
     public List<Project> getProjects() {
         return projectDAO.getAllProjects();
     }
-/**
- *This returns a list of all projects with total tasks */
 
+    /**
+     * This returns a list of all projects with total tasks
+     */
     public List<ProjectWrapper> getProjectsWithTaskCount() {
         return projectDAO.getAllProjectsWithTaskCount();
     }

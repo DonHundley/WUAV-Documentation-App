@@ -62,7 +62,7 @@ public class ManageProjectController extends BaseController implements Initializ
      */
     private void setUsernameLabel() {// set our username label to the users name and our window title label.
         logger.trace("Setting user name label in ManageProjectController.");
-        windowTitleLabel.setText("Task Document Manager");
+        windowTitleLabel.setText("Project and Technician management");
         usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
     }
 

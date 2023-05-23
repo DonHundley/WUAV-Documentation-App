@@ -193,7 +193,31 @@ public class ManageCustomerController extends BaseController implements Initiali
             projectModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
 
             if(mouseEvent.getClickCount() == 2){
+                if(customersTV.getSelectionModel().getSelectedItem().getProject().getProjID() != 0){
                 openDocumentation();
+                }else if(authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("ADMIN") ||
+                        authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("MANAGER") &&
+                                customersTV.getSelectionModel().getSelectedItem().getProject().getProjID() == 0){
+
+                    logger.info("Creating new project in CustomerController");
+                    try {
+                        logger.info("Loading NEProject.fxml");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NEProject.fxml"));
+                        Parent root = loader.load();
+                        NEProjectController controller = loader.getController();
+                        controller.setNEProjectController(false);
+                        Stage stage = new Stage();
+                        Scene scene = new Scene(root);
+                        stage.setTitle("New Project");
+                        stage.setScene(scene);
+                        stage.show();
+                    } catch (IOException e) {
+                        logger.error("There was a problem loading NEProject.fxml.", e);
+                        String str = "There has been an error loading NEProject.fxml. Please contact system Admin.";
+                        super.createWarning(str);
+                    }
+                    logger.info("Loading of NEProject.fxml complete.");
+                }
             }
         }
 

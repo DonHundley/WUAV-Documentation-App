@@ -56,4 +56,14 @@ public class Project {
     public void setCustID(int custID) {
         this.custID = custID;
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "projID=" + projID +
+                ", projName='" + projName + '\'' +
+                ", projDate=" + projDate +
+                ", custID=" + custID +
+                '}';
+    }
 }
