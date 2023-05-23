@@ -248,10 +248,11 @@ public class TaskDAO {
      */
     public List<TaskWrapper> getTasksInfo() {
         List<TaskWrapper> taskInfo = new ArrayList<>();
-        String sql = "SELECT t.*, p.*, c.* " +
+        String sql = "SELECT t.*, p.*, c.*, pc.* " +
                 "FROM project p " +
                 "JOIN task_documentation t ON p.projectID=t.projectID " +
-                "JOIN customer c ON p.customerID=c.customerID ";
+                "JOIN customer c ON p.customerID=c.customerID " +
+                "LEFT JOIN postal_code pc ON c.postal_code = pc.postal_code";
 
         logger.info("Opening connection in TaskDAO");
         try (Connection connection = databaseConnector.getConnection()) {
@@ -282,8 +283,10 @@ public class TaskDAO {
                 String customerName = resultSet.getString("customer_name");
                 String customerEmail = resultSet.getString("customer_email");
                 String customerAddress = resultSet.getString("customer_address");
+                String postalCode = resultSet.getString("postal_code");
+                String city = resultSet.getString("city");
 
-                Customer customer = new Customer(custID, customerName, customerEmail, customerAddress);
+                Customer customer = new Customer(custID, customerName, customerEmail, customerAddress, postalCode, city);
                 TaskWrapper taskWrapper = new TaskWrapper(project, task, customer);
                 taskInfo.add(taskWrapper);
             }
