@@ -41,8 +41,6 @@ public class DocumentationController extends BaseController implements Initializ
     private Button createTaskButton;
     @FXML
     private AnchorPane imagePane;
-    @FXML
-    private Label messageLabel;
 
     // Tableview
     @FXML
@@ -57,9 +55,11 @@ public class DocumentationController extends BaseController implements Initializ
     private Label windowTitleLabel;
     @FXML
     private Label descriptionLabel;
-
     @FXML
     private Label usernameLabel;
+    @FXML
+    private Label messageLabel;
+
 
     // ImageViews
     @FXML

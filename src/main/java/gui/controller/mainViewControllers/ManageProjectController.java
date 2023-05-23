@@ -23,6 +23,7 @@ import java.util.*;
 
 public class ManageProjectController extends BaseController implements Initializable {
 
+
     @FXML
     private AnchorPane projectAnchor;
     // TableViews
@@ -49,6 +50,8 @@ public class ManageProjectController extends BaseController implements Initializ
     private Label usernameLabel;
     @FXML
     private Label windowTitleLabel;
+    @FXML
+    private Label messageLabel;
 
     // Models
     private ProjectModel projectModel = ProjectModel.getInstance();
@@ -62,7 +65,7 @@ public class ManageProjectController extends BaseController implements Initializ
      */
     private void setUsernameLabel() {// set our username label to the users name and our window title label.
         logger.trace("Setting user name label in ManageProjectController.");
-        windowTitleLabel.setText("Project and Technician management");
+        //windowTitleLabel.setText("Project and Technician management");
         usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
     }
 
@@ -144,6 +147,7 @@ public class ManageProjectController extends BaseController implements Initializ
     private void deleteProject(ActionEvent actionEvent) {
         logger.info("deleteProject() called in " + this.getClass().getName());
         if (projectTV.getSelectionModel().getSelectedItem() != null) {
+            messageLabel.setText("");
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Project");
             alert.setHeaderText("Are you sure you wish to delete the project " + projectModel.getSelectedProject().getProjName() + "?");
@@ -156,7 +160,7 @@ public class ManageProjectController extends BaseController implements Initializ
                 alert.close();
             }
             projectModel.loadAllProjLists();
-        }
+        } else {messageLabel.setText("Please select a task to be deleted.");}
         logger.info("deleteProject() complete.");
     }
 
@@ -178,8 +182,9 @@ public class ManageProjectController extends BaseController implements Initializ
     @FXML
     private void editProject(ActionEvent actionEvent) {
         if(projectTV.getSelectionModel().getSelectedItem() != null){
+            messageLabel.setText("");
             editProj(true);
-        }
+        } else {messageLabel.setText("Please select a project to be edited.");}
     }
 
 
@@ -235,8 +240,9 @@ public class ManageProjectController extends BaseController implements Initializ
 
     private void addTask(){
         if (projectTV.getSelectionModel().getSelectedItem() != null){
+            messageLabel.setText("");
             super.newTask();
-        }
+        } else {messageLabel.setText("Please select a project to add tasks to.");}
     }
 
     @Override
@@ -250,6 +256,7 @@ public class ManageProjectController extends BaseController implements Initializ
 
     @FXML private void projectTVOnClick(MouseEvent mouseEvent) {
         logger.trace("User clicked projectTV in ManageProjectController.");
+        messageLabel.setText("");
         if(projectTV.getSelectionModel().getSelectedItem() != null){
         projectModel.setSelectedProject(projectTV.getSelectionModel().getSelectedItem().getProject());
         if(mouseEvent.getClickCount() == 2){
@@ -266,6 +273,7 @@ public class ManageProjectController extends BaseController implements Initializ
 
     @FXML private void techTvOnClick(MouseEvent mouseEvent) {
         logger.trace("User clicked techTV in ManageProjectController.");
+        messageLabel.setText("");
         if(techTV.getSelectionModel().getSelectedItem() != null) {
             userModel.setSelectedUser(techTV.getSelectionModel().getSelectedItem().getUser());
         }

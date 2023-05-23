@@ -26,5 +26,6 @@
       <TextField fx:id="searchCustomer" layoutX="750.0" layoutY="108.0" promptText="search by address" />
       <Button fx:id="newCustomerButton" layoutX="52.0" layoutY="580.0" mnemonicParsing="false" onAction="#createCustomer" prefHeight="30.0" prefWidth="97.0" styleClass="round-btn" text="New Customer" />
       <Button fx:id="editCustomerButton" layoutX="159.0" layoutY="580.0" mnemonicParsing="false" onAction="#editCustomer" prefHeight="30.0" prefWidth="97.0" styleClass="round-btn" text="Edit Customer" />
+      <Label fx:id="messageLabel" layoutX="279.0" layoutY="587.0" prefHeight="17.0" prefWidth="507.0" />
    </children>
 </AnchorPane>

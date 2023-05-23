@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="taskAnchor" onMouseClicked="#taskAnchorOnClick" prefHeight="650.0" prefWidth="950.0" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.mainViewControllers.ManageTaskController">
+<AnchorPane fx:id="taskAnchor" onMouseClicked="#taskAnchorOnClick" prefHeight="650.0" prefWidth="950.0" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.mainViewControllers.ManageTaskController">
    <children>
       <TableView fx:id="taskTV" layoutX="106.0" layoutY="142.0" onMouseClicked="#taskTVOnClick" prefHeight="366.0" prefWidth="756.0">
         <columns>

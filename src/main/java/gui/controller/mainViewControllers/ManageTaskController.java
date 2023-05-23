@@ -20,6 +20,7 @@ import java.util.*;
 public class ManageTaskController extends BaseController implements Initializable{
 
 
+
     @FXML private AnchorPane taskAnchor;
     @FXML private TableView<TaskWrapper> taskTV;
     @FXML private TableColumn<TaskWrapper, String> projectName;
@@ -89,12 +90,13 @@ public class ManageTaskController extends BaseController implements Initializabl
     @FXML private void openProjectInfo(ActionEvent actionEvent)  {
         if(taskTV.getSelectionModel().getSelectedItem() != null){
             openProjectInformation();
-        }
+        } else errorLabel.setText("Please select a task to view documentation.");
     }
 
     @FXML private void taskTVOnClick(MouseEvent mouseEvent) {
         logger.trace("User clicked taskTV in ManageTaskController");
         if(taskTV.getSelectionModel().getSelectedItem() != null){
+            errorLabel.setText("");
             projectModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
             projectModel.setSelectedTask(taskTV.getSelectionModel().getSelectedItem().getTask());
             customerModel.setSelectedCustomer(taskTV.getSelectionModel().getSelectedItem().getCustomer());
@@ -108,6 +110,7 @@ public class ManageTaskController extends BaseController implements Initializabl
     private void openProjectInformation(){
         logger.info("openProjectinformation() called in ManageTaskController");
         try {
+            errorLabel.setText("");
             projectModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
             logger.info("loading DocumentationView.fxml");
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));

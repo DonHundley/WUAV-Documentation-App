@@ -23,6 +23,7 @@ import java.util.*;
 public class ManageCustomerController extends BaseController implements Initializable {
 
 
+
     @FXML private AnchorPane customerAnchor;
     // Tableview
     @FXML
@@ -49,6 +50,8 @@ public class ManageCustomerController extends BaseController implements Initiali
     private Label usernameLabel;
     @FXML
     private Label windowTitle;
+    @FXML
+    private Label messageLabel;
 
     // Buttons
     @FXML
@@ -100,12 +103,14 @@ public class ManageCustomerController extends BaseController implements Initiali
     @FXML
     private void openDocumentButton(ActionEvent actionEvent) {
         if(customersTV.getSelectionModel().getSelectedItem() != null){
-        openDocumentation();}
+        openDocumentation();
+        } messageLabel.setText("Please select a customer to view documentation.");
     }
 
     private void openDocumentation(){
         logger.info("openDocumentation() called in " + this.getClass().getName());
         try {
+            messageLabel.setText("");
             projectModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
             logger.info("Loading DocumentationView.fxml");
             Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
@@ -124,13 +129,15 @@ public class ManageCustomerController extends BaseController implements Initiali
     }
     @FXML
     private void editCustomer(ActionEvent actionEvent) {
-        if(customersTV.getSelectionModel().getSelectedItem() != null){openCustomerWindow(true);}
+        if(customersTV.getSelectionModel().getSelectedItem() != null){openCustomerWindow(true);
+        }messageLabel.setText("Please select a customer to be edited.");
     }
 
     private void openCustomerWindow(boolean isEdit){
         logger.info("openCustomerWindow called in " + this.getClass().getName());
 
             try {
+                messageLabel.setText("");
                 logger.info("Loading NECustomer.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NECustomer.fxml"));
                 Parent root = loader.load();
@@ -189,6 +196,7 @@ public class ManageCustomerController extends BaseController implements Initiali
     @FXML private void onCustomerTVClick(MouseEvent mouseEvent) {
         logger.trace("User clicked customerTV in " + this.getClass().getName());
         if(customersTV.getSelectionModel().getSelectedItem() != null){
+            messageLabel.setText("");
             customerModel.setSelectedCustomer(customersTV.getSelectionModel().getSelectedItem().getCustomer());
             projectModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
 
@@ -217,7 +225,7 @@ public class ManageCustomerController extends BaseController implements Initiali
                         super.createWarning(str);
                     }
                     logger.info("Loading of NEProject.fxml complete.");
-                }
+                }else messageLabel.setText("The customer currently does not have an assigned project.");
             }
         }
 

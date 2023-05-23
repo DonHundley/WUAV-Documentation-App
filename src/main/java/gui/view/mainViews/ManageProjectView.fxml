@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="projectAnchor" onMouseClicked="#anchorOnClick" prefHeight="650.0" prefWidth="950.0" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.mainViewControllers.ManageProjectController">
+<AnchorPane fx:id="projectAnchor" onMouseClicked="#anchorOnClick" prefHeight="650.0" prefWidth="950.0" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.mainViewControllers.ManageProjectController">
    <children>
       <TableView fx:id="projectTV" layoutX="29.0" layoutY="149.0" onMouseClicked="#projectTVOnClick" prefHeight="366.0" prefWidth="390.0">
         <columns>
@@ -41,5 +41,6 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
+      <Label fx:id="messageLabel" alignment="CENTER" layoutX="123.0" layoutY="597.0" prefHeight="17.0" prefWidth="704.0" />
    </children>
 </AnchorPane>
