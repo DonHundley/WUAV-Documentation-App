@@ -142,7 +142,7 @@ public class PDFHandler {
     private static void insertImage(PDPageContentStream contentStream, PDDocument document, Image image, float x, float y, float spacing, float imageWidth, float imageHeight) throws IOException {
         ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
         if (image != null) {
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "jpg", imageStream);
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", imageStream);
             PDImageXObject pdImageXObjectImg1 = PDImageXObject.createFromByteArray(document, imageStream.toByteArray(), "");
             contentStream.drawImage(pdImageXObjectImg1, x, y, imageWidth, imageHeight);
         }

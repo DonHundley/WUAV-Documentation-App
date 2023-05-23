@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,8 +18,9 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.*;
 
 import java.io.File;
+
 import java.util.List;
-import java.util.Optional;
+
 
 public class ExportReportViewController {
 
@@ -49,9 +50,13 @@ public class ExportReportViewController {
      * this method is used to set the thumbnails images int the view.
      * it also handles the selection of the images and show the user which images are selected
      **/
-    public void setImages(List<Image> imageList) {
+    public void setImages(List<Image> imageList)  {
         logger.info("Setting images in ExportReportViewController.");
         images = imageList;
+
+        if(selectedTask.getTaskLayout()!=null){
+            images.add(selectedTask.getTaskLayout());
+        }
         selectImagePane.getChildren().clear();
 
         logger.trace("Checking list.");
