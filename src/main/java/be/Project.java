@@ -1,6 +1,6 @@
 package be;
 
-import java.util.Date;
+import java.util.*;
 
 public class Project {
 
@@ -55,6 +55,28 @@ public class Project {
 
     public void setCustID(int custID) {
         this.custID = custID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Project project = (Project) o;
+
+        if (projID != project.projID) return false;
+        if (custID != project.custID) return false;
+        if (!Objects.equals(projName, project.projName)) return false;
+        return Objects.equals(projDate, project.projDate);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = projID;
+        result = 31 * result + (projName != null ? projName.hashCode() : 0);
+        result = 31 * result + (projDate != null ? projDate.hashCode() : 0);
+        result = 31 * result + custID;
+        return result;
     }
 
     @Override

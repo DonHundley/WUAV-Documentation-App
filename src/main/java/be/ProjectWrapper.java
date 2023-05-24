@@ -20,9 +20,7 @@ public class ProjectWrapper {
     public int getTotalTasks() {
         return totalTasks;
     }
+}
 
-    public Date getDateCreated() {
-        return project.getProjDate();
-    }
-    }
+
 

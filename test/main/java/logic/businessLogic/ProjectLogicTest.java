@@ -30,7 +30,7 @@ public class ProjectLogicTest {
 
         Task task = new Task(1, "task1", "description1", "not started");
         Project project = new Project(1, "Project 1", java.sql.Date.valueOf(java.time.LocalDate.now()), 1);
-        Customer customer = new Customer(1, "Customer", "email@email.com", "Denmarksgade 1", "6700");
+        Customer customer = new Customer(1, "Customer", "email@email.com", "Denmarksgade 1", "6700","Esbjerg");
 
         TaskWrapper taskWrapper = new TaskWrapper(project, task, customer);
         taskInfoList.add(taskWrapper);

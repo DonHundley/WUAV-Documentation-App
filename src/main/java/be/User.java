@@ -1,8 +1,7 @@
 package be;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class User {
 
@@ -18,17 +17,6 @@ public class User {
 
     private String password;
 
-    private List<Project> worksOn;
-
-    public User(int userID, String userName, String password, String access, String firstName, String lastName, List<Project> worksOn) {
-        this.userID = userID;
-        this.userName = userName;
-        this.password = password;
-        this.access = access;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.worksOn = new ArrayList<>();
-    }
 
     public User(int userID, String userName, String password, String access, String firstName, String lastName) {
         this.userID = userID;
@@ -37,16 +25,6 @@ public class User {
         this.access = access;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.worksOn = new ArrayList<>();
-    }
-
-    public User(String userName, String password, String access, String firstName, String lastName, List<Project> worksOn) {
-        this.userName = userName;
-        this.password = password;
-        this.access = access;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.worksOn = new ArrayList<>();
     }
 
     public User(String userName, String password, String access, String firstName, String lastName) {
@@ -107,15 +85,28 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (userID != user.userID) return false;
+        if (!Objects.equals(userName, user.userName)) return false;
+        if (!Objects.equals(firstName, user.firstName)) return false;
+        if (!Objects.equals(lastName, user.lastName)) return false;
+        if (!Objects.equals(access, user.access)) return false;
+        return Objects.equals(password, user.password);
     }
 
-    /*public List<String> getWorksOn() {
-        return worksOn;
+    @Override
+    public int hashCode() {
+        int result = userID;
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (access != null ? access.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        return result;
     }
-
-    public void setWorksOn(List<String> worksOn) {
-        this.worksOn = worksOn;
-    }*/
 }
