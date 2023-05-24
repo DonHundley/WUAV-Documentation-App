@@ -1,5 +1,6 @@
 
 
+import gui.controller.newAndUpdateControllers.*;
 import javafx.application.Application;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -18,11 +19,13 @@ public class Main extends Application{
     public void start(Stage stage)  {
         logger.info("Starting program with Login.fxml");
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/mainViews/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/EditLayout.fxml"));
 
             logger.info("loading root in Main");
 
             Parent root = loader.load();
+            EditLayoutController controller = loader.getController();
+            controller.setUpCanvas();
             Scene scene = new Scene(root);
             stage.setTitle("");
             stage.setScene(scene);
