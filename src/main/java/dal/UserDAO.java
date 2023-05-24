@@ -1,9 +1,8 @@
 package dal;
 
-import be.Project;
+
 import be.User;
 import be.UserWrapper;
-import com.microsoft.sqlserver.jdbc.*;
 import org.apache.logging.log4j.*;
 
 import java.sql.*;

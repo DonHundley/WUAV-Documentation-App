@@ -238,7 +238,7 @@ public class ExportReportViewController {
     public void ExportReport(ActionEvent actionEvent) {
         logger.info("Exporting report from ExportReportViewController");
 
-        String folderPath = "src/main/java/resources/Reports/";
+        String folderPath = "src/main/resources/report/printedReports/";
         String filename = "Report " + selectedProject.getProjName() + "-" + selectedTask.getTaskName() + ".pdf";
 
         File file = new File(folderPath + filename);

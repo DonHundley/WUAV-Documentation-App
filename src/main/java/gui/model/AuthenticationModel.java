@@ -6,11 +6,15 @@ import logic.businessLogic.*;
 import java.util.*;
 
 public class AuthenticationModel {
+    private final UserLogic userLogic;
+    private User loggedInUser;
 
     /**
      * Thread safe singleton of AuthenticationModel.
      */
-    private AuthenticationModel(){}
+    private AuthenticationModel(){
+        userLogic = new UserLogic();
+    }
     private static AuthenticationModel instance;
     public static synchronized AuthenticationModel getInstance(){
         if(instance == null){
@@ -19,8 +23,6 @@ public class AuthenticationModel {
         return instance;
     }
 
-    private UserLogic userLogic = new UserLogic();
-    private User loggedInUser;
     public User getLoggedInUser() {
         return loggedInUser;
     }

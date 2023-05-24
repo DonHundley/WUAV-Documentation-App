@@ -78,24 +78,9 @@ public class ManageProjectController extends BaseController implements Initializ
         projectModel.loadAllProjLists();
 
         logger.trace("setting columns for projectTV");
-        projectDate.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
-        projectDate.setCellFactory(column -> {
-            return new TableCell<ProjectWrapper, Date>() {
-                @Override
-                protected void updateItem(Date date, boolean empty) {
-                    super.updateItem(date, empty);
-                    if (empty || date == null) {
-                        setText(null);
-                    } else {
-                        setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
-                    }
-                }
-            };
-        });
-
+        projectDate.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getProject().getProjDate()));
         projectName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject().getProjName()));
         assignedUserCount.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getTotalTasks()).asObject());
-
         logger.info("setProjectTV() complete.");
     }
 

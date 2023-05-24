@@ -1,8 +1,6 @@
 package be;
 
-import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.Date;
 
 public class ProjectWrapper {
     Project project;

@@ -9,8 +9,12 @@ import java.util.*;
 public class UserLogic {
 
 
-    private UserDAO userDAO = new UserDAO();
+    private final UserDAO userDAO;
     private static final Logger logger = LogManager.getLogger("debugLogger");
+
+    public UserLogic() {
+        userDAO = new UserDAO();
+    }
 
     /**
      * List of Users.
