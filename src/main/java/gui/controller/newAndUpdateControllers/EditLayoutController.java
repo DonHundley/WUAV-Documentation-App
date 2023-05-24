@@ -1,9 +1,8 @@
 package gui.controller.newAndUpdateControllers;
 
-import be.Project;
+
 import be.Task;
 import gui.model.*;
-import gui.shapes.*;
 import javafx.embed.swing.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +19,7 @@ import javafx.scene.paint.Color;
 
 import javafx.scene.control.Button;
 import org.apache.logging.log4j.*;
+import shapeFactory.*;
 
 import javax.imageio.*;
 import java.io.*;
@@ -41,38 +41,44 @@ public class EditLayoutController {
     @FXML
     private Button editLayoutButton, cancelButton;
     @FXML
-    private   Button freeDrawButton;
+    private  Button freeDrawButton;
+    private Button fillButton;
 
-    // Model
+    //------------------------- Model ----------------------------------------------------------------------------------
     private ProjectModel projectModel = ProjectModel.getInstance();
     private Task selectedTask = projectModel.getSelectedTask();
 
-    // Shape variables
-    private Shape[] shapes = new Shape[100];  // We have a limit of 100 shapes.
+    //--------------------- Shape variables-----------------------------------------------------------------------------
     private int shapeCount = 0; // Count of shapes.
+    private String[] sizes = {"small", "medium", "large"}; // sizes to choose from
+    private String selectedSize = "medium"; // default size
+    private ShapeArtist artist; // Our "Artist" is the shape factory.
+    private Shapes[] shapesList;  // Our list of shapes
+    private boolean fillShape; // If true the shapes will be filled.
+    private Shapes shapeBeingDragged = null;  // This is null unless a shape is being dragged.
+    private boolean drawing; // true if freehand drawing.
 
-    // Color variables.colors and colorNames must be in the correct order to assure the name is the selected color.
+    // ---------------------Color variables. --------------------------------------------------------------------------
+    // colors and colorNames must be in the correct order to assure the name is the selected color.
     private Color currentColor = Color.BLACK; // Default color selection.
     private Color[] colors = { Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, // Colors to choose from
             Color.MAGENTA, Color.YELLOW, Color.BLACK, Color.WHITE, Color.ORANGE, Color.VIOLET};
-
     private String[] colorNames = { "Red", "Green", "Blue", "Cyan", // The names of the colors to be selected.
             "Magenta", "Yellow", "Black", "White", "Orange", "Violet" };
 
-    // Mouse variables
+    // -------------------- Mouse variables ---------------------------------------------------------------------------
     private int prevX, prevY;   // Last location of the mouse.
-
     private boolean dragging;   // True while drawing
 
-    private Shape shapeBeingDragged = null;  // This is null unless a shape is being dragged.
-
-    // The canvases
+    // ------------------- The canvases --------------------------------------------------------------------------------
     private int canvasHeight = 400; // The set height of our canvases
     private int canvasWidth = 600; // The set width of our canvases
     private Canvas canvas1;  // The canvas on which everything is drawn. Think of this as layer 1.
     private Canvas canvas2; // The canvas on which shapes will be placed and moved. This of this as layer 2.
     private GraphicsContext g1;  // For drawing on the canvas.
     private GraphicsContext g2; // For placing shapes on the canvas
+
+
 
     /**
      * This method is called to create our canvases to be drawn on.
@@ -104,10 +110,19 @@ public class EditLayoutController {
         paintCanvas(g2);
 
         // We are now creating the tool box for the user.
-        bPane.setBottom(createToolBox());
+        bPane.setBottom(createBottomToolBox());
+        bPane.setRight(createRightToolBox());
+
+        // Instantiate our artist.
+        artist = new ShapeArtist();
+
+        // Create our shape list and set the limit of shapes.
+        shapesList = new Shapes[500];
 
         // Finally we set the default to free hand drawing.
         freeDraw();
+
+
 
         logger.trace("setUpCanvas() complete.");
     }
@@ -116,20 +131,36 @@ public class EditLayoutController {
      * This is to create the tool pane for the user.
      * @return We are returning the tool box to be added to our border pane.
      */
-    private HBox createToolBox() {
+    private HBox createBottomToolBox() {
         logger.trace("createToolBox() called in EditLayoutController.");
 
-        freeDrawButton = new Button("Free draw"); // Button to activate free drawing.
-        freeDrawButton.setOnAction( (e) -> freeDraw());
-        
-
-        Button ovalButton = new Button("Add an Oval"); // Button to create an oval shape.
-        ovalButton.setOnAction( (e) -> addShape( new OvalShape() ) );
+        Button circleButton = new Button("Add a Circle"); // Button to create a circle.
+        circleButton.setOnAction( (e) -> drawShape("circle", selectedSize, fillShape));
         Button rectButton = new Button("Add a Rectangle"); // Button to create a rectangle
-        rectButton.setOnAction( (e) -> addShape( new RectShape() ) );
-        Button roundRectButton = new Button("Add a RoundRect"); // Button to create a rounded rectangle.
-        roundRectButton.setOnAction( (e) -> addShape( new RoundRectShape() ) );
+        rectButton.setOnAction( (e) -> drawShape("rectangle",selectedSize, fillShape));
+        Button ovalButton = new Button("Add a Oval"); // Button to create an oval.
+        ovalButton.setOnAction( (e) -> drawShape("oval", selectedSize, fillShape));
+        Button squareButton = new Button("Add a Square"); // Button to create a square.
+        squareButton.setOnAction( (e) -> drawShape("square", selectedSize, fillShape));
+        Button triangleButton = new Button("Add a Triangle"); // Button to create a triangle.
+        triangleButton.setOnAction( (e) -> drawShape("triangle", selectedSize, fillShape));
 
+        HBox tools = new HBox(10);
+
+        tools.getChildren().add(circleButton);
+        tools.getChildren().add(rectButton);
+        tools.getChildren().add(ovalButton);
+        tools.getChildren().add(squareButton);
+        tools.getChildren().add(triangleButton);
+
+        tools.setStyle("-fx-border-width: 3px; -fx-border-color: transparent; -fx-background-color: silver");
+
+        logger.trace("createToolBox Complete.");
+        return tools;
+    }
+
+
+    private VBox createRightToolBox(){
         ComboBox<String> combobox = new ComboBox<>(); // This is our combobox of colors.
         combobox.setEditable(false);
         combobox.getItems().addAll(colorNames); // Adding the names of our colors.
@@ -137,17 +168,53 @@ public class EditLayoutController {
         combobox.setOnAction(
                 e -> currentColor = colors[combobox.getSelectionModel().getSelectedIndex()] );
 
+        freeDrawButton = new Button("Free draw"); // Button to activate free drawing.
+        freeDrawButton.setOnAction( (e) -> freeDraw());
+        freeDrawButton.setPrefWidth(95);
 
-        HBox tools = new HBox(10);
-        tools.getChildren().add(freeDrawButton); // Adding the buttons we created to the HBox
-        tools.getChildren().add(ovalButton);
-        tools.getChildren().add(rectButton);
-        tools.getChildren().add(roundRectButton);
+        fillButton = new Button("Fill Shapes"); // Button to choose if shapes should be filled.
+        fillButton.setOnAction( (e) -> fillShape(e));
+        fillButton.setPrefWidth(95);
+        fillShape = false;
+
+        ComboBox<String> comboboxSize = new ComboBox<>(); // This is our combobox of sizes.
+        comboboxSize.setEditable(false);
+        comboboxSize.getItems().addAll(sizes); // Adding the names of our sizes.
+        comboboxSize.setValue("medium"); // Setting the value of the comboBox to meet our default size selection.
+        comboboxSize.setOnAction(
+                e -> selectedSize = comboboxSize.getSelectionModel().getSelectedItem());
+        comboboxSize.setPrefWidth(95);
+
+        Button clearButton = new Button("Clear Canvas"); // Button to clear the canvases
+        clearButton.setOnAction((e) -> clearCanvases());
+        clearButton.setPrefWidth(95);
+
+        VBox tools = new VBox(10);
         tools.getChildren().add(combobox);
+        tools.getChildren().add(freeDrawButton);
+        tools.getChildren().add(fillButton);
+        tools.getChildren().add(comboboxSize);
+        tools.getChildren().add(clearButton);
+
         tools.setStyle("-fx-border-width: 3px; -fx-border-color: transparent; -fx-background-color: silver");
 
-        logger.trace("createToolBox Complete.");
         return tools;
+    }
+
+    private void clearCanvases() {
+        g1.clearRect(0,0, canvasWidth, canvasHeight);
+        g2.clearRect(0,0, canvasWidth, canvasHeight);
+
+        shapesList = new Shapes[shapesList.length];
+        shapeCount = 0;
+    }
+
+
+    private void fillShape(ActionEvent e) {
+        fillShape = !fillShape;
+        if(fillShape){
+            fillButton.setStyle("-fx-border-color: blue;");
+        }else fillButton.setStyle("-fx-border-color: transparent;");
     }
 
     /**
@@ -155,27 +222,26 @@ public class EditLayoutController {
      */
     private void freeDraw() {
         logger.trace("freeDraw() called.");
-
-        freeDrawButton.setDisable(true); // We disable the button so the user has a visual queue of what is selected.
-        canvas1.toFront(); // This is brought to the front because it is our free draw canvas.
+        drawing = !drawing;
+        if(drawing) {
+            freeDrawButton.setStyle("-fx-border-color: blue;");
+            canvas1.toFront(); // This is brought to the front because it is our free draw canvas.
+        }else {
+            canvas2.toFront();
+            freeDrawButton.setStyle("-fx-border-color: transparent;");
+        }
     }
 
-    /**
-     * This is called whenever we want to add a shape to our canvas.
-     * @param shape This is in reference to one of our shape classes that extend Shape
-     */
-    private void addShape(Shape shape) {
-        logger.trace("addShape() called in EditLayoutController.");
 
+    private void drawShape(String shapeType, String size, boolean fill){
         canvas2.toFront(); // We bring the canvas to the front because this is our shape canvas.
-        freeDrawButton.setDisable(false); // Enable the button again to show that we are no longer drawing.
-        shape.setColor(currentColor); // The color of the shape is the current color selected.
-        shape.reshape(10,10,150,100); // This is the predetermined size of the shape.
-        shapes[shapeCount] = shape;  // We are using the shapeCount to refer to the stored shape.
+        drawing = false;
+        freeDrawButton.setStyle("-fx-border-color: transparent;");
+        Shapes shape = artist.drawShape(shapeType, size, fill, currentColor, 10, 10, dragging);
+        shapesList[shapeCount] = shape;
         shapeCount++;
-        paintCanvas(g2); // We recreate the canvas with our old shapes + our new one.
+        paintCanvas(g2);
 
-        logger.trace("addShape() complete.");
     }
 
     /**
@@ -191,8 +257,9 @@ public class EditLayoutController {
 
         if (gc.equals(g2)) { // If the given graphics context is the gc for canvas2, we add the shapes again.
             for (int i = 0; i < shapeCount; i++) { // Iterate over our shape list.
-                Shape s = shapes[i];
-                s.draw(gc); // Draw the shape on the canvas again.
+                Shapes s = shapesList[i];
+                System.out.println(i);
+                s.createShape(gc); // Draw the shape on the canvas again.
             }
         }
         logger.trace("paintCanvas() complete.");
@@ -263,7 +330,7 @@ public class EditLayoutController {
         int x = (int)mouseEvent.getX();
         int y = (int)mouseEvent.getY();
         if (shapeBeingDragged != null) {
-            shapeBeingDragged.moveBy(x - prevX, y - prevY);
+            shapeBeingDragged.moveShape(x - prevX, y - prevY);
             prevX = x;
             prevY = y;
             paintCanvas(g2);      // redraw canvas to show shape in new position
@@ -271,7 +338,9 @@ public class EditLayoutController {
     }
 
     private void mouseReleasedShape(MouseEvent mouseEvent){
+
         shapeBeingDragged = null;
+        dragging = false;
     }
 
     /**
@@ -283,16 +352,16 @@ public class EditLayoutController {
         int y = (int)mouseEvent.getY(); // y-coord of where mouse was clicked
 
         for (int i = shapeCount - 1; i >= 0; i--) {  // check shapes
-            Shape s = shapes[i];
-            if (s.containsPoint(x, y)) { // true if a shape is at the mouse location
+            Shapes s = shapesList[i];
+            if (s.containedCoordinates(x,y)) { // true if a shape is at the mouse location
+                dragging = true;
                 shapeBeingDragged = s; // we set our shape being dragged
                 prevX = x;
                 prevY = y;
 
-                shapes[shapeCount - 1] = s;  // put s at the end of the list
+
                 paintCanvas(g2);  // repaint canvas
             }
-            return;
         }
     }
 
@@ -306,8 +375,8 @@ public class EditLayoutController {
 
         logger.info("Iterating over shapes.");
         for (int i = 0; i < shapeCount; i++) {
-            Shape s = shapes[i];
-            s.draw(g1);
+            Shapes s = shapesList[i];
+            s.createShape(g1);
         }
 
         logger.info("Creating image from canvases.");

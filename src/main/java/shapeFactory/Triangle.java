@@ -71,7 +71,7 @@ public class Triangle extends Shapes{
             gc.fillPolygon(xPoints, yPoints, 3);
         }
         gc.setStroke(Color.BLACK);
-        gc.fillPolygon(xPoints, yPoints, 3);
+        gc.strokePolygon(xPoints, yPoints, 3);
     }
 
 

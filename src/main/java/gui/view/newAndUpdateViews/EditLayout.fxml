@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" styleClass="NEwindow-background" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.newAndUpdateControllers.EditLayoutController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="811.0" styleClass="NEwindow-background" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.newAndUpdateControllers.EditLayoutController">
    <children>
-      <Label layoutX="135.0" layoutY="14.0" styleClass="NEwindow-title" text="Create Project Diagram" />
+      <Label layoutX="216.0" layoutY="14.0" styleClass="NEwindow-title" text="Create Project Diagram" />
       <Button fx:id="editLayoutButton" layoutX="454.0" layoutY="541.0" mnemonicParsing="false" onAction="#saveLayout" styleClass="round-btn" text="Save" AnchorPane.bottomAnchor="20.0">
          <padding>
             <Insets top="20.0" />
@@ -22,9 +22,6 @@
          <center>
             <StackPane fx:id="diagramStack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: WHITE;" BorderPane.alignment="CENTER" />
          </center>
-         <right>
-            <AnchorPane prefHeight="448.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
-         </right>
       </BorderPane>
    </children>
 </AnchorPane>
