@@ -91,7 +91,12 @@ public class NECustomerController extends BaseController {
     private void createCustomer() {
         logger.info("Creating a new customer");
         if (validateCustomerFields()) {
-            customer = new Customer(customerName.getText(), customerEmail.getText(), customerAddress.getText(), postalCodeTV.getSelectionModel().getSelectedItem().getPostalCode());
+            customer = new Customer(
+                    customerName.getText(),
+                    customerEmail.getText(),
+                    customerAddress.getText(),
+                    postalCodeTV.getSelectionModel().getSelectedItem().getPostalCode(),
+                    postalCodeTV.getSelectionModel().getSelectedItem().getCity());
             customerModel.createCustomer(customer);
             customerModel.loadCustomersWithWrapper();
             Stage stage = (Stage) createOrEditCustomer.getScene().getWindow();

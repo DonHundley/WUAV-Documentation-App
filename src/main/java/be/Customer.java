@@ -14,14 +14,9 @@ public class Customer {
 
     private String city;
 
-    public Customer(int custID, String custName, String custEmail, String custAddress, String postalCode) {
-        this.custID = custID;
-        this.custName = custName;
-        this.custEmail = custEmail;
-        this.custAddress = custAddress;
-        this.postalCode = postalCode;
-    }
+    public Customer() {} // Blank constructor, used for testing purposes.
 
+    // Constructor with customer ID.
     public Customer(int custID, String custName, String custEmail, String custAddress, String postalCode, String city) {
         this.custID = custID;
         this.custName = custName;
@@ -31,18 +26,13 @@ public class Customer {
         this.city = city;
     }
 
-    public Customer(int custID, String custName, String custEmail, String custAddress) {
-        this.custID = custID;
-        this.custName = custName;
-        this.custEmail = custEmail;
-        this.custAddress = custAddress;
-    }
-
-    public Customer(String custName, String custEmail, String custAddress, String postalCode) {
+    // Constructor without Customer ID, for new customer creation.
+    public Customer(String custName, String custEmail, String custAddress, String postalCode, String city) {
         this.custName = custName;
         this.custEmail = custEmail;
         this.custAddress = custAddress;
         this.postalCode = postalCode;
+        this.city = city;
     }
 
     public int getCustID() {
