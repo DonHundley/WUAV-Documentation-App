@@ -57,6 +57,8 @@ public class EditLayoutController {
     private boolean fillShape; // If true the shapes will be filled.
     private Shapes shapeBeingDragged = null;  // This is null unless a shape is being dragged.
     private boolean drawing; // true if freehand drawing.
+    private String[] strokeChoices = {"fine", "normal", "large", "very large"};
+    private String currentStroke = "normal";
 
     // ---------------------Color variables. --------------------------------------------------------------------------
     // colors and colorNames must be in the correct order to assure the name is the selected color.
@@ -172,8 +174,15 @@ public class EditLayoutController {
         freeDrawButton.setOnAction( (e) -> freeDraw());
         freeDrawButton.setPrefWidth(95);
 
+        ComboBox<String> comboBoxStrokeWidth = new ComboBox<>(); // This is our stroke width comboBox
+        comboBoxStrokeWidth.setEditable(false);
+        comboBoxStrokeWidth.getItems().addAll(strokeChoices);
+        comboBoxStrokeWidth.setValue("normal");
+        comboBoxStrokeWidth.setOnAction(e -> currentStroke = comboBoxStrokeWidth.getSelectionModel().getSelectedItem());
+        comboBoxStrokeWidth.setPrefWidth(95);
+
         fillButton = new Button("Fill Shapes"); // Button to choose if shapes should be filled.
-        fillButton.setOnAction( (e) -> fillShape(e));
+        fillButton.setOnAction( (e) -> fillShape());
         fillButton.setPrefWidth(95);
         fillShape = false;
 
@@ -192,6 +201,7 @@ public class EditLayoutController {
         VBox tools = new VBox(10);
         tools.getChildren().add(combobox);
         tools.getChildren().add(freeDrawButton);
+        tools.getChildren().add(comboBoxStrokeWidth);
         tools.getChildren().add(fillButton);
         tools.getChildren().add(comboboxSize);
         tools.getChildren().add(clearButton);
@@ -201,6 +211,9 @@ public class EditLayoutController {
         return tools;
     }
 
+    /**
+     * When called this will fully clear the canvases and the array of shapes.
+     */
     private void clearCanvases() {
         g1.clearRect(0,0, canvasWidth, canvasHeight);
         g2.clearRect(0,0, canvasWidth, canvasHeight);
@@ -209,8 +222,11 @@ public class EditLayoutController {
         shapeCount = 0;
     }
 
-
-    private void fillShape(ActionEvent e) {
+    /**
+     * This cycles the fill boolean and borders the button if true.
+     * When true the shapes will be filled.
+     */
+    private void fillShape() {
         fillShape = !fillShape;
         if(fillShape){
             fillButton.setStyle("-fx-border-color: blue;");
@@ -227,7 +243,7 @@ public class EditLayoutController {
             freeDrawButton.setStyle("-fx-border-color: blue;");
             canvas1.toFront(); // This is brought to the front because it is our free draw canvas.
         }else {
-            canvas2.toFront();
+            canvas2.toFront(); // We cycle back to our shape canvas now.
             freeDrawButton.setStyle("-fx-border-color: transparent;");
         }
     }
@@ -241,7 +257,6 @@ public class EditLayoutController {
         shapesList[shapeCount] = shape;
         shapeCount++;
         paintCanvas(g2);
-
     }
 
     /**
@@ -279,10 +294,23 @@ public class EditLayoutController {
 
         dragging = true;
 
-        g1.setLineWidth(2);  // Use a 2-pixel-wide line for drawing.
+        g1.setLineWidth(strokeWidth());  // Use a 2-pixel-wide line for drawing.
         g1.setStroke(currentColor); // Line color is our current color.
     }
 
+    /**
+     * Sets the pixel size of our stroke based on the selection in the combobox.
+     * @return returns an int that is representative of the pixel size of our stroke.
+     */
+    private int strokeWidth(){
+        return switch (currentStroke) {
+            case "fine" -> 1;
+            case "normal" -> 3;
+            case "large" -> 5;
+            case "very large" -> 10;
+            default -> throw new AssertionError();
+        };
+    }
 
     /**
      * Called whenever the user releases the mouse button.
