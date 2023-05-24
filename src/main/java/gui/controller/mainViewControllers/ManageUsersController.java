@@ -30,7 +30,6 @@ public class ManageUsersController extends BaseController implements Initializab
     @FXML private Label usernameLabel;
     @FXML private Label windowTitleLabel;
     @FXML private Label errorLabel;
-
     @FXML private AnchorPane anchorUsers;
 
     // Models
@@ -119,7 +118,7 @@ public class ManageUsersController extends BaseController implements Initializab
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/NEUser.fxml"));
             Parent root = loader.load();
             NEUserController controller = loader.getController();
-            controller.setNEUserController(false);
+            controller.setNEUserController(isEdit);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
 

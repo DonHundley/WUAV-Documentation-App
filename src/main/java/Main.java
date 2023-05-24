@@ -24,14 +24,13 @@ public class Main extends Application{
             logger.info("loading root in Main");
 
             Parent root = loader.load();
-            //EditLayoutController controller = loader.getController();
-            //controller.setUpCanvas();
+
             Scene scene = new Scene(root);
             stage.setTitle("");
             stage.setScene(scene);
             stage.show();
         }catch (IOException e){
-            logger.error("There was a problem with loading the fxml file. Class: Main CAUSE: " + e);
+            logger.error("There was a problem with loading the fxml file.", e);
         }
         logger.info("finished program start.");
     }

@@ -27,7 +27,6 @@ public class Oval extends Shapes{
             }
             default -> throw new AssertionError();
         }
-
     }
 
     @Override

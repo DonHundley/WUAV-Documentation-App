@@ -439,8 +439,6 @@ public class DocumentationController extends BaseController implements Initializ
                 logger.info("Loading EditLayout.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/newAndUpdateViews/EditLayout.fxml"));
                 Parent root = loader.load();
-                EditLayoutController controller = loader.getController();
-                controller.setUpCanvas();
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 stage.setTitle("Update Layout");

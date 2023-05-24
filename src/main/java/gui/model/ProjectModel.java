@@ -9,24 +9,31 @@ import logic.documentPDF.*;
 import java.util.*;
 
 public class ProjectModel {
-
-    private ProjectLogic projectLogic = new ProjectLogic();
-    private PDFHandler pdfHandler = new PDFHandler();
+    private final ProjectLogic projectLogic;
+    private final PDFHandler pdfHandler;
 
     private Task selectedTask;
     private Project selectedProject;
 
-    private ObservableList<ProjectWrapper> projects = FXCollections.observableArrayList();
-    private ObservableList<Task> allTasks = FXCollections.observableArrayList();
-    private ObservableList<TaskWrapper> tasksByUser = FXCollections.observableArrayList();
-    private ObservableList<TaskWrapper> tasksInfo = FXCollections.observableArrayList();
-    private ObservableList<Task> tasksByProject = FXCollections.observableArrayList();
+    private final ObservableList<ProjectWrapper> projects;
+    private final ObservableList<Task> allTasks;
+    private final ObservableList<TaskWrapper> tasksByUser;
+    private final ObservableList<TaskWrapper> tasksInfo;
+    private final ObservableList<Task> tasksByProject;
 
 
     /**
      * Thread safe singleton of ProjectModel.
      */
-    private ProjectModel(){}
+    private ProjectModel(){
+        projectLogic = new ProjectLogic();
+        projects = FXCollections.observableArrayList();
+        allTasks = FXCollections.observableArrayList();
+        tasksByUser = FXCollections.observableArrayList();
+        tasksInfo = FXCollections.observableArrayList();
+        tasksByProject = FXCollections.observableArrayList();
+        pdfHandler = new PDFHandler();
+    }
     private static ProjectModel instance;
     public static synchronized ProjectModel getInstance(){
         if(instance == null){

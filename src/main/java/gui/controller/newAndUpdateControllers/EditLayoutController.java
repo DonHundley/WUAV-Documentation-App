@@ -5,7 +5,7 @@ import be.Task;
 import gui.model.*;
 import javafx.embed.swing.*;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
@@ -23,6 +23,7 @@ import shapeFactory.*;
 
 import javax.imageio.*;
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
 
@@ -31,7 +32,7 @@ import java.util.*;
  * The drawing application used in this controller at its current state takes heavy inspiration from https://math.hws.edu/javanotes/
  * which is Introduction to Programming Using Java, a free, on-line textbook.
  */
-public class EditLayoutController {
+public class EditLayoutController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
     @FXML
@@ -52,13 +53,13 @@ public class EditLayoutController {
     private int shapeCount = 0; // Count of shapes.
     private String[] sizes = {"small", "medium", "large"}; // sizes to choose from
     private String selectedSize = "medium"; // default size
-    private ShapeArtist artist; // Our "Artist" is the shape factory.
-    private Shapes[] shapesList;  // Our list of shapes
-    private boolean fillShape; // If true the shapes will be filled.
-    private Shapes shapeBeingDragged = null;  // This is null unless a shape is being dragged.
-    private boolean drawing; // true if freehand drawing.
     private String[] strokeChoices = {"fine", "normal", "large", "very large"};
     private String currentStroke = "normal";
+    private Shapes[] shapesList;  // Our list of shapes
+    private ShapeArtist artist; // Our "Artist" is the shape factory.
+    private boolean drawing; // true if freehand drawing.
+    private boolean fillShape; // If true the shapes will be filled.
+    private Shapes shapeBeingDragged = null;  // This is null unless a shape is being dragged.
 
     // ---------------------Color variables. --------------------------------------------------------------------------
     // colors and colorNames must be in the correct order to assure the name is the selected color.
@@ -86,7 +87,7 @@ public class EditLayoutController {
      * This method is called to create our canvases to be drawn on.
      * Canvas 1 is for freehand drawing, canvas 2 is for shapes.
      */
-    public void setUpCanvas(){
+    private void setUpCanvas(){
         logger.trace("setUpCanvas() called in EditLayoutController");
         canvas1 = new Canvas(canvasWidth, canvasHeight);
         canvas2 = new Canvas(canvasWidth, canvasHeight);
@@ -111,26 +112,11 @@ public class EditLayoutController {
         paintCanvas(g1);
         paintCanvas(g2);
 
-        // We are now creating the tool box for the user.
-        bPane.setBottom(createBottomToolBox());
-        bPane.setRight(createRightToolBox());
-
-        // Instantiate our artist.
-        artist = new ShapeArtist();
-
-        // Create our shape list and set the limit of shapes.
-        shapesList = new Shapes[500];
-
-        // Finally we set the default to free hand drawing.
-        freeDraw();
-
-
-
         logger.trace("setUpCanvas() complete.");
     }
 
     /**
-     * This is to create the tool pane for the user.
+     * This is to create the bottom tool pane for the user. Consists of shape buttons.
      * @return We are returning the tool box to be added to our border pane.
      */
     private HBox createBottomToolBox() {
@@ -161,7 +147,10 @@ public class EditLayoutController {
         return tools;
     }
 
-
+    /**
+     * Creates the right tool box for the user. Consists mainly of settings, like color choice or shape size.
+     * @return The Vbox full of buttons and comboBoxes to be placed in the borderpane.
+     */
     private VBox createRightToolBox(){
         ComboBox<String> combobox = new ComboBox<>(); // This is our combobox of colors.
         combobox.setEditable(false);
@@ -248,7 +237,12 @@ public class EditLayoutController {
         }
     }
 
-
+    /**
+     * This will draw the shape on a canvas when a shape button is clicked.
+     * @param shapeType The type of shape to be created. Square, circle, triangle, etc.
+     * @param size The size of the shape. Small, medium, and large.
+     * @param fill If the shape should be filled with color.
+     */
     private void drawShape(String shapeType, String size, boolean fill){
         canvas2.toFront(); // We bring the canvas to the front because this is our shape canvas.
         drawing = false;
@@ -283,7 +277,7 @@ public class EditLayoutController {
     /**
      * This is called when the user presses the mouse anywhere in canvas1.
      */
-    public void mousePressed(MouseEvent mouseEvent) {
+    private void mousePressed(MouseEvent mouseEvent) {
         int x = (int) mouseEvent.getX();   // x-coordinate where the user clicked.
         int y = (int) mouseEvent.getY();   // y-coordinate where the user clicked.
 
@@ -315,7 +309,7 @@ public class EditLayoutController {
     /**
      * Called whenever the user releases the mouse button.
      */
-    public void mouseReleased (MouseEvent mouseEvent){
+    private void mouseReleased (MouseEvent mouseEvent){
         dragging = false;
     }
 
@@ -326,7 +320,7 @@ public class EditLayoutController {
      * to the current mouse location, and set up prevX and prevY for the next call.
      * The user is locked to drawing within the canvas.
      */
-    public void mouseDragged (MouseEvent mouseEvent){
+    private void mouseDragged (MouseEvent mouseEvent){
         if (!dragging)
             return;  // Nothing to do because the user isn't drawing.
 
@@ -366,7 +360,6 @@ public class EditLayoutController {
     }
 
     private void mouseReleasedShape(MouseEvent mouseEvent){
-
         shapeBeingDragged = null;
         dragging = false;
     }
@@ -386,13 +379,10 @@ public class EditLayoutController {
                 shapeBeingDragged = s; // we set our shape being dragged
                 prevX = x;
                 prevY = y;
-
-
                 paintCanvas(g2);  // repaint canvas
             }
         }
     }
-
 
     /**
      * Method to update the layout for a task.
@@ -440,6 +430,23 @@ public class EditLayoutController {
         stage.close();
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setUpCanvas();
+
+        // We are now creating the tool boxes for the user.
+        bPane.setBottom(createBottomToolBox());
+        bPane.setRight(createRightToolBox());
+
+        // Instantiate our artist.
+        artist = new ShapeArtist();
+
+        // Create our shape list and set the limit of shapes.
+        shapesList = new Shapes[500];
+
+        // Finally we set the default to free hand drawing.
+        freeDraw();
+    }
 }
 
 

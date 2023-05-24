@@ -6,16 +6,20 @@ import logic.businessLogic.*;
 
 public class CustomerModel {
     private Customer selectedCustomer;
-    private CustomerLogic customerLogic = new CustomerLogic();
-
-    private ObservableList<CustomerWrapper> customerswithWrapper = FXCollections.observableArrayList();
-    private ObservableList<Customer> customers = FXCollections.observableArrayList();
-
+    private final CustomerLogic customerLogic;
+    private final ObservableList<CustomerWrapper> customerswithWrapper;
+    private final ObservableList<Customer> customers;
+    private final ObservableList<PostalCode> postalCodes;
 
     /**
      * Thread safe singleton of CustomerModel.
      */
-    private CustomerModel(){}
+    private CustomerModel(){
+        customerLogic = new CustomerLogic();
+        customerswithWrapper = FXCollections.observableArrayList();
+        customers = FXCollections.observableArrayList();
+        postalCodes = FXCollections.observableArrayList();
+    }
     private static CustomerModel instance;
     public static synchronized CustomerModel getInstance(){
         if(instance == null){
@@ -38,7 +42,6 @@ public class CustomerModel {
     public ObservableList<Customer> getCustomers() {
         return customers;
     }
-    private ObservableList<PostalCode> postalCodes = FXCollections.observableArrayList();
     public ObservableList<PostalCode> getPostalCodes() {return postalCodes;}
 
     /**

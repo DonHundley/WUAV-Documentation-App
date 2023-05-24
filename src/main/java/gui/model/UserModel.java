@@ -8,15 +8,19 @@ import java.util.*;
 
 public class UserModel {
 
-    private ObservableList<User> users = FXCollections.observableArrayList();
-    private ObservableList<UserWrapper> techs = FXCollections.observableArrayList();
+    private final ObservableList<User> users;
+    private final ObservableList<UserWrapper> techs;
     private User selectedUser;
-    private UserLogic userLogic = new UserLogic();
+    private final UserLogic userLogic;
 
     /**
      * Thread safe singleton of UserModel.
      */
-    private UserModel(){}
+    private UserModel(){
+        userLogic = new UserLogic();
+        users = FXCollections.observableArrayList();
+        techs = FXCollections.observableArrayList();
+    }
     private static UserModel instance;
     public static synchronized UserModel getInstance(){
         if(instance == null){
