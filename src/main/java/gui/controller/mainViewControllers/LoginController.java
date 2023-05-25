@@ -38,13 +38,11 @@ public class LoginController extends BaseController implements Initializable{
             logger.warn("User did not input proper login information. Assure there are not warnings from UserLogic for lists.");
             return;
         }
-        
+
         try {
             logger.info("Loading NavigationView.fxml");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/mainViews/NavigationView.fxml"));
             Parent root = loader.load();
-            NavigationController controller = loader.getController();
-            controller.setNavigationController();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setTitle("WUAV Documentation management system.");

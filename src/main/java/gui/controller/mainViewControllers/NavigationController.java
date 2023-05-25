@@ -12,11 +12,12 @@ import javafx.scene.layout.*;
 import org.apache.logging.log4j.*;
 
 import java.io.*;
+import java.net.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class NavigationController extends BaseController{
+public class NavigationController extends BaseController implements Initializable{
     @FXML private AnchorPane baseNavAnchor;
     @FXML private AnchorPane navAnchor;
      //x300 y0
@@ -37,14 +38,17 @@ public class NavigationController extends BaseController{
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
-    public void setNavigationController()  {
-        logger.info("setNavigationController() called.");
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         viewAnchor = super.getViewPane();
         baseNavAnchor.getChildren().add(viewAnchor);
         viewAnchor.setLayoutX(300);
         viewAnchor.setLayoutY(0);
 
-        logger.info("Checking account access level.");
+        setNavigationController();
+    }
+    private void setNavigationController()  {
+        logger.info("setNavigationController() called.");
         String access = loggedInUser.getAccess().toUpperCase();
         try {
             switch (access) {
@@ -209,5 +213,6 @@ public class NavigationController extends BaseController{
         }
         logger.info("documentationExpired() complete.");
     }
+
 
 }

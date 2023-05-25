@@ -22,9 +22,6 @@ import java.util.*;
 
 public class ManageCustomerController extends BaseController implements Initializable {
 
-
-
-    @FXML private AnchorPane customerAnchor;
     // Tableview
     @FXML
     private TableView<CustomerWrapper> customersTV;
@@ -49,8 +46,6 @@ public class ManageCustomerController extends BaseController implements Initiali
     @FXML
     private Label usernameLabel;
     @FXML
-    private Label windowTitle;
-    @FXML
     private Label messageLabel;
 
     // Buttons
@@ -65,6 +60,25 @@ public class ManageCustomerController extends BaseController implements Initiali
     private ProjectModel projectModel = ProjectModel.getInstance();
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("Initializing ManageCustomerController");
+        if(authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("SALES")){
+            editCustomerButton.setVisible(false);
+            newCustomerButton.setVisible(false);
+        }
+        setCustomerTableView();
+        setUsernameLabel();
+
+        logger.trace("Adding listener for search customer in ManageCustomersController.");
+        searchCustomer.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                customerModel.search(newValue);
+            }
+        });
+    }
 
     /**
      * We use this to set our username label and window title label.
@@ -172,33 +186,15 @@ public class ManageCustomerController extends BaseController implements Initiali
         super.logout(actionEvent);
     }
 
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        logger.trace("Initializing ManageCustomerController");
-        if(authenticationModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")){
-           editCustomerButton.setVisible(false);
-           newCustomerButton.setVisible(false);
-        }
-
-        setCustomerTableView();
-        setUsernameLabel();
-        logger.info("Adding listener for search customer in ManageCustomersController.");
-        searchCustomer.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                customerModel.search(newValue);
-            }
-        });
-    }
-
     @FXML private void onCustomerTVClick(MouseEvent mouseEvent) {
         logger.trace("User clicked customerTV in " + this.getClass().getName());
         if(customersTV.getSelectionModel().getSelectedItem() != null){
             messageLabel.setText("");
             customerModel.setSelectedCustomer(customersTV.getSelectionModel().getSelectedItem().getCustomer());
             projectModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
+
+            // If the customer that is clicked twice has a project, we open the documentation for it.
+            // If there is no documentation, and the logged in account has the correct access, we instead create a project for the customer.
 
             if(mouseEvent.getClickCount() == 2){
                 if(customersTV.getSelectionModel().getSelectedItem().getProject().getProjID() != 0){
@@ -229,7 +225,7 @@ public class ManageCustomerController extends BaseController implements Initiali
             }
         }
 
-        if(customersTV.getSelectionModel().getSelectedItem() == null){
+        if(customersTV.getSelectionModel().getSelectedItem() == null){ // If the table is clicked twice off of a user, we create a new customer.
             if(mouseEvent.getClickCount() == 2){
                 openCustomerWindow(false);
             }
