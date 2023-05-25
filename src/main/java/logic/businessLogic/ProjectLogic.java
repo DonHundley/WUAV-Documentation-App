@@ -2,6 +2,7 @@ package logic.businessLogic;
 
 import be.*;
 import dal.*;
+import javafx.scene.image.*;
 import org.apache.logging.log4j.*;
 
 import java.util.*;
@@ -14,11 +15,18 @@ public class ProjectLogic {
     private final PictureDAO pictureDAO;
     private final WorksOnDAO worksOnDAO;
     private static final Logger logger = LogManager.getLogger("debugLogger");
+    private List<Image> imageList;
+    private List<String> deviceList;
+    private List<String> deviceCredentials;
+
     public ProjectLogic() {
         projectDAO = new ProjectDAO();
         taskDAO = new TaskDAO();
         pictureDAO = new PictureDAO();
         worksOnDAO = new WorksOnDAO();
+        imageList = new ArrayList<>();
+        deviceList = new ArrayList<>();
+        deviceCredentials = new ArrayList<>();
     }
 
 
@@ -147,6 +155,12 @@ public class ProjectLogic {
         worksOnDAO.deleteWork(selectedUser, selectedProject);
     }
 
+    public List<TaskPictures> getTaskPicturesByTask(Task task){return pictureDAO.getPictureByDocumentID(task);}
+
+    public List<Integer> getProjectIDsByUserID(User user){
+        return worksOnDAO.getProjectIDsByUserID(user);
+    }
+
     public List<TaskWrapper> tasksByUserID(List<Integer> projectIDsByUserIDs, List<TaskWrapper> getTasksInfo){
         logger.info("Creating list in ProjectLogic. tasksByUserID()");
         List<TaskWrapper> tasksByUserID = new ArrayList<>();
@@ -172,9 +186,48 @@ public class ProjectLogic {
         logger.info("Returning list of tasksByUserID, process complete.");
         return tasksByUserID;
     }
-    public List<TaskPictures> getTaskPicturesByTask(Task task){return pictureDAO.getPictureByDocumentID(task);}
 
-    public List<Integer> getProjectIDsByUserID(User user){
-        return worksOnDAO.getProjectIDsByUserID(user);
+
+    public void createTaskPictureLists(List<TaskPictures> taskPictures){
+        int deviceCount = 1;
+        for (TaskPictures pics : taskPictures) {
+            if(pics.getPicture() != null){
+                imageList.add(pics.getPicture());
+            }
+            if(pics.getDeviceName() != null) {
+                deviceList.add("Device " + deviceCount + ": " + pics.getDeviceName() + ", ");
+                if(pics.getPassword() != null){
+                    deviceCredentials.add("Device " + deviceCount +": " + pics.getPassword() + ", ");
+                }
+                deviceCount++;
+            }
+        }
+
+    }
+
+    public List<Image> getImageList() {
+        return imageList;
+    }
+
+    public String getDeviceList() {
+        StringBuilder names = new StringBuilder();
+        if(!deviceList.isEmpty()) {
+            for (String device : deviceList
+            ) {
+                names.append(device);
+            }
+        }
+        return names.toString();
+    }
+
+    public String getDeviceCredentials() {
+        StringBuilder credentials = new StringBuilder();
+        if(!deviceCredentials.isEmpty()){
+            for (String credential: deviceCredentials
+            ) {
+                credentials.append(credential);
+            }
+        }
+        return credentials.toString();
     }
 }

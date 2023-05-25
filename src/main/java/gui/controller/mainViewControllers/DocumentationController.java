@@ -70,12 +70,6 @@ public class DocumentationController extends BaseController implements Initializ
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
     private CustomerModel customerModel = CustomerModel.getInstance();
 
-    // private variables
-    private Project selectedProject;
-    private HashMap<String, Image> images = new HashMap<>();
-    private List<String> deviceNames = new ArrayList<>();
-    private List<String> deviceCredentials = new ArrayList<>();
-
     // logger
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
@@ -102,110 +96,38 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
     /**
-     * This controller needs the selected project in order to get a list of tasks for it.
-     * We fetch the selected project from persistent in order to do this, if there is a problem with this, we show an alert.
-     */
-    private void setSelectedProject() {
-        logger.trace("Setting selected project from "+ this.getClass().getName());
-        if (projectModel.getSelectedProject() != null) {
-            selectedProject = projectModel.getSelectedProject();
-        } else {
-            logger.warn("User may not have selected a project in " + this.getClass().getName() +". User was notified.");
-            String str = "An error has occurred, please contact system admin. Project was not selected or does not exist.";
-            super.createWarning(str);
-        }
-    }
-
-    /**
      * this method generates thumbnail images for a list of picture belonging to a specific task and displays them in a pane.
      * A mouse click event is set on each thumbnail to open an image dialog
      */
-    private List<Image> generateImgThumbnails() {
+    private void generateImgThumbnails() {
         logger.info("generateImgThumbnails() was called in " + this.getClass().getName());
-        Task task = projectModel.getSelectedTask();
-        logger.trace("Creating list in generateImgThumbnails()");
-        List<TaskPictures> pics = projectModel.taskPicturesByDocID(task);
-        List<Image> imageList = new ArrayList<>();
-        for (TaskPictures taskPictures : pics) {
-            imageList.add(taskPictures.getPicture());
-        }
-
-        logger.trace("Clearing appropriate items for image Thumbnails.");
-
+        List<Image> imageList = projectModel.getTaskPictureImages();
         imagePane.getChildren().clear();
-        images.clear();
-        resetDeviceLabels();
-
         int imgCount = 1;
-        int deviceCount = 1;
 
-        logger.info("Iterating over all pictures for selected task in generateImgThumbnails()");
-        for (TaskPictures picture : pics) {
-            if (picture.getPicture() != null) {
-                ImageView bImage = new ImageView(picture.getPicture());
-                bImage.setFitHeight(150);
-                bImage.setFitWidth(200);
-                bImage.setX(imageLocationX(imgCount, 200));
-                bImage.setY(imageLocationY(imgCount, 150));
-                imagePane.getChildren().add(bImage);
-                bImage.setOnMouseClicked(event -> openImageDialogOnMouseClick(event, bImage.getImage(), imageList));
-                imgCount++;
-
-            }
-
-            logger.info("Iterating over all devices for selected task in generateImgThumbnails()");
-
-            if(picture.getDeviceName() != null){
-                deviceNames.add("Device " + deviceCount + ": " + picture.getDeviceName() + ", ");
-                if(picture.getPassword() != null){
-                    deviceCredentials.add("Device " + deviceCount +": " + picture.getPassword() + ", ");
-                }
-                deviceCount++;
-            }
-
-            logger.trace("setting device labels.");
-            setDeviceLabels();
+        logger.info("Iterating over all pictures for selected task");
+        for (Image taskPicture : imageList) {
+            ImageView bImage = new ImageView(taskPicture);
+            bImage.setFitHeight(150);
+            bImage.setFitWidth(200);
+            bImage.setX(imageLocationX(imgCount, 200));
+            bImage.setY(imageLocationY(imgCount, 150));
+            imagePane.getChildren().add(bImage);
+            bImage.setOnMouseClicked(event -> openImageDialogOnMouseClick(event, bImage.getImage(), imageList));
+            imgCount++;
 
             if (imgCount == 20) {
                 break;
             }
         }
         logger.info("Finished generating image thumbnails.");
-        return imageList;
     }
 
-    private void resetDeviceLabels() {
-        logger.trace("Activated resetDeviceLabels() in " + this.getClass().getName());
-        deviceNames.clear();
-        deviceCredentials.clear();
-        deviceNamesLabel.setText("No device names listed.");
-        deviceCredentialsLabel.setText("No device credentials listed.");
-        logger.trace("Device labels reset.");
-    }
 
     private void setDeviceLabels() {
-
-        if(!deviceNames.isEmpty()) {
-            String names = new String();
-            for (String device : deviceNames
-            ) {
-                names = names + device;
-                deviceNamesLabel.setText(names);
-            }
-        }else {
-            deviceNamesLabel.setText("No devices found.");
-        }
-
-        if(!deviceCredentials.isEmpty()){
-            String credentials = new String();
-        for (String credential:deviceCredentials
-             ) {
-            credentials = credentials + credential;
-            deviceCredentialsLabel.setText(credentials);
-        }
-        }else {
-            deviceCredentialsLabel.setText("No device credentials found.");
-        }
+        logger.trace("setting device labels.");
+        deviceNamesLabel.setText(projectModel.getTaskPictureDevices());
+        deviceCredentialsLabel.setText(projectModel.getTaskPictureCredentials());
         logger.trace("Device labels set.");
     }
 
@@ -391,14 +313,13 @@ public class DocumentationController extends BaseController implements Initializ
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.trace("initializing DocumentationController");
-        setSelectedProject();
         setUsernameLabel();
         setTaskTV();
-        if (authenticationModel.getLoggedInUser().getAccess().toUpperCase().equals("TECHNICIAN")) {
+        if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("TECHNICIAN")) {
             createTaskButton.setVisible(false);
         }
 
-        if (authenticationModel.getLoggedInUser().getAccess().toUpperCase().equals("SALES")) {
+        if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("SALES")) {
             createTaskButton.setVisible(false);
             layoutButton.setVisible(false);
             picturesButton.setVisible(false);
@@ -414,21 +335,21 @@ public class DocumentationController extends BaseController implements Initializ
         logger.trace("taskTV clicked in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             projectModel.setSelectedTask(taskTV.getSelectionModel().getSelectedItem());
+            projectModel.createTaskPicturesList(projectModel.taskPicturesByDocID());
+            setDeviceLabels();
+            setDescriptionLabel();
+            generateImgThumbnails();
             if (projectModel.getSelectedTask().getTaskLayout() != null) {
                 largeImageView.setImage(projectModel.getSelectedTask().getTaskLayout());
             }
-            setDescriptionLabel();
-            //images.clear();
-            generateImgThumbnails();
             if (mouseEvent.getClickCount() == 2) {
                 editTask();
             }
         } else if (mouseEvent.getClickCount() == 2) {
-            if (authenticationModel.getLoggedInUser().getAccess().toUpperCase().equals("MANAGER") || authenticationModel.getLoggedInUser().getAccess().toUpperCase().equals("ADMIN")) {
+            if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("MANAGER") || authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("ADMIN")) {
                 newTask();
             }
         }
-
     }
 
     public void updateLayout(ActionEvent actionEvent) {
@@ -470,25 +391,14 @@ public class DocumentationController extends BaseController implements Initializ
         logger.info("openExportReportView called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             try {
-                logger.trace("Collecting selected project, selected item from task tv, and selected customer.");
-                Project project = projectModel.getSelectedProject();
-                Task task = taskTV.getSelectionModel().getSelectedItem();
-                Customer customer = customerModel.getSelectedCustomer();
                 logger.info("Loading ExportReportView.fxml");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/externalViews/ExportReportView.fxml"));
                 Parent root = loader.load();
-                ExportReportViewController controller = loader.getController();
-               List<Image> imageList = generateImgThumbnails();
-                controller.setSelectedTask(task);
-                controller.setSelectedProject(project);
-                controller.setSelectedCustomer(customer);
-                controller.setImages(imageList);
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 stage.setTitle("Export Report View");
                 stage.setScene(scene);
                 stage.show();
-
             } catch (IOException e) {
                 logger.error("There has been an issue loading ExportReportView.fxml.", e);
                 String str = "There has been an issue loading ExportReportView.fxml, please contact system Admin.";

@@ -20,8 +20,8 @@ public class LoginController extends BaseController implements Initializable{
     @FXML private MFXPasswordField passTF;
     @FXML private Label messageLabel;
 
-    private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    private UserModel userModel = UserModel.getInstance();
+    private AuthenticationModel authenticationModel;
+    private UserModel userModel;
     private HashMap<Integer, Integer> userInfo;
     private List<User> users;
     private static final Logger logger = LogManager.getLogger("debugLogger");
@@ -82,6 +82,8 @@ public class LoginController extends BaseController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("Initializing LoginController.");
+        authenticationModel = AuthenticationModel.getInstance();
+        userModel = UserModel.getInstance();
         users = userModel.users();
         userInfo = authenticationModel.userInfo();
     }

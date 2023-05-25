@@ -46,8 +46,6 @@ public class ProjectModel {
      * These methods get our observable lists.
      */
     public ObservableList<ProjectWrapper> getProjects() {return projects;}
-
-    public ObservableList<Task> getAllTasks(){return allTasks;}
     public ObservableList<TaskWrapper> getTasksInfo(){return tasksInfo;}
 
     public ObservableList<Task> getTasksByProject() {return tasksByProject;}
@@ -129,17 +127,22 @@ public class ProjectModel {
     public void assignProject(User selectedUser, Project selectedProject) {
         projectLogic.assignProject(selectedUser, selectedProject);
     }
-    public void removeProjectAssign(User selectedUser, Project selectedProject) {
-        projectLogic.removeAssignedProject(selectedUser, selectedProject);
-    }
 
 
     /**
      * TaskPicture Methods.
      */
-    public List<TaskPictures> taskPicturesByDocID(Task task) {
-        return projectLogic.getTaskPicturesByTask(task);
+    public List<TaskPictures> taskPicturesByDocID() {
+        return projectLogic.getTaskPicturesByTask(selectedTask);
     }
+    public void createTaskPicturesList(List<TaskPictures> taskPictures) {
+        projectLogic.createTaskPictureLists(taskPictures);
+    }
+    public List<Image> getTaskPictureImages(){return projectLogic.getImageList();}
+    public String getTaskPictureDevices(){return projectLogic.getDeviceList();}
+    public String getTaskPictureCredentials(){return projectLogic.getDeviceCredentials();}
+
+
 
     /**
      * The method called to export a pdf of a specific project.

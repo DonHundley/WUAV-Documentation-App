@@ -16,7 +16,7 @@ import java.io.*;
 public abstract class BaseController {
 
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    private ViewPane viewPaneClass = ViewPane.getViewPaneInstance();;
+    private final ViewPane viewPaneClass = ViewPane.getViewPaneInstance();;
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
