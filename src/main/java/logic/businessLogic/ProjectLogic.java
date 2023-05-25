@@ -189,6 +189,9 @@ public class ProjectLogic {
 
 
     public void createTaskPictureLists(List<TaskPictures> taskPictures){
+        imageList.clear();
+        deviceList.clear();
+        deviceCredentials.clear();
         int deviceCount = 1;
         for (TaskPictures pics : taskPictures) {
             if(pics.getPicture() != null){
