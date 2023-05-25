@@ -1,7 +1,5 @@
 package be;
 
-import javafx.geometry.Pos;
-
 public class CustomerWrapper {
     Customer customer;
     Project project;

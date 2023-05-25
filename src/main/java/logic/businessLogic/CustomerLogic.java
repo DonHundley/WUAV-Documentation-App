@@ -7,10 +7,14 @@ import org.apache.logging.log4j.*;
 import java.util.*;
 
 public class CustomerLogic {
-    private CustomerDAO customerDAO = new CustomerDAO();
+    private final CustomerDAO customerDAO;
+    private final PostalCodeDAO postalCodeDAO;
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
-    private PostalCodeDAO postalCodeDAO = new PostalCodeDAO();
+    public CustomerLogic() {
+       customerDAO = new CustomerDAO();
+       postalCodeDAO = new PostalCodeDAO();
+    }
 
     /**
      * @return This returns the list of postal codes created by PostalCodeDAO.

@@ -1,8 +1,6 @@
 package be;
 
-import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.Date;
 
 public class ProjectWrapper {
     Project project;
@@ -20,9 +18,7 @@ public class ProjectWrapper {
     public int getTotalTasks() {
         return totalTasks;
     }
+}
 
-    public Date getDateCreated() {
-        return project.getProjDate();
-    }
-    }
+
 

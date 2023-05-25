@@ -1,7 +1,5 @@
 package be;
 
-import java.util.Date;
-
 public class UserWrapper {
     User user;
     int assignedTasks;
@@ -18,6 +16,4 @@ public class UserWrapper {
     public int getAssignedTasks() {
         return assignedTasks;
     }
-
-
 }

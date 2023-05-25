@@ -9,7 +9,6 @@ public class Task {
     private int projID;
 
     private String taskName;
-
     private Image taskLayout;
 
     private String taskDesc;

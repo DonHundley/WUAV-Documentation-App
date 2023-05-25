@@ -1,5 +1,6 @@
 package logic.documentPDF;
 
+
 import be.Customer;
 import be.Project;
 import be.Task;
@@ -25,8 +26,8 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.*;
+import java.util.*;
 
 
 public class PDFHandler {
@@ -39,7 +40,7 @@ public class PDFHandler {
     public void exportReport(Customer customer, Project project, Task task, Image image1, Image image2, String deviceNames, String devicePasswords) {
         try {
 
-            PDDocument document = Loader.loadPDF(new File("src/main/java/resources/ReportBackground/reportBackground-input.pdf"));
+            PDDocument document = Loader.loadPDF(new File(Objects.requireNonNull(this.getClass().getResource("/report/reportBackground-input.pdf")).toURI()));
             PDPage page = document.getPage(0);
             PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
 
@@ -73,13 +74,15 @@ public class PDFHandler {
 
             contentStream.close();
 
-            String folderPath = "src/main/java/resources/Reports/";
+            String folderPath = "src/main/resources/report/printedReports/";
             String exportFile = folderPath + "Report " + project.getProjName() + "-" + task.getTaskName() + ".pdf";
             document.save(exportFile);
             document.close();
-        } catch (IOException e) {
+
+        } catch (IOException | URISyntaxException e) {
 
             logger.error("There was an issue with the content stream in the pdf creation", e);
+
         }
 
     }

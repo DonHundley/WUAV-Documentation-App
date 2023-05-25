@@ -190,7 +190,7 @@ public class NavigationController extends BaseController{
             LocalDateTime localDateTime = LocalDateTime.now().minusYears(4); //4 years ago date
             java.sql.Date dateTime = Date.valueOf(localDateTime.toLocalDate()); //converts to Date
 
-            if (p.getDateCreated().before(dateTime)) {
+            if (p.getProject().getProjDate().before(dateTime)) {
                 expiredDocumentation.add(p.getProject().getProjName());
             }
 

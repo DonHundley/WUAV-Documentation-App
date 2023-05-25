@@ -25,11 +25,11 @@ public class CustomerLogicTest {
     @Test
     void testSearchCustomer() {
         //Arrange
-        Customer customer1 = new Customer(1, "Customer", "email@email.com", "Denmarksgade 1", "6700");
+        Customer customer1 = new Customer(1,"Customer", "email@email.com", "Denmarksgade 1", "6700","Esbjerg");
         Project project1 = new Project(1, "Project", java.sql.Date.valueOf(java.time.LocalDate.now()), 1);
         PostalCode postalCode1 = new PostalCode("6700", "Esbjerg");
 
-        Customer customer2 = new Customer(1, "Customer", "email@email.com", "Kirkevej 1", "6705");
+        Customer customer2 = new Customer(1, "Customer", "email@email.com", "Kirkevej 1", "6705","København");
         Project project2 = new Project(1, "Project", java.sql.Date.valueOf(java.time.LocalDate.now()), 2);
         PostalCode postalCode2 = new PostalCode("6705", "Esbjerg Ø");
 

@@ -9,12 +9,19 @@ import java.util.*;
 public class ProjectLogic {
 
 
-    private ProjectDAO projectDAO = new ProjectDAO();
-    private TaskDAO taskDAO = new TaskDAO();
-    private PictureDAO pictureDAO = new PictureDAO();
-    private WorksOnDAO worksOnDAO = new WorksOnDAO();
-
+    private final ProjectDAO projectDAO;
+    private final TaskDAO taskDAO;
+    private final PictureDAO pictureDAO;
+    private final WorksOnDAO worksOnDAO;
     private static final Logger logger = LogManager.getLogger("debugLogger");
+    public ProjectLogic() {
+        projectDAO = new ProjectDAO();
+        taskDAO = new TaskDAO();
+        pictureDAO = new PictureDAO();
+        worksOnDAO = new WorksOnDAO();
+    }
+
+
     /**
      * List of projects.
      *

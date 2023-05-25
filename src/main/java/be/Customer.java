@@ -1,5 +1,7 @@
 package be;
 
+import java.util.*;
+
 public class Customer {
 
     private int custID;
@@ -14,14 +16,9 @@ public class Customer {
 
     private String city;
 
-    public Customer(int custID, String custName, String custEmail, String custAddress, String postalCode) {
-        this.custID = custID;
-        this.custName = custName;
-        this.custEmail = custEmail;
-        this.custAddress = custAddress;
-        this.postalCode = postalCode;
-    }
+    public Customer() {} // Blank constructor, used for testing purposes.
 
+    // Constructor with customer ID.
     public Customer(int custID, String custName, String custEmail, String custAddress, String postalCode, String city) {
         this.custID = custID;
         this.custName = custName;
@@ -31,18 +28,13 @@ public class Customer {
         this.city = city;
     }
 
-    public Customer(int custID, String custName, String custEmail, String custAddress) {
-        this.custID = custID;
-        this.custName = custName;
-        this.custEmail = custEmail;
-        this.custAddress = custAddress;
-    }
-
-    public Customer(String custName, String custEmail, String custAddress, String postalCode) {
+    // Constructor without Customer ID, for new customer creation.
+    public Customer(String custName, String custEmail, String custAddress, String postalCode, String city) {
         this.custName = custName;
         this.custEmail = custEmail;
         this.custAddress = custAddress;
         this.postalCode = postalCode;
+        this.city = city;
     }
 
     public int getCustID() {
@@ -91,6 +83,33 @@ public class Customer {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Customer customer = (Customer) o;
+
+        if (custID != customer.custID) return false;
+        if (!Objects.equals(custName, customer.custName)) return false;
+        if (!Objects.equals(custEmail, customer.custEmail)) return false;
+        if (!Objects.equals(custAddress, customer.custAddress))
+            return false;
+        if (!Objects.equals(postalCode, customer.postalCode)) return false;
+        return Objects.equals(city, customer.city);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = custID;
+        result = 31 * result + (custName != null ? custName.hashCode() : 0);
+        result = 31 * result + (custEmail != null ? custEmail.hashCode() : 0);
+        result = 31 * result + (custAddress != null ? custAddress.hashCode() : 0);
+        result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        return result;
     }
 
     @Override

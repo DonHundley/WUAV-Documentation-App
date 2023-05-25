@@ -1,9 +1,8 @@
 package dal;
 
-import be.Project;
+
 import be.User;
 import be.UserWrapper;
-import com.microsoft.sqlserver.jdbc.*;
 import org.apache.logging.log4j.*;
 
 import java.sql.*;
@@ -101,7 +100,6 @@ public class UserDAO {
      */
     public List<User> getAllUsers() {
         ArrayList<User> users = new ArrayList<>();
-        ArrayList<Project> currentProjects = new ArrayList<>();
         logger.info("Opening new connection in UserDAO");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM users";
@@ -119,7 +117,7 @@ public class UserDAO {
                     String lastName = resultSet.getString("last_name");
 
 
-                    User user = new User(id, userName, password, access, name, lastName, currentProjects);
+                    User user = new User(id, userName, password, access, name, lastName);
                     users.add(user);
                 }
             }
@@ -137,7 +135,6 @@ public class UserDAO {
      * Method to get user by ID from database.
      */
     public User getUserById(User user) {
-        ArrayList<Project> currentProjects = new ArrayList<>();
         logger.info("Opening new connection in UserDAO");
         try (Connection connection = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM users WHERE userID = ?";
@@ -157,7 +154,7 @@ public class UserDAO {
                     String lastName = resultSet.getString("last_name");
 
 
-                    return new User(id, userName, password, access, name, lastName, currentProjects);
+                    return new User(id, userName, password, access, name, lastName);
                 }
             }
         } catch (SQLException e) {
