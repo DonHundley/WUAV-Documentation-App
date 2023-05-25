@@ -23,13 +23,16 @@ public class AuthenticationModel {
         return instance;
     }
 
+    public void authenticateCredentials(String userID, String pass) throws NoSuchElementException {
+        if(userLogic.authenticateCredentials(userID, pass) != null){
+            loggedInUser = userLogic.authenticateCredentials(userID, pass);
+        } else {throw new NoSuchElementException();}
+    }
+
     public User getLoggedInUser() {
         return loggedInUser;
     }
     public void setLoggedInUser(User loggedInUser) {
         this.loggedInUser = loggedInUser;
-    }
-    public HashMap<Integer, Integer> userInfo() {
-        return userLogic.loginInformation(userLogic.getUsers());
     }
 }

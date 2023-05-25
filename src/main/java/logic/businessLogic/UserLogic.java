@@ -10,10 +10,15 @@ public class UserLogic {
 
 
     private final UserDAO userDAO;
+    private final HashMap<Integer, Integer> loginInfo;
+    private final List<User> allUsers;
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
     public UserLogic() {
         userDAO = new UserDAO();
+        loginInfo = new HashMap<>();
+        allUsers = new ArrayList<>();
+        setUsers();
     }
 
     /**
@@ -21,9 +26,12 @@ public class UserLogic {
      * @return returns a list of all users.
      */
     public List<User> getUsers() {
-        return userDAO.getAllUsers();
+        return allUsers;
     }
-
+    public void setUsers() {
+        allUsers.clear();
+        allUsers.addAll(userDAO.getAllUsers());
+    }
     /**
      * List of technicians.
      * @return This will return the list from UserDAO that retrieves all Users who have the technician access level.
@@ -46,6 +54,7 @@ public class UserLogic {
      */
     public void createUser(User user) {
         userDAO.createUser(user);
+        setUsers();
     }
 
     /**
@@ -54,6 +63,7 @@ public class UserLogic {
      */
     public void editUser(User user) {
         userDAO.updateUser(user);
+        setUsers();
     }
 
     /**
@@ -62,14 +72,13 @@ public class UserLogic {
      */
     public void deleteUser(User user) {
         userDAO.deleteUser(user);
+        setUsers();
     }
 
 
 
-    public HashMap<Integer, Integer> loginInformation(List<User> allUsers){
+    public void loginInformation(List<User> allUsers){
         logger.info("Creating hashmap of login information");
-        HashMap<Integer, Integer> loginInfo = new HashMap<>();
-
         if(allUsers.isEmpty()){
             logger.warn("The list of users is empty!");
         }
@@ -79,13 +88,29 @@ public class UserLogic {
             //System.out.println(user.getUserName() + " "+ user.getPassword());
             int k = user.getUserName().hashCode();
             int v = user.getPassword().hashCode();
-
             loginInfo.put(k, v);
         }
         if(loginInfo.isEmpty()){
             logger.warn("There are no accounts to log into!");
         }
         logger.info("Hashmap complete, process finished.");
-        return loginInfo;
+    }
+
+    public User authenticateCredentials(String userID, String pass) {
+        loginInformation(allUsers);
+        if (loginInfo.containsKey(userID.hashCode())) {
+            logger.trace("Checking password");
+            if (loginInfo.get(userID.hashCode()).equals(pass.hashCode())) {
+                logger.info("Correct user information input. Locating user profile.");
+                for (User user : allUsers
+                ) {
+                    if (Objects.equals(userID, user.getUserName())) {
+                        logger.info("Setting logged in user.");
+                        return user;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

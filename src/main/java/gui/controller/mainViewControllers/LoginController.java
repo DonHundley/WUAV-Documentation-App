@@ -21,9 +21,6 @@ public class LoginController extends BaseController implements Initializable{
     @FXML private Label messageLabel;
 
     private AuthenticationModel authenticationModel;
-    private UserModel userModel;
-    private HashMap<Integer, Integer> userInfo;
-    private List<User> users;
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
 
@@ -34,58 +31,38 @@ public class LoginController extends BaseController implements Initializable{
         String userID = userName.getText();
         String pass = passTF.getText();
 
-        logger.trace("Checking user name.");
-        if(userInfo.containsKey(userID.hashCode())){
-            logger.trace("Checking password");
-            if(userInfo.get(userID.hashCode()).equals(pass.hashCode())){
-                logger.info("Correct user information input. Locating user profile.");
-                for (User user:users
-                     ) {
-                    if(Objects.equals(userID, user.getUserName())){
-                        logger.info("Setting logged in user.");
-                        authenticationModel.setLoggedInUser(user);
-
-                        try {
-                            logger.info("Loading NavigationView.fxml");
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/mainViews/NavigationView.fxml"));
-                            Parent root = loader.load();
-                            NavigationController controller = loader.getController();
-                            controller.setNavigationController();
-                            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                            Scene scene = new Scene(root);
-                            stage.setTitle("WUAV Documentation management system.");
-                            stage.setScene(scene);
-                            stage.show();
-                            logger.info("User login completed.");
-                            break;
-                        } catch (IOException e){
-                            logger.error("There has been a problem loading NavigationView.fxml. ",e );
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Error");
-                            alert.setHeaderText("There has been a problem loading NavigationView, please contact System administrator.");
-
-                            alert.show();
-                        }
-                    }
-                }
-            } else {
-                messageLabel.setText(loginError);
-                logger.trace("User input incorrect.");
-            }
-        } else {
+        try {
+            authenticationModel.authenticateCredentials(userID, pass);
+        }catch (NoSuchElementException e){
             messageLabel.setText(loginError);
-            logger.trace("User input incorrect.");
+            logger.warn("User did not input proper login information. Assure there are not warnings from UserLogic for lists.");
+            return;
+        }
+        
+        try {
+            logger.info("Loading NavigationView.fxml");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/mainViews/NavigationView.fxml"));
+            Parent root = loader.load();
+            NavigationController controller = loader.getController();
+            controller.setNavigationController();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("WUAV Documentation management system.");
+            stage.setScene(scene);
+            stage.show();
+            logger.info("User login completed.");
+        } catch (IOException e){
+            logger.error("There has been a problem loading NavigationView.fxml. ",e );
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText("There has been a problem loading NavigationView, please contact System administrator.");
+            alert.show();
         }
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("Initializing LoginController.");
         authenticationModel = AuthenticationModel.getInstance();
-        userModel = UserModel.getInstance();
-        users = userModel.users();
-        userInfo = authenticationModel.userInfo();
     }
-
 }
