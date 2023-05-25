@@ -7,6 +7,8 @@ import javafx.embed.swing.SwingFXUtils;
 
 import javafx.scene.image.Image;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -28,7 +30,7 @@ import java.util.List;
 
 
 public class PDFHandler {
-
+    private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
      * method to export a pdf with text and images to create the documentation report
@@ -43,39 +45,31 @@ public class PDFHandler {
 
             PDFont boldFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
             PDFont regularFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
-            contentStream.setFont(regularFont, 13);
-            float[] color = new float[]{0, 0, 0};
-            contentStream.setNonStrokingColor(color[0], color[1], color[2]);
 
+            setUpContentStream(contentStream, page, regularFont);
             PDRectangle pageSize = page.getMediaBox();
             float pageHeight = pageSize.getHeight();
 
-            float margin = 20;
-            float spacing = 50;
-            float lineSpacing = 30;
-            float x = spacing;
+            final float MARGIN = 20;
+            final float SPACING = 50;
+            final float LINE_SPACING = 30;
+            final int IMAGE_WIDTH = 200;
+            final int IMAGE_HEIGHT = 166;
+
+            float x = SPACING;
             float custY = pageHeight - 170;
+            float projY = custY - LINE_SPACING * 2;
+            float taskY = projY - SPACING * 3;
+            float deviceY = projY - LINE_SPACING * 2;
+            float imgY = 300 - IMAGE_HEIGHT - SPACING * 2;
 
-            float projY = custY - lineSpacing * 2;
-            float taskY = projY - spacing * 3;
-            float deviceY = projY - lineSpacing * 2;
-
-            int imageWidth = 200;
-            int imageHeight = 166;
-            float imgY = 300 - imageHeight - spacing * 2;
-
-            writeCustomerInfo(contentStream, customer, x, custY, lineSpacing, boldFont, regularFont);
-
-            writeProjectInfo(contentStream, project, x, projY, lineSpacing, boldFont, regularFont);
-            writeDeviceInfo(contentStream, task, x, deviceY, boldFont, regularFont, lineSpacing, deviceNames, devicePasswords);
-
-            writeTaskInfo(contentStream, task, boldFont, regularFont, 12, page.getMediaBox().getWidth() - margin * 4, x, taskY, lineSpacing);
-
-            insertImage(contentStream, document, image1, x, imgY, spacing, imageWidth, imageHeight);
-
-            float x2 = x + imageWidth + spacing;
-
-            insertImage(contentStream, document, image2, x2, imgY, spacing, imageWidth, imageHeight);
+            writeCustomerInfo(contentStream, customer, x, custY, LINE_SPACING, boldFont, regularFont);
+            writeProjectInfo(contentStream, project, x, projY, LINE_SPACING, boldFont, regularFont);
+            writeDeviceInfo(contentStream, x, deviceY, boldFont, regularFont, LINE_SPACING, deviceNames, devicePasswords);
+            writeTaskInfo(contentStream, task, boldFont, regularFont, 12, page.getMediaBox().getWidth() - MARGIN * 4, x, taskY, LINE_SPACING);
+            insertImage(contentStream, document, image1, x, imgY, SPACING, IMAGE_WIDTH, IMAGE_HEIGHT);
+            float x2 = x + IMAGE_WIDTH + SPACING;
+            insertImage(contentStream, document, image2, x2, imgY, SPACING, IMAGE_WIDTH, IMAGE_HEIGHT);
 
             contentStream.close();
 
@@ -84,16 +78,27 @@ public class PDFHandler {
             document.save(exportFile);
             document.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            logger.error("There was an issue with the content stream in the pdf creation", e);
         }
 
+    }
+
+    /**
+     * method to set the font and font color for  the content stream
+     **/
+    private void setUpContentStream(PDPageContentStream contentStream, PDPage page, PDFont regularFont) throws IOException {
+
+        contentStream.setFont(regularFont, 13);
+        float[] color = new float[]{0, 0, 0};
+        contentStream.setNonStrokingColor(color[0], color[1], color[2]);
     }
 
 
     /**
      * method to write the device info on a pdf document
      */
-    private static void writeDeviceInfo(PDPageContentStream contentStream, Task task, float x, float deviceY, PDFont boldFont, PDFont regularFont, float lineSpacing, String deviceNames, String devicePasswords) throws IOException {
+    private void writeDeviceInfo(PDPageContentStream contentStream, float x, float deviceY, PDFont boldFont, PDFont regularFont, float lineSpacing, String deviceNames, String devicePasswords) throws IOException {
 
         if (deviceNames != null) {
             contentStream.beginText();
@@ -120,7 +125,7 @@ public class PDFHandler {
     /**
      * method to write the customer info on a pdf document
      */
-    private static void writeCustomerInfo(PDPageContentStream contentStream, Customer customer, float x, float custY, float linespacing, PDFont bold, PDFont regular) throws IOException {
+    private void writeCustomerInfo(PDPageContentStream contentStream, Customer customer, float x, float custY, float linespacing, PDFont bold, PDFont regular) throws IOException {
         contentStream.beginText();
         contentStream.setFont(bold, 12);
         contentStream.newLineAtOffset(x, custY);
@@ -139,7 +144,7 @@ public class PDFHandler {
     /**
      * method to insert an image in a pdf
      */
-    private static void insertImage(PDPageContentStream contentStream, PDDocument document, Image image, float x, float y, float spacing, float imageWidth, float imageHeight) throws IOException {
+    private void insertImage(PDPageContentStream contentStream, PDDocument document, Image image, float x, float y, float spacing, float imageWidth, float imageHeight) throws IOException {
         ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
         if (image != null) {
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", imageStream);
