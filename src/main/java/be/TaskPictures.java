@@ -5,12 +5,10 @@ import javafx.scene.image.Image;
 public class TaskPictures {
 
     private int pictureID;
-
     private Image picture;
     private int docID;
     private String deviceName;
     private String password;
-
     private String pictureAbsolute;
 
 

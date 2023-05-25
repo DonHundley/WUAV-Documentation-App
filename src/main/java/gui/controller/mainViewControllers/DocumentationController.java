@@ -24,21 +24,6 @@ import java.util.*;
 
 
 public class DocumentationController extends BaseController implements Initializable {
-
-
-    @FXML
-    private Label deviceNamesLabel;
-    @FXML
-    private Label deviceCredentialsLabel;
-    @FXML
-    private Button updateTaskButton;
-    @FXML
-    private Button picturesButton;
-    @FXML
-    private Button layoutButton;
-
-    @FXML
-    private Button createTaskButton;
     @FXML
     private AnchorPane imagePane;
 
@@ -59,7 +44,20 @@ public class DocumentationController extends BaseController implements Initializ
     private Label usernameLabel;
     @FXML
     private Label messageLabel;
+    @FXML
+    private Label deviceNamesLabel;
+    @FXML
+    private Label deviceCredentialsLabel;
 
+    // Buttons
+    @FXML
+    private Button updateTaskButton;
+    @FXML
+    private Button picturesButton;
+    @FXML
+    private Button layoutButton;
+    @FXML
+    private Button createTaskButton;
 
     // ImageViews
     @FXML
@@ -68,17 +66,34 @@ public class DocumentationController extends BaseController implements Initializ
     // Models
     private ProjectModel projectModel = ProjectModel.getInstance();
     private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    private CustomerModel customerModel = CustomerModel.getInstance();
 
     // logger
     private static final Logger logger = LogManager.getLogger("debugLogger");
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("initializing DocumentationController");
+        setUsernameLabel();
+        setTaskTV();
+        if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("TECHNICIAN")) {
+            createTaskButton.setVisible(false);
+        }
+
+        if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("SALES")) {
+            createTaskButton.setVisible(false);
+            layoutButton.setVisible(false);
+            picturesButton.setVisible(false);
+            updateTaskButton.setVisible(false);
+            windowTitleLabel.setText("Customer Documentation");
+        }
+    }
 
     /**
      * We use this to set our username label and window title label.
      */
     private void setUsernameLabel() {// set our username label to the users name
         logger.trace("setting username Label in " + this.getClass().getName());
-        windowTitleLabel.setText("Project Task Manager");
+        windowTitleLabel.setText("Project Task Documentation");
         usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
     }
 
@@ -89,10 +104,8 @@ public class DocumentationController extends BaseController implements Initializ
         logger.info("Setting taskTV in "+ this.getClass().getName());
         taskTV.setItems(projectModel.getTasksByProject());
         projectModel.loadAllProjLists();
-
         taskName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskName()));
         taskState.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTaskState()));
-
     }
 
     /**
@@ -110,10 +123,10 @@ public class DocumentationController extends BaseController implements Initializ
             ImageView bImage = new ImageView(taskPicture);
             bImage.setFitHeight(150);
             bImage.setFitWidth(200);
-            bImage.setX(imageLocationX(imgCount, 200));
-            bImage.setY(imageLocationY(imgCount, 150));
+            bImage.setX(projectModel.getLocationX(imgCount, 200));
+            bImage.setY(projectModel.getLocationY(imgCount, 150));
             imagePane.getChildren().add(bImage);
-            bImage.setOnMouseClicked(event -> openImageDialogOnMouseClick(event, bImage.getImage(), imageList));
+            bImage.setOnMouseClicked(event -> openImageDialogOnMouseClick(imageList.indexOf(taskPicture)));
             imgCount++;
 
             if (imgCount == 20) {
@@ -123,34 +136,31 @@ public class DocumentationController extends BaseController implements Initializ
         logger.info("Finished generating image thumbnails.");
     }
 
-
+    /**
+     * This will set the device names and device credentials labels with the relevant information of the devices for the
+     * selected task.
+     */
     private void setDeviceLabels() {
         logger.trace("setting device labels.");
         deviceNamesLabel.setText(projectModel.getTaskPictureDevices());
         deviceCredentialsLabel.setText(projectModel.getTaskPictureCredentials());
-        logger.trace("Device labels set.");
     }
 
     /**
      * this method handles the click event on the thumbnails image and open an image dialog to see the selected image in a bigger size
      **/
-    private void openImageDialogOnMouseClick(MouseEvent event, Image image, List<Image> imageList) {
+    private void openImageDialogOnMouseClick(int imageIndex) {
+        projectModel.setImageIndex(imageIndex);
         logger.info("openImageDialogOnMouseClick() activated in " + this.getClass().getName());
         try {
-            int selectedIndex = imageList.indexOf(image);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/externalViews/ImageDialogView.fxml"));
             logger.info("Loading ImageDialogView.fxml");
             Parent root = loader.load();
-            ImageDialogViewController controller = loader.getController();
-            controller.setImageList(imageList);
-            controller.setSelectedImage(image);
-            controller.setCurrentImageIndex(selectedIndex);
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setTitle("Image Dialog");
             stage.setScene(scene);
             stage.show();
-
         } catch (IOException e) {
             logger.error("There has been an issue loading ImageDialogView.fxml.", e);
             String str = "There has been an issue loading ImageDialogView.fxml, please contact system admin.";
@@ -159,58 +169,7 @@ public class DocumentationController extends BaseController implements Initializ
         logger.info("openImageDialogOnMouseClick() complete.");
     }
 
-    /**These methods calculate the X and Y location of images based on their amount and size.**/
-    private int imageLocationX(int imgCount, int imgWidth) {
-        logger.trace("Determining image X coordinates.");
-        int getX;
-        int spacing;
-        if (imgCount <= 4) {
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        } else if (imgCount <= 8) {
-            imgCount = imgCount - 4;
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        } else if (imgCount <= 12) {
-            imgCount = imgCount - 8;
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        } else if (imgCount <= 16) {
-            imgCount = imgCount - 12;
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        } else {
-            imgCount = imgCount - 16;
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        }
-    }
 
-    private int imageLocationY(int imgCount, int imgHeight) {
-        logger.trace("Determining image y coordinates");
-        int getY;
-
-        if (imgCount <= 4) {
-            return 0;
-        } else if (imgCount <= 8) {
-            return imgHeight + 5;
-        } else if (imgCount <= 12) {
-
-            getY = imgHeight * 2;
-            return getY + 10;
-        } else if (imgCount <= 16) {
-            getY = imgHeight * 3;
-            return getY + 15;
-        } else {
-            getY = imgHeight * 4;
-            return getY + 20;
-        }
-    }
 
     private void setDescriptionLabel() {
         if (projectModel.getSelectedTask().getTaskDesc() != null) {
@@ -222,8 +181,6 @@ public class DocumentationController extends BaseController implements Initializ
 
     /**
      * This will open the New Task View.
-     * We catch the IOException and show the user a crafted alert.
-     *
      * @param actionEvent triggered by the create task button.
      */
     @FXML
@@ -232,11 +189,8 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
 
-
     /**
      * This will open the edit task view.
-     * We catch the IOException and show the user a crafted alert.
-     *
      * @param actionEvent triggered by the update task button.
      */
     @FXML
@@ -310,23 +264,7 @@ public class DocumentationController extends BaseController implements Initializ
 
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        logger.trace("initializing DocumentationController");
-        setUsernameLabel();
-        setTaskTV();
-        if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("TECHNICIAN")) {
-            createTaskButton.setVisible(false);
-        }
 
-        if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("SALES")) {
-            createTaskButton.setVisible(false);
-            layoutButton.setVisible(false);
-            picturesButton.setVisible(false);
-            updateTaskButton.setVisible(false);
-            windowTitleLabel.setText("Customer Documentation");
-        }
-    }
 
 
 

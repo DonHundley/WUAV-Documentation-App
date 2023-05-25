@@ -16,8 +16,6 @@ public class Customer {
 
     private String city;
 
-    public Customer() {} // Blank constructor, used for testing purposes.
-
     // Constructor with customer ID.
     public Customer(int custID, String custName, String custEmail, String custAddress, String postalCode, String city) {
         this.custID = custID;

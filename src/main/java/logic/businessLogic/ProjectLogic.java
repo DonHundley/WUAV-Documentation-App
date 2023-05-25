@@ -14,6 +14,7 @@ public class ProjectLogic {
     private final TaskDAO taskDAO;
     private final PictureDAO pictureDAO;
     private final WorksOnDAO worksOnDAO;
+
     private static final Logger logger = LogManager.getLogger("debugLogger");
     private List<Image> imageList;
     private List<String> deviceList;
@@ -232,5 +233,71 @@ public class ProjectLogic {
             }
         }
         return credentials.toString();
+    }
+
+    /**
+     * This method will return an int to represent the x coordinate that an image will be placed at on the GUI.
+     * @param imgCount The number of a given image to have a location found.
+     *                 For example if there are 5 images, but we are finding the location for image 3, this would be 3.
+     * @param imgWidth The width of the images to be placed on the GUI.
+     * @return an interger representing the X coordinate.
+     */
+    public int imageLocationX(int imgCount, int imgWidth) {
+        logger.trace("Determining image X coordinates.");
+        int getX;
+        int spacing;
+        if (imgCount <= 4) {
+            getX = imgCount * imgWidth;
+            spacing = imgCount * 5;
+            return getX - imgWidth + spacing;
+        } else if (imgCount <= 8) {
+            imgCount = imgCount - 4;
+            getX = imgCount * imgWidth;
+            spacing = imgCount * 5;
+            return getX - imgWidth + spacing;
+        } else if (imgCount <= 12) {
+            imgCount = imgCount - 8;
+            getX = imgCount * imgWidth;
+            spacing = imgCount * 5;
+            return getX - imgWidth + spacing;
+        } else if (imgCount <= 16) {
+            imgCount = imgCount - 12;
+            getX = imgCount * imgWidth;
+            spacing = imgCount * 5;
+            return getX - imgWidth + spacing;
+        } else {
+            imgCount = imgCount - 16;
+            getX = imgCount * imgWidth;
+            spacing = imgCount * 5;
+            return getX - imgWidth + spacing;
+        }
+    }
+
+    /**
+     * This method will return an int to represent the y coordinate that an image will be placed at on the GUI.
+     * @param imgCount The number of a given image to have a location found.
+     *                 For example if there are 5 images, but we are finding the location for image 3, this would be 3.
+     * @param imgHeight The height of the images to be placed on the GUI.
+     * @return an interger representing the y coordinate.
+     */
+    public int imageLocationY(int imgCount, int imgHeight) {
+        logger.trace("Determining image y coordinates");
+        int getY;
+
+        if (imgCount <= 4) {
+            return 0;
+        } else if (imgCount <= 8) {
+            return imgHeight + 5;
+        } else if (imgCount <= 12) {
+
+            getY = imgHeight * 2;
+            return getY + 10;
+        } else if (imgCount <= 16) {
+            getY = imgHeight * 3;
+            return getY + 15;
+        } else {
+            getY = imgHeight * 4;
+            return getY + 20;
+        }
     }
 }

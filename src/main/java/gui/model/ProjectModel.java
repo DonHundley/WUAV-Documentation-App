@@ -14,6 +14,7 @@ public class ProjectModel {
 
     private Task selectedTask;
     private Project selectedProject;
+    private int imageIndex;
 
     private final ObservableList<ProjectWrapper> projects;
     private final ObservableList<Task> allTasks;
@@ -129,9 +130,14 @@ public class ProjectModel {
     }
 
 
+
+
     /**
      * TaskPicture Methods.
      */
+    public int getImageIndex() {return imageIndex;}
+
+    public void setImageIndex(int imageIndex) {this.imageIndex = imageIndex;}
     public List<TaskPictures> taskPicturesByDocID() {
         return projectLogic.getTaskPicturesByTask(selectedTask);
     }
@@ -142,7 +148,8 @@ public class ProjectModel {
     public String getTaskPictureDevices(){return projectLogic.getDeviceList();}
     public String getTaskPictureCredentials(){return projectLogic.getDeviceCredentials();}
 
-
+    public int getLocationX(int imageCount, int imageWidth){ return projectLogic.imageLocationX(imageCount, imageWidth);}
+    public int getLocationY(int imageCount, int imageHeight){return projectLogic.imageLocationY(imageCount,imageHeight);}
 
     /**
      * The method called to export a pdf of a specific project.

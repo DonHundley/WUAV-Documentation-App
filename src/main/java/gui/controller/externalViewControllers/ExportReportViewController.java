@@ -89,8 +89,8 @@ public class ExportReportViewController implements Initializable {
             ImageView bImage = new ImageView(image);
             bImage.setFitHeight(150);
             bImage.setFitWidth(200);
-            bImage.setX(imageLocationX(imgCount, 200));
-            bImage.setY(imageLocationY(imgCount, 150));
+            bImage.setX(projectModel.getLocationX(imgCount, 200));
+            bImage.setY(projectModel.getLocationY(imgCount, 150));
 
             bImage.setOnMouseClicked((e) -> imageOnClick(e, bImage));
             selectImagePane.getChildren().add(bImage);
@@ -122,59 +122,6 @@ public class ExportReportViewController implements Initializable {
             }
     }
 
-
-    /**
-     * These methods calculate the X and Y location of images based on their amount and size.
-     **/
-    private int imageLocationX(int imgCount, int imgWidth) {
-        int getX;
-        int spacing;
-        if (imgCount <= 4) {
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        } else if (imgCount <= 8) {
-            imgCount = imgCount - 4;
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        } else if (imgCount <= 12) {
-            imgCount = imgCount - 8;
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        } else if (imgCount <= 16) {
-            imgCount = imgCount - 12;
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        } else {
-            imgCount = imgCount - 16;
-            getX = imgCount * imgWidth;
-            spacing = imgCount * 5;
-            return getX - imgWidth + spacing;
-        }
-    }
-
-    private int imageLocationY(int imgCount, int imgHeight) {
-        int getY;
-
-        if (imgCount <= 4) {
-            return 0;
-        } else if (imgCount <= 8) {
-            return imgHeight + 5;
-        } else if (imgCount <= 12) {
-
-            getY = imgHeight * 2;
-            return getY + 10;
-        } else if (imgCount <= 16) {
-            getY = imgHeight * 3;
-            return getY + 15;
-        } else {
-            getY = imgHeight * 4;
-            return getY + 20;
-        }
-    }
 
     /**
      * method used to show an alert to the user and warn them of an error

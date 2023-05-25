@@ -6,15 +6,10 @@ import java.util.*;
 public class User {
 
     private int userID;
-
     private String userName;
-
     private String firstName;
-
     private String lastName;
-
     private String access;
-
     private String password;
 
 
