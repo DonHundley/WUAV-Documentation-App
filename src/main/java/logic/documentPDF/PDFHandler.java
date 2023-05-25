@@ -47,7 +47,7 @@ public class PDFHandler {
             PDFont boldFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
             PDFont regularFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
 
-            setUpContentStream(contentStream, page, regularFont);
+            setUpContentStream(contentStream, regularFont);
             PDRectangle pageSize = page.getMediaBox();
             float pageHeight = pageSize.getHeight();
 
@@ -90,7 +90,7 @@ public class PDFHandler {
     /**
      * method to set the font and font color for  the content stream
      **/
-    private void setUpContentStream(PDPageContentStream contentStream, PDPage page, PDFont regularFont) throws IOException {
+    private void setUpContentStream(PDPageContentStream contentStream, PDFont regularFont) throws IOException {
 
         contentStream.setFont(regularFont, 13);
         float[] color = new float[]{0, 0, 0};
