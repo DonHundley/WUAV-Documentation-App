@@ -3,7 +3,6 @@ package gui.controller.newAndUpdateControllers;
 import be.*;
 import gui.controller.mainViewControllers.*;
 import gui.model.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
@@ -26,37 +25,32 @@ public class AddTaskPicturesController extends BaseController {
     @FXML private Button createTaskPictures;
 
     // Models
-    private ProjectModel projectModel = ProjectModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
 
     // Task to have pictures added to
-    private Task task = projectModel.getSelectedTask();
-
-    private Image picture;
+    private final Task task = projectModel.getSelectedTask();
 
     private String pictureAbsolute;
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
     //validation fields
-
-    int maxDeviceNameLength = 100;
-    int maxDeviceCredLength = 100;
+    private final int maxDeviceNameLength = 100;
+    private final int maxDeviceCredLength = 100;
 
     /**
      * Opens the filechooser for pictures.
-     * @param actionEvent triggers when the user activates the after picture button.
      */
-    @FXML private void openFileChooser(ActionEvent actionEvent){
+    @FXML private void openFileChooser(){
         imageFileExplorer();
     }
 
 
     /**
      * Creates a new TaskPictures from the filled fields.
-     * @param actionEvent triggered when the user activates the create button.
      */
     @FXML
-    private void createTaskPictures(ActionEvent actionEvent) {
+    private void createTaskPictures() {
         logger.info("Creating Task Picture");
         if (validateTaskPictureFields()) {
             TaskPictures taskPictures = new TaskPictures(task.getDocID(), deviceNameTA.getText(), deviceCredTA.getText(), pictureAbsolute);
@@ -69,14 +63,12 @@ public class AddTaskPicturesController extends BaseController {
             logger.info("Task picture not created due to invalid fields");
             warningLoggerForTaskPicture();
         }
-
     }
 
     /**
      * Closes the window with an action event.
-     * @param actionEvent triggers when the user activates the cancel button.
      */
-    @FXML private void cancel(ActionEvent actionEvent){
+    @FXML private void cancel(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
@@ -94,7 +86,7 @@ public class AddTaskPicturesController extends BaseController {
             try{
                 Path imagePath = FileSystems.getDefault().getPath(file.getPath());
 
-                picture = new Image(new FileInputStream(imagePath.toFile()));
+                Image picture = new Image(new FileInputStream(imagePath.toFile()));
                 pictureAbsolute = file.getAbsolutePath();
                 pictureImageView.setImage(picture);
                 pictureTF.setText(imagePath.toString());
@@ -126,11 +118,11 @@ public class AddTaskPicturesController extends BaseController {
 
 
     /**
-     * This method checks if the length of the device name textfield is bigger than the max length for the field
+     * This method checks if the length of the device name text field is bigger than the max length for the field
      * it returns true if the length is valid
      **/
     private boolean isDeviceNameTFValid() {
-        return deviceNameTA.getText().length() <= maxDeviceNameLength;
+        return deviceNameTA.getText().length() > maxDeviceNameLength;
     }
 
     /**
@@ -138,67 +130,29 @@ public class AddTaskPicturesController extends BaseController {
      * it returns true if the length is valid
      **/
     private boolean isDeviceCredTFValid() {
-        return deviceCredTA.getText().length() <= maxDeviceCredLength;
+        return deviceCredTA.getText().length() > maxDeviceCredLength;
     }
 
 
     /**
-     * This method checks if the picture textfield is empty
+     * This method checks if the picture text field is empty
      * it returns true if it's present, false if it's empty
      **/
     private boolean isPictureValid() {
-        if (pictureTF.getText().isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
-
-
-    /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertDeviceNameTF() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate device name");
-        alert.setContentText("Device name is too long, max is " + maxDeviceNameLength + " characters.");
-        alert.showAndWait();
+        return !pictureTF.getText().isEmpty();
     }
 
     /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertDeviceCredTF() {
+     * Used to generate dynamic alerts based on different failures in validation
+     * @param title The title of the alert.
+     * @param context The context of the alert.
+     */
+    private void validationAlert(String title, String context){
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate device credentials");
-        alert.setContentText("Device credential is too long, max is " + maxDeviceCredLength + " characters.");
+        alert.setTitle(title);
+        alert.setContentText(context);
         alert.showAndWait();
     }
-
-
-    /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertDeviceNameAndCredTF() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate device name and credentials");
-        alert.setContentText("Device name and credential are too long, max is " + maxDeviceNameLength + " and " + maxDeviceCredLength + " characters respectively.");
-        alert.showAndWait();
-    }
-
-    /**
-     * this method shows an alert to the user if a picture is not selected
-     **/
-    private void alertNoPicture() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate picture");
-        alert.setContentText("No picture selected, please select one");
-        alert.showAndWait();
-    }
-
-
-
 
 
     /**
@@ -208,29 +162,33 @@ public class AddTaskPicturesController extends BaseController {
         boolean isValid = true;
 
         if (isPictureValid()) {
-
-            if (!isDeviceCredTFValid() && !isDeviceNameTFValid()) {
-                alertDeviceNameAndCredTF();
+            if (isDeviceCredTFValid() && isDeviceNameTFValid()) {
+                validationAlert("Validate device name and credentials",
+                        "Device name and credential are too long, max is " + maxDeviceNameLength
+                                + " and " + maxDeviceCredLength + " characters respectively.");
                 isValid = false;
-            } else if (!isDeviceNameTFValid()) {
-                alertDeviceNameTF();
+            } else if (isDeviceNameTFValid()) {
+                validationAlert("Validate device name",
+                        "Device name is too long, max is " + maxDeviceNameLength + " characters.");
                 isValid = false;
-            } else if (!isDeviceCredTFValid()) {
-                alertDeviceCredTF();
+            } else if (isDeviceCredTFValid()) {
+                validationAlert("Validate device credentials",
+                        "Device credential is too long, max is " + maxDeviceCredLength + " characters.");
                 isValid = false;
             }
         } else {
-            alertNoPicture();
+            validationAlert("Validate picture",
+                    "No picture selected, please select one");
             isValid = false;
         }
         return isValid;
     }
 
     private void warningLoggerForTaskPicture() {
-        if (!isDeviceCredTFValid()) {
+        if (isDeviceCredTFValid()) {
             logger.warn("Invalid device credential field: credential exceeds the maximum character limit");
         }
-        if (!isDeviceNameTFValid()) {
+        if (isDeviceNameTFValid()) {
             logger.warn("Invalid device name field: device name exceeds the maximum character limit");
 
         }

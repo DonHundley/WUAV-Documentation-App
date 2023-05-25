@@ -11,35 +11,29 @@ import javafx.stage.*;
 import org.apache.logging.log4j.*;
 
 
-import java.util.*;
-
 public class EditTaskController extends BaseController {
 
 
     // FXML
     @FXML
     private TextArea taskDescription;
-
-
     @FXML
     private ComboBox<String> stateSelection;
-    @FXML
-    private Label errorLabel;
     @FXML
     private Button cancelButton;
 
 
     // Model
-    private ProjectModel projectModel = ProjectModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
 
 
     // Instance of our task to be edited.
     private Task selectedTask;
 
     // Variables
-    private String[] states = {"Not Started", "In Progress", "Completed"};
+    private final String[] states = {"Not Started", "In Progress", "Completed"};
 
-    int maxDescription = 255;
+    // Logger
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
 
@@ -84,7 +78,6 @@ public class EditTaskController extends BaseController {
 
     /**
      * This will update the selected task with any changes the user has done.
-     *
      * @param actionEvent This triggers when the user activates the edit task button.
      */
     @FXML
@@ -118,10 +111,9 @@ public class EditTaskController extends BaseController {
     /**
      * Closes the window with an action event.
      *
-     * @param actionEvent triggers when the user activates the cancel button.
      */
     @FXML
-    private void cancel(ActionEvent actionEvent) {
+    private void cancel() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
@@ -131,13 +123,9 @@ public class EditTaskController extends BaseController {
      * This method checks if the length of the textfield is bigger than the max length for the field
      * it returns true if the length is okay, false if it's too long
      **/
-
     private boolean validateDescTFLength() {
-        if (taskDescription.getText().length() > maxDescription) {
-            return false;
-        } else {
-            return true;
-        }
+        int maxDescription = 255;
+        return taskDescription.getText().length() <= maxDescription;
     }
 
     /**

@@ -4,7 +4,6 @@ import be.*;
 import gui.controller.mainViewControllers.*;
 import gui.model.*;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
@@ -36,7 +35,7 @@ public class NECustomerController extends BaseController {
     private Customer customer;
 
     // Model instances
-    private CustomerModel customerModel = CustomerModel.getInstance();
+    private final CustomerModel customerModel = CustomerModel.getInstance();
 
 
     // True if editing, false if creating a new customer.
@@ -74,10 +73,9 @@ public class NECustomerController extends BaseController {
     /**
      * This will create or edit a customer based on the isEdit boolean
      *
-     * @param actionEvent triggered when the user activates the create/edit button.
      */
     @FXML
-    private void createOrEditCustomer(ActionEvent actionEvent) {
+    private void createOrEditCustomer() {
         if (isEdit) {
             editCustomer();
         } else {
@@ -135,10 +133,9 @@ public class NECustomerController extends BaseController {
     /**
      * Closes the window with an action event.
      *
-     * @param actionEvent triggers when the user activates the cancel button.
      */
     @FXML
-    private void cancel(ActionEvent actionEvent) {
+    private void cancel() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
@@ -200,7 +197,7 @@ public class NECustomerController extends BaseController {
      * it returns true if the length is valid
      **/
     private boolean isCustNameTFValid() {
-        return customerName.getText().length() <= maxCustNameLength;
+        return customerName.getText().length() > maxCustNameLength;
     }
 
 
@@ -209,81 +206,18 @@ public class NECustomerController extends BaseController {
      * it returns true if the length is valid
      **/
     private boolean isCustAddressTFValid() {
-        return customerAddress.getText().length() <= maxCustAddressLength;
+        return customerAddress.getText().length() > maxCustAddressLength;
     }
 
 
     /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertCustNameTF() {
+     * An alert created when there is an input validation issue
+     * @param context Context for the created alert.
+     */
+    private void validationAlert(String context){
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate Customer Name");
-        alert.setContentText("Customer Name is too long, max is " + maxCustNameLength + " characters.");
-        alert.showAndWait();
-    }
-
-    /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertCustEmailTF() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate Customer Email");
-        alert.setContentText("Enter a valid email");
-        alert.showAndWait();
-    }
-
-
-    /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertCustAddressTF() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate Customer Address");
-        alert.setContentText("Customer Address is too long, max is " + maxCustAddressLength + " characters.");
-        alert.showAndWait();
-    }
-
-
-    /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertCustNameAndEmailTF() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate Customer Name and Email");
-        alert.setContentText("Customer name is too long, max is " + maxCustNameLength + " characters. Enter a valid email.");
-        alert.showAndWait();
-    }
-
-
-    /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertCustNameAndAddressTF() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate Customer Name and Address");
-        alert.setContentText("Customer name and address are too long, max is " + maxCustNameLength + " and " + maxCustAddressLength + " characters respectively");
-        alert.showAndWait();
-    }
-
-
-    /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertCustEmailAndAddressTF() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate Customer Email and Address");
-        alert.setContentText("Customer Email not valid. Customer address is too long, max is " + maxCustNameLength + " characters");
-        alert.showAndWait();
-    }
-
-    /**
-     * this method shows an alert to the user if the inserted text field length exceeds the max
-     **/
-    private void alertCustEmailAddressAndEmailTF() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validate Customer fields");
-        alert.setContentText("Customer Email not valid. Customer name and address are too long, max is " + maxCustNameLength + " and " + maxCustAddressLength + " characters respectively");
+        alert.setTitle("Field validation");
+        alert.setContentText(context);
         alert.showAndWait();
     }
 
@@ -298,28 +232,28 @@ public class NECustomerController extends BaseController {
             super.createWarning(str);
             isValid = false;
         } else {
-            if (!isCustNameTFValid() && !isCustEmailTFValid() && !isCustAddressTFValid()) {
-                alertCustEmailAddressAndEmailTF();
+            if (isCustNameTFValid() && !isCustEmailTFValid() && isCustAddressTFValid()) {
+                validationAlert("Customer Email not valid. Customer name and address are too long, max is "
+                        + maxCustNameLength + " and " + maxCustAddressLength + " characters respectively");
+                isValid = false;
+            } else if (isCustNameTFValid() && !isCustEmailTFValid()) {
+                validationAlert("Customer name is too long, max is " + maxCustNameLength + " characters. Enter a valid email.");
+                isValid = false;
+            } else if (isCustNameTFValid() && isCustAddressTFValid()) {
+                validationAlert("Customer name and address are too long, max is " + maxCustNameLength + " and " + maxCustAddressLength + " characters respectively");
+                isValid = false;
+            } else if (!isCustEmailTFValid() && isCustAddressTFValid()) {
+                validationAlert("Customer Email not valid. Customer address is too long, max is " + maxCustNameLength + " characters");
                 isValid = false;
 
-            } else if (!isCustNameTFValid() && !isCustEmailTFValid()) {
-                alertCustNameAndEmailTF();
-                isValid = false;
-            } else if (!isCustNameTFValid() && !isCustAddressTFValid()) {
-                alertCustNameAndAddressTF();
-                isValid = false;
-            } else if (!isCustEmailTFValid() && !isCustAddressTFValid()) {
-                alertCustEmailAndAddressTF();
-                isValid = false;
-
-            } else if (!isCustNameTFValid()) {
-                alertCustNameTF();
+            } else if (isCustNameTFValid()) {
+                validationAlert("Customer Name is too long, max is " + maxCustNameLength + " characters.");
                 isValid = false;
             } else if (!isCustEmailTFValid()) {
-                alertCustEmailTF();
+                validationAlert("Enter a valid email");
                 isValid = false;
-            } else if (!isCustAddressTFValid()) {
-                alertCustAddressTF();
+            } else if (isCustAddressTFValid()) {
+                validationAlert("Customer Address is too long, max is " + maxCustAddressLength + " characters.");
                 isValid = false;
             }
         }
@@ -331,13 +265,13 @@ public class NECustomerController extends BaseController {
      **/
 
     private void warningLoggerForCustomer() {
-        if (!isCustNameTFValid()) {
+        if (isCustNameTFValid()) {
             logger.warn("Invalid customer name field: customer name exceeds the maximum character limit");
         }
         if (!isCustEmailTFValid() && !customerEmail.getText().isEmpty()) {
             logger.warn("Invalid email field: email exceeds the maximum character limit or is not in a valid format");
         }
-        if (!isCustAddressTFValid()) {
+        if (isCustAddressTFValid()) {
             logger.warn("Invalid customer address field: customer address exceeds the maximum character limit");
         }
 

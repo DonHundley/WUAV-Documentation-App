@@ -1,6 +1,5 @@
 package gui.controller.externalViewControllers;
 
-import be.TaskPictures;
 import gui.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.*;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -22,9 +20,6 @@ public class ImageDialogViewController implements Initializable {
     private Button nextButton, previousButton;
     @FXML
     private ImageView largeImg;
-
-    // Model
-    private ProjectModel projectModel;
 
     // private variables.
     private int currentImageIndex;
@@ -36,7 +31,8 @@ public class ImageDialogViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.trace("Initializing ImageDialogViewController.");
-        projectModel = ProjectModel.getInstance();
+        // Model
+        ProjectModel projectModel = ProjectModel.getInstance();
         imageList = new ArrayList<>();
 
         imageList.addAll(projectModel.getTaskPictureImages()); // Getting images for selected task.

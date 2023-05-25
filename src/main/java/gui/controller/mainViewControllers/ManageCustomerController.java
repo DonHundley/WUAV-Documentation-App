@@ -4,14 +4,11 @@ import be.*;
 import gui.controller.newAndUpdateControllers.*;
 import gui.model.*;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 import org.apache.logging.log4j.*;
 
@@ -55,9 +52,9 @@ public class ManageCustomerController extends BaseController implements Initiali
     private Button editCustomerButton;
 
     // Models
-    private CustomerModel customerModel = CustomerModel.getInstance();
-    private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    private ProjectModel projectModel = ProjectModel.getInstance();
+    private final CustomerModel customerModel = CustomerModel.getInstance();
+    private final AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
@@ -72,12 +69,7 @@ public class ManageCustomerController extends BaseController implements Initiali
         setUsernameLabel();
 
         logger.trace("Adding listener for search customer in ManageCustomersController.");
-        searchCustomer.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                customerModel.search(newValue);
-            }
-        });
+        searchCustomer.textProperty().addListener((observable, oldValue, newValue) -> customerModel.search(newValue));
     }
 
     /**
@@ -115,7 +107,7 @@ public class ManageCustomerController extends BaseController implements Initiali
     }
 
     @FXML
-    private void openDocumentButton(ActionEvent actionEvent) {
+    private void openDocumentButton() {
         if(customersTV.getSelectionModel().getSelectedItem() != null){
         openDocumentation();
         } messageLabel.setText("Please select a customer to view documentation.");
@@ -127,7 +119,7 @@ public class ManageCustomerController extends BaseController implements Initiali
             messageLabel.setText("");
             projectModel.setSelectedProject(customersTV.getSelectionModel().getSelectedItem().getProject());
             logger.info("Loading DocumentationView.fxml");
-            Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
+            Node n = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml")));
             super.getViewPane().getChildren().setAll(n);
         } catch (IOException e) {
             logger.error("There has been a problem loading DocumentationView.fxml.", e);
@@ -138,11 +130,11 @@ public class ManageCustomerController extends BaseController implements Initiali
     }
 
     @FXML
-    private void createCustomer(ActionEvent actionEvent) {
+    private void createCustomer() {
         openCustomerWindow(false);
     }
     @FXML
-    private void editCustomer(ActionEvent actionEvent) {
+    private void editCustomer() {
         if(customersTV.getSelectionModel().getSelectedItem() != null){openCustomerWindow(true);
         }messageLabel.setText("Please select a customer to be edited.");
     }
@@ -233,7 +225,7 @@ public class ManageCustomerController extends BaseController implements Initiali
 
     }
 
-    @FXML private void anchorOnClick(MouseEvent mouseEvent) {
+    @FXML private void anchorOnClick() {
         logger.trace("User clicked the anchor pane in " + this.getClass().getName());
         if(customersTV.getSelectionModel().getSelectedItem() != null){
             customersTV.getSelectionModel().clearSelection();

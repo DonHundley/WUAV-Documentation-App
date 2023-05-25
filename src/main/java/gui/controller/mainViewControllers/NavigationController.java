@@ -3,11 +3,9 @@ package gui.controller.mainViewControllers;
 import be.*;
 import gui.model.*;
 import io.github.palexdev.materialfx.controls.*;
-import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import org.apache.logging.log4j.*;
 
@@ -18,24 +16,26 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class NavigationController extends BaseController implements Initializable{
+    // FXML
     @FXML private AnchorPane baseNavAnchor;
-    @FXML private AnchorPane navAnchor;
-     //x300 y0
-    @FXML private ImageView imageWUAV;
     @FXML private MFXButton manageProjectsButton;
     @FXML private MFXButton manageCustomerButton;
     @FXML private MFXButton manageUserButton;
 
+    // anchor
     private AnchorPane viewAnchor;
 
+    // Models
+    private final AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
 
-    private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    private ProjectModel projectModel = ProjectModel.getInstance();
+    // private BE
+    private final User loggedInUser = authenticationModel.getLoggedInUser();
 
-    private User loggedInUser = authenticationModel.getLoggedInUser();
-
+    // Variables
     private String home;
 
+    // Logger
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
     @Override
@@ -47,27 +47,23 @@ public class NavigationController extends BaseController implements Initializabl
 
         setNavigationController();
     }
+
+    /**
+     * This method determines which view will be set in view anchor depending on the access level of the user.
+     */
     private void setNavigationController()  {
         logger.info("setNavigationController() called.");
         String access = loggedInUser.getAccess().toUpperCase();
         try {
             switch (access) {
-                case "ADMIN":
-                    adminManagerLogin();
-                    break;
-                case "MANAGER":
-                    adminManagerLogin();
-                    break;
-                case "TECHNICIAN":
-                    techLogin();
-                    break;
-                case "SALES":
-                    salesLogin();
-                    break;
-                default:
+                case "ADMIN", "MANAGER" -> adminManagerLogin();
+                case "TECHNICIAN" -> techLogin();
+                case "SALES" -> salesLogin();
+                default -> {
                     logger.warn("There was an issue finding user role.");
                     String str = "User account either has no role or the role is invalid. Please contact an Administrator.";
                     super.createWarning(str);
+                }
             }
         }catch (IOException e){
             logger.error("There has been a problem loading the appropriate view file for access level " + access + ".", e);
@@ -82,7 +78,7 @@ public class NavigationController extends BaseController implements Initializabl
     private void adminManagerLogin() throws IOException {
         logger.trace("Admin or manager logged in.");
         home = "/gui/view/mainViews/ManageTaskView.fxml";
-        Node m = FXMLLoader.load(getClass().getResource(home));
+        Node m = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(home)));
         viewAnchor.getChildren().setAll(m);
         documentationExpired();
     }
@@ -95,7 +91,7 @@ public class NavigationController extends BaseController implements Initializabl
         logger.trace("Technician logged in.");
         home = "/gui/view/mainViews/ManageTaskView.fxml";
         projectModel.loadProjectsByUser(loggedInUser);
-        Node t = FXMLLoader.load(getClass().getResource(home));
+        Node t = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(home)));
         viewAnchor.getChildren().setAll(t);
         manageCustomerButton.setVisible(false);
         manageProjectsButton.setVisible(false);
@@ -109,7 +105,7 @@ public class NavigationController extends BaseController implements Initializabl
     private void salesLogin() throws IOException{
         logger.trace("Sales logged in.");
         home = "/gui/view/mainViews/ManageCustomersView.fxml";
-        Node s = FXMLLoader.load(getClass().getResource(home));
+        Node s = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(home)));
         viewAnchor.getChildren().setAll(s);
         manageCustomerButton.setVisible(false);
         manageProjectsButton.setVisible(false);
@@ -118,13 +114,12 @@ public class NavigationController extends BaseController implements Initializabl
 
     /**
      * This is used to return the user to their appropriate home window based on their access level.
-     * @param actionEvent triggered by the home button on the nav menu.
      */
-    public void home(ActionEvent actionEvent)  {
+    public void home()  {
         logger.trace("home() called in NavigationController.");
         Node n = null;
         try {
-            n = FXMLLoader.load(getClass().getResource(home));
+            n = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(home)));
         } catch (IOException e) {
             logger.error("There was a problem loading " + home + ". " , e);
         }
@@ -134,13 +129,12 @@ public class NavigationController extends BaseController implements Initializabl
 
     /**
      * This is used to open the manage project view.
-     * @param actionEvent is activated when the manage projects button is clicked.
      */
-    public void manageProjects(ActionEvent actionEvent)  {
+    public void manageProjects()  {
         logger.trace("manageProjects() called in NavigationController");
         Node n = null;
         try {
-            n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/ManageProjectView.fxml"));
+            n = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/gui/view/mainViews/ManageProjectView.fxml")));
         } catch (IOException e) {
             logger.error("There was a problem loading ManageProjectView.fxml.",e);
         }
@@ -150,13 +144,12 @@ public class NavigationController extends BaseController implements Initializabl
 
     /**
      * This is used to open the manage customers view.
-     * @param actionEvent is activated when the manage customers button is clicked.
      */
-    public void manageCustomers(ActionEvent actionEvent)  {
+    public void manageCustomers()  {
         logger.trace("manageCustomers() called in NavigationController");
         Node n = null;
         try {
-            n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/ManageCustomersView.fxml"));
+            n = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/gui/view/mainViews/ManageCustomersView.fxml")));
         } catch (IOException e) {
             logger.error("There was a problem loading ManageCustomersView.fxml.", e);
         }
@@ -166,13 +159,12 @@ public class NavigationController extends BaseController implements Initializabl
 
     /**
      * This is used to open the manage users view.
-     * @param actionEvent is activated when the manage customers button is clicked.
      */
-    public void manageUsers(ActionEvent actionEvent)  {
+    public void manageUsers()  {
         logger.trace("manageUsers() called in NavigationController");
         Node n = null;
         try {
-            n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/ManageUsersView.fxml"));
+            n = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/gui/view/mainViews/ManageUsersView.fxml")));
         } catch (IOException e) {
             logger.error("There has been a problem loading ManageUsersView.fxml.",e);
         }
@@ -205,11 +197,8 @@ public class NavigationController extends BaseController implements Initializabl
             alert.setTitle("Expired Documentation");
             alert.setHeaderText("Remember to manage the documentation that has been stored for 48+ months:");
             alert.setContentText(expiredDocumentation.toString().replace("[","").replace("]",""));
-            Optional<ButtonType> result = alert.showAndWait();
             alert.getContentText();
-            if (result.get() == ButtonType.CLOSE) {
-                alert.close();
-            }
+            alert.show();
         }
         logger.info("documentationExpired() complete.");
     }

@@ -12,11 +12,12 @@ import org.apache.logging.log4j.*;
 
 
 import java.io.*;
+import java.util.*;
 
 public abstract class BaseController {
 
-    private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    private final ViewPane viewPaneClass = ViewPane.getViewPaneInstance();;
+    private final AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
+    private final ViewPane viewPaneClass = ViewPane.getViewPaneInstance();
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
     /**
@@ -29,7 +30,7 @@ public abstract class BaseController {
             logger.trace("setting logged in user to null");
             authenticationModel.setLoggedInUser(null);
             logger.info("Loading Login.fxml");
-            Parent root = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/Login.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/gui/view/mainViews/Login.fxml")));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setTitle("WUAV");

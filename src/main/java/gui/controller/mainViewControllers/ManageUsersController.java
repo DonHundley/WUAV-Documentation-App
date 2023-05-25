@@ -9,7 +9,6 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 import org.apache.logging.log4j.*;
 
@@ -28,13 +27,11 @@ public class ManageUsersController extends BaseController implements Initializab
 
     // Labels
     @FXML private Label usernameLabel;
-    @FXML private Label windowTitleLabel;
     @FXML private Label errorLabel;
-    @FXML private AnchorPane anchorUsers;
 
     // Models
-    private UserModel userModel = UserModel.getInstance();
-    private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
+    private final UserModel userModel = UserModel.getInstance();
+    private final AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
@@ -62,18 +59,15 @@ public class ManageUsersController extends BaseController implements Initializab
         userRole.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAccess()));
 
         logger.trace("adding listener to userTV");
-        userTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedUser) -> {
-            userModel.setSelectedUser(selectedUser);
-        })));
+        userTV.getSelectionModel().selectedItemProperty().addListener((((observable, oldValue, selectedUser) -> userModel.setSelectedUser(selectedUser))));
         logger.info("setUserTV() complete.");
     }
 
 
     /**
      * This method is an alert confirmation to delete the selected user stored in Persistent.
-     * @param actionEvent This is triggered when the user activates the Delete User button.
      */
-    @FXML private void deleteUser(ActionEvent actionEvent){
+    @FXML private void deleteUser(){
         logger.info("deleteUser() called in ManageUsersController");
         if(userModel.getSelectedUser() != null){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -96,16 +90,14 @@ public class ManageUsersController extends BaseController implements Initializab
 
     /**
      * We use this method to open our new user view to the user. If this fails we show the user an alert.
-     * @param actionEvent When the user activates the New User button, we open a window.
      */
-    @FXML private void newUser(ActionEvent actionEvent){
+    @FXML private void newUser(){
         newOrEditUser(false);
     }
     /**
      * We use this method to open our edit user view to the user. If this fails we show the user an alert.
-     * @param actionEvent When the user activates the Edit User button, we open a window.
      */
-    @FXML private void editUser(ActionEvent actionEvent) {
+    @FXML private void editUser() {
         if(userTV.getSelectionModel().getSelectedItem() != null) {
             newOrEditUser(true);
         }
@@ -153,7 +145,7 @@ public class ManageUsersController extends BaseController implements Initializab
         setUsernameLabel();
     }
 
-    @FXML private void usersAnchorOnClick(MouseEvent mouseEvent) {
+    @FXML private void usersAnchorOnClick() {
         logger.trace("User clicked anchor pane in ManageUsersController");
         if(userTV.getSelectionModel().getSelectedItem() != null){
             userTV.getSelectionModel().clearSelection();

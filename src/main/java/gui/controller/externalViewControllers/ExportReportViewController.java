@@ -3,9 +3,7 @@ package gui.controller.externalViewControllers;
 import be.Customer;
 import be.Project;
 import be.Task;
-import be.TaskPictures;
 import gui.model.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -35,7 +33,6 @@ public class ExportReportViewController implements Initializable {
 
     // Models
     private ProjectModel projectModel;
-    private CustomerModel customerModel;
 
     // BE instances
     private Task selectedTask;
@@ -53,7 +50,7 @@ public class ExportReportViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         projectModel = ProjectModel.getInstance();
-        customerModel = CustomerModel.getInstance();
+        CustomerModel customerModel = CustomerModel.getInstance();
 
         selectedProject = projectModel.getSelectedProject();
         selectedTask = projectModel.getSelectedTask();
@@ -147,7 +144,7 @@ public class ExportReportViewController implements Initializable {
     /**
      * method to export the task's Report. it checks if the report already exists and warns the user or confirm that the file has been saved.
      **/
-    public void ExportReport(ActionEvent actionEvent) {
+    public void ExportReport() {
         logger.info("Exporting report from ExportReportViewController");
 
         String folderPath = "src/main/resources/report/printedReports/";
@@ -170,11 +167,9 @@ public class ExportReportViewController implements Initializable {
 
     /**
      * Closes the window with an action event.
-     *
-     * @param actionEvent triggers when the user activates the cancel button.
      */
     @FXML
-    private void cancel(ActionEvent actionEvent) {
+    private void cancel() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

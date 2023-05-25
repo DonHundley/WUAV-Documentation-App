@@ -4,7 +4,6 @@ package gui.controller.newAndUpdateControllers;
 import be.Task;
 import gui.model.*;
 import javafx.embed.swing.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -27,14 +26,11 @@ import java.net.*;
 import java.util.*;
 
 
-
-/**
- * The drawing application used in this controller at its current state takes heavy inspiration from https://math.hws.edu/javanotes/
- * which is Introduction to Programming Using Java, a free, on-line textbook.
- */
 public class EditLayoutController implements Initializable {
-
+    // Logger
     private static final Logger logger = LogManager.getLogger("debugLogger");
+
+    // FXML
     @FXML
     private  StackPane diagramStack;
     @FXML
@@ -46,14 +42,14 @@ public class EditLayoutController implements Initializable {
     private Button fillButton;
 
     //------------------------- Model ----------------------------------------------------------------------------------
-    private ProjectModel projectModel = ProjectModel.getInstance();
-    private Task selectedTask = projectModel.getSelectedTask();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
+    private final Task selectedTask = projectModel.getSelectedTask();
 
     //--------------------- Shape variables-----------------------------------------------------------------------------
     private int shapeCount = 0; // Count of shapes.
-    private String[] sizes = {"small", "medium", "large"}; // sizes to choose from
+    private final String[] sizes = {"small", "medium", "large"}; // sizes to choose from
     private String selectedSize = "medium"; // default size
-    private String[] strokeChoices = {"fine", "normal", "large", "very large"};
+    private final String[] strokeChoices = {"fine", "normal", "large", "very large"};
     private String currentStroke = "normal";
     private Shapes[] shapesList;  // Our list of shapes
     private ShapeArtist artist; // Our "Artist" is the shape factory.
@@ -64,9 +60,9 @@ public class EditLayoutController implements Initializable {
     // ---------------------Color variables. --------------------------------------------------------------------------
     // colors and colorNames must be in the correct order to assure the name is the selected color.
     private Color currentColor = Color.BLACK; // Default color selection.
-    private Color[] colors = { Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, // Colors to choose from
+    private final Color[] colors = { Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, // Colors to choose from
             Color.MAGENTA, Color.YELLOW, Color.BLACK, Color.WHITE, Color.ORANGE, Color.VIOLET};
-    private String[] colorNames = { "Red", "Green", "Blue", "Cyan", // The names of the colors to be selected.
+    private final String[] colorNames = { "Red", "Green", "Blue", "Cyan", // The names of the colors to be selected.
             "Magenta", "Yellow", "Black", "White", "Orange", "Violet" };
 
     // -------------------- Mouse variables ---------------------------------------------------------------------------
@@ -74,8 +70,8 @@ public class EditLayoutController implements Initializable {
     private boolean dragging;   // True while drawing
 
     // ------------------- The canvases --------------------------------------------------------------------------------
-    private int canvasHeight = 400; // The set height of our canvases
-    private int canvasWidth = 600; // The set width of our canvases
+    private final int canvasHeight = 400; // The set height of our canvases
+    private final int canvasWidth = 600; // The set width of our canvases
     private Canvas canvas1;  // The canvas on which everything is drawn. Think of this as layer 1.
     private Canvas canvas2; // The canvas on which shapes will be placed and moved. This of this as layer 2.
     private GraphicsContext g1;  // For drawing on the canvas.
@@ -388,7 +384,7 @@ public class EditLayoutController implements Initializable {
      * Method to update the layout for a task.
      */
     @FXML
-    private void saveLayout (ActionEvent actionEvent){
+    private void saveLayout (){
         logger.info("Saving drawn layout.");
 
         logger.info("Iterating over shapes.");
@@ -403,7 +399,7 @@ public class EditLayoutController implements Initializable {
             WritableImage writableImage = new WritableImage(600,400);
             WritableImage snapshot = canvas1.snapshot(parameters,writableImage);
 
-            File output = new File( System.getProperty("user.home") + "/Desktop/snapshot" + new Date().getTime() + ".png");
+            File output = new File( "src/main/resources/layouts/snapshot" + new Date().getTime() + ".png");
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
             selectedTask.setTaskLayoutAbsolute(output.getAbsolutePath());
         }catch (IOException io){
@@ -422,10 +418,9 @@ public class EditLayoutController implements Initializable {
 
     /**
      * Closes the window with an action event.
-     * @param actionEvent triggers when the user activates the cancel button.
      */
     @FXML
-    private void cancel (ActionEvent actionEvent){
+    private void cancel (){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

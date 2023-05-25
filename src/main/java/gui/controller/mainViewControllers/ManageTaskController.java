@@ -8,8 +8,6 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.*;
 import org.apache.logging.log4j.*;
 
 
@@ -18,10 +16,7 @@ import java.net.URL;
 import java.util.*;
 
 public class ManageTaskController extends BaseController implements Initializable{
-
-
-
-    @FXML private AnchorPane taskAnchor;
+    // FXML
     @FXML private TableView<TaskWrapper> taskTV;
     @FXML private TableColumn<TaskWrapper, String> projectName;
     @FXML private TableColumn<TaskWrapper, String> taskName;
@@ -30,13 +25,12 @@ public class ManageTaskController extends BaseController implements Initializabl
 
     // Labels
     @FXML private Label usernameLabel;
-    @FXML private Label windowTitleLabel;
     @FXML private Label errorLabel;
 
     // Models
-    private ProjectModel projectModel = ProjectModel.getInstance();
-    private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    private CustomerModel customerModel = CustomerModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
+    private final AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
+    private final CustomerModel customerModel = CustomerModel.getInstance();
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
@@ -87,7 +81,7 @@ public class ManageTaskController extends BaseController implements Initializabl
     }
 
 
-    @FXML private void openProjectInfo(ActionEvent actionEvent)  {
+    @FXML private void openProjectInfo()  {
         if(taskTV.getSelectionModel().getSelectedItem() != null){
             openProjectInformation();
         } else errorLabel.setText("Please select a task to view documentation.");
@@ -108,12 +102,12 @@ public class ManageTaskController extends BaseController implements Initializabl
     }
 
     private void openProjectInformation(){
-        logger.info("openProjectinformation() called in ManageTaskController");
+        logger.info("openProjectInformation() called in ManageTaskController");
         try {
             errorLabel.setText("");
             projectModel.setSelectedProject(taskTV.getSelectionModel().getSelectedItem().getProject());
             logger.info("loading DocumentationView.fxml");
-            Node n = FXMLLoader.load(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml"));
+            Node n = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/gui/view/mainViews/DocumentationView.fxml")));
             super.getViewPane().getChildren().setAll(n);
         }  catch (IOException e) {
             logger.warn("User may not have selected a task to see information for, user was informed. Potential problem: ", e);
@@ -121,7 +115,7 @@ public class ManageTaskController extends BaseController implements Initializabl
         }
     }
 
-    @FXML private void taskAnchorOnClick(MouseEvent mouseEvent) {
+    @FXML private void taskAnchorOnClick() {
         logger.trace("User clicked anchor pane in ManageTaskController.");
         if(taskTV.getSelectionModel().getSelectedItem() != null){
             taskTV.getSelectionModel().clearSelection();

@@ -1,7 +1,6 @@
 package gui.controller.mainViewControllers;
 
 import be.*;
-import gui.controller.externalViewControllers.*;
 import gui.controller.newAndUpdateControllers.*;
 import gui.model.*;
 import javafx.beans.property.*;
@@ -64,8 +63,8 @@ public class DocumentationController extends BaseController implements Initializ
     private ImageView largeImageView;
 
     // Models
-    private ProjectModel projectModel = ProjectModel.getInstance();
-    private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
+    private final AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
 
     // logger
     private static final Logger logger = LogManager.getLogger("debugLogger");
@@ -181,20 +180,18 @@ public class DocumentationController extends BaseController implements Initializ
 
     /**
      * This will open the New Task View.
-     * @param actionEvent triggered by the create task button.
      */
     @FXML
-    private void createTask(ActionEvent actionEvent) {
+    private void createTask() {
         super.newTask();
     }
 
 
     /**
      * This will open the edit task view.
-     * @param actionEvent triggered by the update task button.
      */
     @FXML
-    private void updateTask(ActionEvent actionEvent) {
+    private void updateTask() {
         editTask();
     }
 
@@ -225,11 +222,9 @@ public class DocumentationController extends BaseController implements Initializ
     /**
      * This will open the add pictures window.
      * We catch the IOException and show the user a crafted alert.
-     *
-     * @param actionEvent triggered by the add pictures button.
      */
     @FXML
-    private void addPictures(ActionEvent actionEvent) {
+    private void addPictures() {
         logger.info("addPictures called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             try {
@@ -290,7 +285,7 @@ public class DocumentationController extends BaseController implements Initializ
         }
     }
 
-    public void updateLayout(ActionEvent actionEvent) {
+    public void updateLayout() {
         logger.info("updateLayout() called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null && projectModel.getSelectedTask() != null) {
             try {
@@ -313,7 +308,7 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
     @FXML
-    private void anchorOnClick(MouseEvent mouseEvent) {
+    private void anchorOnClick() {
         logger.trace("User has clicked the anchor pane in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             taskTV.getSelectionModel().clearSelection();
@@ -325,7 +320,7 @@ public class DocumentationController extends BaseController implements Initializ
     /**
      * method to open the window where it's possible to export the report for the selected task
      **/
-    @FXML private void openExportReportView(ActionEvent actionEvent) {
+    @FXML private void openExportReportView() {
         logger.info("openExportReportView called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
             try {
