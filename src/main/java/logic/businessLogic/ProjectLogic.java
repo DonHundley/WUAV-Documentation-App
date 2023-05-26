@@ -213,7 +213,11 @@ public class ProjectLogic {
         return imageList;
     }
 
-    public String getDeviceList() {
+    public List<String> getDeviceList() {return deviceList;}
+
+    public List<String> getDeviceCredentials() {return deviceCredentials;}
+
+    public String getDeviceString() {
         StringBuilder names = new StringBuilder();
         if(!deviceList.isEmpty()) {
             for (String device : deviceList
@@ -224,7 +228,7 @@ public class ProjectLogic {
         return names.toString();
     }
 
-    public String getDeviceCredentials() {
+    public String getDeviceCredentialsString() {
         StringBuilder credentials = new StringBuilder();
         if(!deviceCredentials.isEmpty()){
             for (String credential: deviceCredentials
@@ -240,7 +244,7 @@ public class ProjectLogic {
      * @param imgCount The number of a given image to have a location found.
      *                 For example if there are 5 images, but we are finding the location for image 3, this would be 3.
      * @param imgWidth The width of the images to be placed on the GUI.
-     * @return an interger representing the X coordinate.
+     * @return an integer representing the X coordinate.
      */
     public int imageLocationX(int imgCount, int imgWidth) {
         logger.trace("Determining image X coordinates.");

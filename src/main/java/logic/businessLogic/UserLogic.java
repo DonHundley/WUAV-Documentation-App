@@ -75,7 +75,9 @@ public class UserLogic {
         setUsers();
     }
 
-
+    public HashMap<Integer, Integer> getLoginInfo() {
+        return loginInfo;
+    }
 
     public void loginInformation(List<User> allUsers){
         logger.info("Creating hashmap of login information");

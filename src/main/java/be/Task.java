@@ -17,7 +17,7 @@ public class Task {
 
     private String taskLayoutAbsolute;
 
-
+    public Task(){}
     public Task(int docID, int projID, String taskName, Image taskLayout, String taskDesc, String taskState) {
         this.docID = docID;
         this.projID = projID;

@@ -145,8 +145,8 @@ public class ProjectModel {
         projectLogic.createTaskPictureLists(taskPictures);
     }
     public List<Image> getTaskPictureImages(){return projectLogic.getImageList();}
-    public String getTaskPictureDevices(){return projectLogic.getDeviceList();}
-    public String getTaskPictureCredentials(){return projectLogic.getDeviceCredentials();}
+    public String getTaskPictureDevices(){return projectLogic.getDeviceString();}
+    public String getTaskPictureCredentials(){return projectLogic.getDeviceCredentialsString();}
 
     public int getLocationX(int imageCount, int imageWidth){ return projectLogic.imageLocationX(imageCount, imageWidth);}
     public int getLocationY(int imageCount, int imageHeight){return projectLogic.imageLocationY(imageCount,imageHeight);}
