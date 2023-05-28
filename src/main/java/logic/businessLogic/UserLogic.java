@@ -79,6 +79,10 @@ public class UserLogic {
         return loginInfo;
     }
 
+    /**
+     * Creates a hashmap of all usernames and passwords
+     * @param allUsers list of all users.
+     */
     public void loginInformation(List<User> allUsers){
         logger.info("Creating hashmap of login information");
         if(allUsers.isEmpty()){
@@ -97,6 +101,12 @@ public class UserLogic {
         logger.info("Hashmap complete, process finished.");
     }
 
+    /**
+     * Authenticates the given credentials, checking if they are valid login information.
+     * @param userID The username to check.
+     * @param pass The user pass to check
+     * @return if the credentials are valid we return the user associated with that username.
+     */
     public User authenticateCredentials(String userID, String pass) {
         loginInformation(allUsers);
         if (loginInfo.containsKey(userID.hashCode())) {

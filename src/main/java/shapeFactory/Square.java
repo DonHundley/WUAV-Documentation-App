@@ -31,7 +31,6 @@ public class Square extends Shapes{
 
     @Override
     public void createShape(GraphicsContext gc) {
-        System.out.println("called" + size + left + top + width + height + color.toString());
         chooseSize(size);
         if(fill) {
             gc.setFill(color);

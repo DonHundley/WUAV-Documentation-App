@@ -109,11 +109,15 @@ public class EditLayoutController implements Initializable {
     }
 
     /**
-     * This is to create the bottom tool pane for the user. Consists of shape buttons.
+     * This is to create the bottom tool pane for the user. Consists of shape and free draw buttons.
      * @return We are returning the tool box to be added to our border pane.
      */
     private HBox createBottomToolBox() {
         logger.trace("createToolBox() called in EditLayoutController.");
+
+        freeDrawButton = new Button("Free draw"); // Button to activate free drawing.
+        freeDrawButton.setOnAction( (e) -> freeDraw());
+        freeDrawButton.setPrefWidth(95);
 
         Button circleButton = new Button("Add a Circle"); // Button to create a circle.
         circleButton.setOnAction( (e) -> drawShape("circle"));
@@ -133,7 +137,7 @@ public class EditLayoutController implements Initializable {
         tools.getChildren().add(ovalButton);
         tools.getChildren().add(squareButton);
         tools.getChildren().add(triangleButton);
-
+        tools.getChildren().add(freeDrawButton);
         tools.setStyle("-fx-border-width: 3px; -fx-border-color: transparent; -fx-background-color: silver");
 
         logger.trace("createToolBox Complete.");
@@ -145,6 +149,7 @@ public class EditLayoutController implements Initializable {
      * @return The Vbox full of buttons and comboBoxes to be placed in the borderpane.
      */
     private VBox createRightToolBox(){
+        Label colorLabel = new Label("COLOR");
         ComboBox<String> combobox = new ComboBox<>(); // This is our combobox of colors.
         combobox.setEditable(false);
         combobox.getItems().addAll(colorNames); // Adding the names of our colors.
@@ -152,10 +157,9 @@ public class EditLayoutController implements Initializable {
         combobox.setOnAction(
                 e -> currentColor = colors[combobox.getSelectionModel().getSelectedIndex()] );
 
-        freeDrawButton = new Button("Free draw"); // Button to activate free drawing.
-        freeDrawButton.setOnAction( (e) -> freeDraw());
-        freeDrawButton.setPrefWidth(95);
 
+
+        Label strokeLabel = new Label("STROKE WIDTH");
         ComboBox<String> comboBoxStrokeWidth = new ComboBox<>(); // This is our stroke width comboBox
         comboBoxStrokeWidth.setEditable(false);
         comboBoxStrokeWidth.getItems().addAll(strokeChoices);
@@ -163,11 +167,13 @@ public class EditLayoutController implements Initializable {
         comboBoxStrokeWidth.setOnAction(e -> currentStroke = comboBoxStrokeWidth.getSelectionModel().getSelectedItem());
         comboBoxStrokeWidth.setPrefWidth(95);
 
+        Label fillLabel = new Label("TOGGLE FILL");
         fillButton = new Button("Fill Shapes"); // Button to choose if shapes should be filled.
         fillButton.setOnAction( (e) -> fillShape());
         fillButton.setPrefWidth(95);
         fillShape = false;
 
+        Label sizeLabel = new Label("SHAPE SIZE");
         ComboBox<String> comboboxSize = new ComboBox<>(); // This is our combobox of sizes.
         comboboxSize.setEditable(false);
         comboboxSize.getItems().addAll(sizes); // Adding the names of our sizes.
@@ -176,16 +182,21 @@ public class EditLayoutController implements Initializable {
                 e -> selectedSize = comboboxSize.getSelectionModel().getSelectedItem());
         comboboxSize.setPrefWidth(95);
 
-        Button clearButton = new Button("Clear Canvas"); // Button to clear the canvases
+        Label clearLabel = new Label("CLEAR CANVAS");
+        Button clearButton = new Button("Reset"); // Button to clear the canvases
         clearButton.setOnAction((e) -> clearCanvases());
         clearButton.setPrefWidth(95);
 
         VBox tools = new VBox(10);
+        tools.getChildren().add(colorLabel);
         tools.getChildren().add(combobox);
-        tools.getChildren().add(freeDrawButton);
+        tools.getChildren().add(strokeLabel);
         tools.getChildren().add(comboBoxStrokeWidth);
+        tools.getChildren().add(fillLabel);
         tools.getChildren().add(fillButton);
+        tools.getChildren().add(sizeLabel);
         tools.getChildren().add(comboboxSize);
+        tools.getChildren().add(clearLabel);
         tools.getChildren().add(clearButton);
 
         tools.setStyle("-fx-border-width: 3px; -fx-border-color: transparent; -fx-background-color: silver");

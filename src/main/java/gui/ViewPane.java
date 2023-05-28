@@ -3,6 +3,7 @@ package gui;
 import javafx.scene.layout.*;
 
 public class ViewPane {
+    // This class is used to represent the pane that can have the view changed by any given controller.
 
     private final AnchorPane viewPane;
     public ViewPane() {

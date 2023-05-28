@@ -179,7 +179,8 @@ public class ProjectLogicTest {
 
         int imgWidth = 150;
 
-        int expected = 5;
+        int expected = 5; // each row starts at pixel 5
+
         int result1 = projectLogic.imageLocationX(image1, imgWidth);
         int result2 = projectLogic.imageLocationX(image5, imgWidth);
         int result3 = projectLogic.imageLocationX(image9, imgWidth);

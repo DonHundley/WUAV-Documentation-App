@@ -162,6 +162,12 @@ public class ProjectLogic {
         return worksOnDAO.getProjectIDsByUserID(user);
     }
 
+    /**
+     * Create a list of tasks by user ID. Used to give Technicians a list of their tasks.
+     * @param projectIDsByUserIDs The list of project ids associated with the tech.
+     * @param getTasksInfo list of all TaskWrappers
+     * @return a list of only the tasks associated with the user.
+     */
     public List<TaskWrapper> tasksByUserID(List<Integer> projectIDsByUserIDs, List<TaskWrapper> getTasksInfo){
         logger.info("Creating list in ProjectLogic. tasksByUserID()");
         List<TaskWrapper> tasksByUserID = new ArrayList<>();
@@ -188,7 +194,10 @@ public class ProjectLogic {
         return tasksByUserID;
     }
 
-
+    /**
+     * Creates three lists from every given task pictures. A list of pictures, a list of devices, and a list of credentials.
+     * @param taskPictures is the list of TaskPictures which is associated to a given task.
+     */
     public void createTaskPictureLists(List<TaskPictures> taskPictures){
         imageList.clear();
         deviceList.clear();
@@ -209,14 +218,30 @@ public class ProjectLogic {
 
     }
 
+    /**
+     * List of images from TaskPictures
+     * @return the image list made by createTaskPictureLists
+     */
     public List<Image> getImageList() {
         return imageList;
     }
 
+    /**
+     * List of devices from TaskPictures
+     * @return the image list made by createTaskPictureLists
+     */
     public List<String> getDeviceList() {return deviceList;}
 
+    /**
+     * List of credentials from TaskPictures
+     * @return the image list made by createTaskPictureLists
+     */
     public List<String> getDeviceCredentials() {return deviceCredentials;}
 
+    /**
+     * Converts the device list to a string
+     * @return String of all devices in device list
+     */
     public String getDeviceString() {
         StringBuilder names = new StringBuilder();
         if(!deviceList.isEmpty()) {
@@ -228,6 +253,10 @@ public class ProjectLogic {
         return names.toString();
     }
 
+    /**
+     * Converts the credentials into a string
+     * @return String of all the credentials in deviceCredentials
+     */
     public String getDeviceCredentialsString() {
         StringBuilder credentials = new StringBuilder();
         if(!deviceCredentials.isEmpty()){

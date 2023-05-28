@@ -47,8 +47,15 @@ public abstract class Shapes {
         this.color = color;
     }
 
+    /**
+     * Choose the size of the shape
+     * @param size the size of the shape being small, medium or large.
+     */
     public abstract void chooseSize(String size);
+
+    /**
+     * This is what is used to actually draw the shape.
+     * @param gc the graphics context the shape will be drawn on.
+     */
     public abstract void createShape(GraphicsContext gc);
-
-
 }
