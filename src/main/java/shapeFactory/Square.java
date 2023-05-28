@@ -6,8 +6,8 @@ import javafx.scene.paint.*;
 public class Square extends Shapes{
 
 
-    public Square(String size, Color color, boolean fill, int left, int top) {
-        super(size, color, fill, left, top);
+    public Square(String size, Color color, boolean fill, int left, int top, GraphicsContext gc) {
+        super(size, color, fill, left, top, gc);
     }
 
     @Override

@@ -9,13 +9,14 @@ public abstract class Shapes {
     protected Color color; // color of the shape
     protected String size; // The selected size of the shape.
     protected boolean fill; // If true the shape will be filled.
-
-    public Shapes(String size, Color color, boolean fill, int left, int top) {
+    protected GraphicsContext gc;
+    public Shapes(String size, Color color, boolean fill, int left, int top, GraphicsContext gc) {
         this.fill = fill;
         this.size = size;
         this.color = color;
         this.left = left;
         this.top = top;
+        this.gc = gc;
     }
 
     /**

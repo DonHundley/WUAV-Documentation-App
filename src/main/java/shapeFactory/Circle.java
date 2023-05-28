@@ -6,8 +6,8 @@ import javafx.scene.paint.*;
 public class Circle extends Shapes{
 
 
-    public Circle(String size, Color color, boolean fill, int left, int top) {
-        super(size, color, fill, left, top);
+    public Circle(String size, Color color, boolean fill, int left, int top, GraphicsContext gc) {
+        super(size, color, fill, left, top, gc);
     }
 
     @Override

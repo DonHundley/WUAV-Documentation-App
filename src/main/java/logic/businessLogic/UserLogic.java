@@ -87,7 +87,6 @@ public class UserLogic {
 
         logger.info("Iterating over users");
         for (User user: allUsers) {
-            //System.out.println(user.getUserName() + " "+ user.getPassword());
             int k = user.getUserName().hashCode();
             int v = user.getPassword().hashCode();
             loginInfo.put(k, v);

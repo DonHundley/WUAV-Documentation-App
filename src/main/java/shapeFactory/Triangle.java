@@ -17,8 +17,8 @@ public class Triangle extends Shapes{
     private double[] xPoints;
     private double[] yPoints;
 
-    public Triangle(String size, Color color, boolean fill, int left, int top, boolean dragging) {
-        super(size, color, fill, left, top);
+    public Triangle(String size, Color color, boolean fill, int left, int top, boolean dragging, GraphicsContext gc) {
+        super(size, color, fill, left, top, gc);
         if(!dragging){
         chooseSize(size);
         xPoints = new double[]{x1, x2, x3};
@@ -62,10 +62,6 @@ public class Triangle extends Shapes{
 
     @Override
     public void createShape(GraphicsContext gc) {
-        System.out.println("called" + size + left + top + width + height + color.toString());
-
-        System.out.println(Arrays.toString(xPoints));
-        System.out.println(Arrays.toString(yPoints));
         if(fill) {
             gc.setFill(color);
             gc.fillPolygon(xPoints, yPoints, 3);

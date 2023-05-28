@@ -1,31 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="info">
 
-    <!-- Logging Properties -->
     <Properties>
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n</Property>
     </Properties>
 
     <Appenders>
 
-        <!-- Console Appender -->
         <Console name="Console" target="SYSTEM_OUT" follow="true">
             <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
 
-        <!-- File Appenders on need basis -->
-        <RollingFile name="frameworkLog" fileName="appFrameWork.Log"
-                     filePattern="logs/app-framework-%d{yyyy-MM-dd}-%i.log">
-            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="10MB" />
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
-
-        <RollingFile name="debugLog" fileName="app.Log"
+        <RollingFile name="debugLog" fileName="debug.Log"
                      filePattern="logs/app-debug-%d{yyyy-MM-dd}-%i.log">
             <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
@@ -55,15 +42,6 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
-        <RollingFile name="perfLog" fileName="appPerf.Log"
-                     filePattern="logs/app-perf-%d{yyyy-MM-dd}-%i.log" >
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="10MB" />
-            </Policies>
-            <DefaultRolloverStrategy max="1"/>
-        </RollingFile>
-
         <RollingFile name="traceLog" fileName="appTrace.Log"
                      filePattern="logs/app-trace-%d{yyyy-MM-dd}-%i.log" >
             <PatternLayout pattern="${LOG_PATTERN}"/>
@@ -83,7 +61,6 @@
         </Logger>
 
         <Logger name="debugLogger" additivity="false" level="debug">
-            <AppenderRef ref="perfLog" />
             <AppenderRef ref="traceLog" />
             <AppenderRef ref="debugLog" />
             <AppenderRef ref="infoLog"  />
@@ -93,8 +70,9 @@
 
 
         <Logger name="infoLogger" additivity="false" level="info">
-            <AppenderRef ref="perfLog" />
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="infoLog"  />
+            <AppenderRef ref="traceLog" />
         </Logger>
 
         <Root level="warn">

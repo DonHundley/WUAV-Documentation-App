@@ -105,9 +105,6 @@ public class EditLayoutController implements Initializable {
         g1 = canvas1.getGraphicsContext2D();
         g2 = canvas2.getGraphicsContext2D();
 
-        paintCanvas(g1);
-        paintCanvas(g2);
-
         logger.trace("setUpCanvas() complete.");
     }
 
@@ -119,15 +116,15 @@ public class EditLayoutController implements Initializable {
         logger.trace("createToolBox() called in EditLayoutController.");
 
         Button circleButton = new Button("Add a Circle"); // Button to create a circle.
-        circleButton.setOnAction( (e) -> drawShape("circle", selectedSize, fillShape));
+        circleButton.setOnAction( (e) -> drawShape("circle"));
         Button rectButton = new Button("Add a Rectangle"); // Button to create a rectangle
-        rectButton.setOnAction( (e) -> drawShape("rectangle",selectedSize, fillShape));
+        rectButton.setOnAction( (e) -> drawShape("rectangle"));
         Button ovalButton = new Button("Add a Oval"); // Button to create an oval.
-        ovalButton.setOnAction( (e) -> drawShape("oval", selectedSize, fillShape));
+        ovalButton.setOnAction( (e) -> drawShape("oval"));
         Button squareButton = new Button("Add a Square"); // Button to create a square.
-        squareButton.setOnAction( (e) -> drawShape("square", selectedSize, fillShape));
+        squareButton.setOnAction( (e) -> drawShape("square"));
         Button triangleButton = new Button("Add a Triangle"); // Button to create a triangle.
-        triangleButton.setOnAction( (e) -> drawShape("triangle", selectedSize, fillShape));
+        triangleButton.setOnAction( (e) -> drawShape("triangle"));
 
         HBox tools = new HBox(10);
 
@@ -236,14 +233,12 @@ public class EditLayoutController implements Initializable {
     /**
      * This will draw the shape on a canvas when a shape button is clicked.
      * @param shapeType The type of shape to be created. Square, circle, triangle, etc.
-     * @param size The size of the shape. Small, medium, and large.
-     * @param fill If the shape should be filled with color.
      */
-    private void drawShape(String shapeType, String size, boolean fill){
+    private void drawShape(String shapeType){
         canvas2.toFront(); // We bring the canvas to the front because this is our shape canvas.
         drawing = false;
         freeDrawButton.setStyle("-fx-border-color: transparent;");
-        Shapes shape = artist.drawShape(shapeType, size, fill, currentColor, 10, 10, dragging);
+        Shapes shape = artist.drawShape(shapeType, selectedSize, fillShape, currentColor, 10, 10, dragging, g2);
         shapesList[shapeCount] = shape;
         shapeCount++;
         paintCanvas(g2);
@@ -284,7 +279,7 @@ public class EditLayoutController implements Initializable {
 
         dragging = true;
 
-        g1.setLineWidth(strokeWidth());  // Use a 2-pixel-wide line for drawing.
+        g1.setLineWidth(strokeWidth());  // Determine the width of our brush while drawing
         g1.setStroke(currentColor); // Line color is our current color.
     }
 

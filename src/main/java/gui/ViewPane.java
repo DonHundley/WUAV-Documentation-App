@@ -4,7 +4,7 @@ import javafx.scene.layout.*;
 
 public class ViewPane {
 
-    private AnchorPane viewPane;
+    private final AnchorPane viewPane;
     public ViewPane() {
         viewPane = new AnchorPane();
         viewPane.setPrefWidth(950);
@@ -13,7 +13,7 @@ public class ViewPane {
         viewPane.setLayoutY(0);
     }
     private static ViewPane instance;
-    public static synchronized ViewPane getViewPaneInstance(){
+    public static ViewPane getViewPaneInstance(){
         if (instance == null){
             instance = new ViewPane();
 
