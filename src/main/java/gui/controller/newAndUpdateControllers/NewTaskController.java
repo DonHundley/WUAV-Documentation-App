@@ -3,7 +3,6 @@ package gui.controller.newAndUpdateControllers;
 import be.*;
 import gui.controller.mainViewControllers.*;
 import gui.model.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 
@@ -19,22 +18,15 @@ public class NewTaskController extends BaseController implements Initializable {
     @FXML
     private TextField taskName;
     @FXML
-    private Label windowTitleLabel;
-    @FXML
-    private Label errorLabel;
-    @FXML
     private Button cancelButton;
     @FXML
     private Button createTask;
 
     // Model instances
-    private ProjectModel projectModel = ProjectModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
 
     // The project to have a task added.
     private Project selectedProject;
-
-    //variables for input validation
-    private int maxTaskName = 25;
 
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
@@ -73,11 +65,9 @@ public class NewTaskController extends BaseController implements Initializable {
 /** This method checks if the length of the textfield is bigger than the max length for the field
  * it returns true if the length is okay, false if it's too long**/
     private boolean validateTaskNameTFLength() {
-        if (taskName.getText().length() > maxTaskName) {
-            return false;
-        } else {
-            return true;
-        }
+        //variables for input validation
+        int maxTaskName = 25;
+        return taskName.getText().length() <= maxTaskName;
     }
 
     /**this method shows an alert to the user if the inserted text field length exceeds the max **/
@@ -89,7 +79,7 @@ public class NewTaskController extends BaseController implements Initializable {
     }
 
     @FXML
-    private void createTask(ActionEvent actionEvent) {
+    private void createTask() {
         logger.trace("Creating new task.");
         constructTask();
         projectModel.loadProjects();
@@ -100,10 +90,9 @@ public class NewTaskController extends BaseController implements Initializable {
     /**
      * Closes the window with an action event.
      *
-     * @param actionEvent triggers when the user activates the cancel button.
      */
     @FXML
-    private void cancel(ActionEvent actionEvent) {
+    private void cancel() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

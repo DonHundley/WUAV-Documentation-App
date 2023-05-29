@@ -35,6 +35,13 @@ public class ManageUsersController extends BaseController implements Initializab
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        logger.trace("Initializing ManageUsersController");
+        setUserTV();
+        setUsernameLabel();
+    }
+
     /**
      * We use this to set our username label and window title label.
      */
@@ -103,6 +110,10 @@ public class ManageUsersController extends BaseController implements Initializab
         }
     }
 
+    /**
+     * Open NEUser to create or edit a user
+     * @param isEdit true if editing user
+     */
     private void newOrEditUser(boolean isEdit){
         logger.info("newOrEditUser() called in ManageUsersController");
         try {
@@ -138,13 +149,10 @@ public class ManageUsersController extends BaseController implements Initializab
         super.logout(actionEvent);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        logger.trace("Initializing ManageUsersController");
-        setUserTV();
-        setUsernameLabel();
-    }
 
+    /**
+     * Clear selected item on TV
+     */
     @FXML private void usersAnchorOnClick() {
         logger.trace("User clicked anchor pane in ManageUsersController");
         if(userTV.getSelectionModel().getSelectedItem() != null){
@@ -153,6 +161,11 @@ public class ManageUsersController extends BaseController implements Initializab
         userTV.refresh();
     }
 
+    /**
+     * If an item is double-clicked, edit that user
+     * If the table is double-clicked, but there is no selected user, create a new user
+     * @param mouseEvent triggered when the tv is clicked
+     */
     @FXML private void tvOnClick(MouseEvent mouseEvent) {
         logger.trace("User clicked the tableview in ManageUsersController.");
         if(userTV.getSelectionModel().getSelectedItem() != null){

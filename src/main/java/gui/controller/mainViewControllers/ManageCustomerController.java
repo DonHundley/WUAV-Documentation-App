@@ -106,6 +106,9 @@ public class ManageCustomerController extends BaseController implements Initiali
         logger.info("setCustomerTableView() complete.");
     }
 
+    /**
+     * called to open customer documentation
+     */
     @FXML
     private void openDocumentButton() {
         if(customersTV.getSelectionModel().getSelectedItem() != null){
@@ -113,6 +116,9 @@ public class ManageCustomerController extends BaseController implements Initiali
         } messageLabel.setText("Please select a customer to view documentation.");
     }
 
+    /**
+     * Opens the documentation for the selected user
+     */
     private void openDocumentation(){
         logger.info("openDocumentation() called in " + this.getClass().getName());
         try {
@@ -129,16 +135,27 @@ public class ManageCustomerController extends BaseController implements Initiali
         logger.info("openDocumentation() complete.");
     }
 
+    /**
+     * Create new customer
+     */
     @FXML
     private void createCustomer() {
         openCustomerWindow(false);
     }
+
+    /**
+     * Edit the selected customer
+     */
     @FXML
     private void editCustomer() {
         if(customersTV.getSelectionModel().getSelectedItem() != null){openCustomerWindow(true);
         }messageLabel.setText("Please select a customer to be edited.");
     }
 
+    /**
+     * Open NECustomer
+     * @param isEdit true if editing, false if creating a new customer
+     */
     private void openCustomerWindow(boolean isEdit){
         logger.info("openCustomerWindow called in " + this.getClass().getName());
 
@@ -178,6 +195,13 @@ public class ManageCustomerController extends BaseController implements Initiali
         super.logout(actionEvent);
     }
 
+
+    /**
+     * sets fields if an item is clicked once in the TV
+     * if an item is clicked twice, and it has documentation, open the documentation
+     * if an item is clicked twice, but it does not have documentation and the user is manager/admin, create new project for the customer
+     * @param mouseEvent triggered when the TV is clicked
+     */
     @FXML private void onCustomerTVClick(MouseEvent mouseEvent) {
         logger.trace("User clicked customerTV in " + this.getClass().getName());
         if(customersTV.getSelectionModel().getSelectedItem() != null){
@@ -225,6 +249,9 @@ public class ManageCustomerController extends BaseController implements Initiali
 
     }
 
+    /**
+     * Deselect item in tableview
+     */
     @FXML private void anchorOnClick() {
         logger.trace("User clicked the anchor pane in " + this.getClass().getName());
         if(customersTV.getSelectionModel().getSelectedItem() != null){
@@ -232,6 +259,4 @@ public class ManageCustomerController extends BaseController implements Initiali
         }
         customersTV.refresh();
     }
-
-
 }

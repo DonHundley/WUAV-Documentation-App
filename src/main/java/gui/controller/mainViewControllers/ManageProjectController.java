@@ -8,24 +8,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 import org.apache.logging.log4j.*;
 
 
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ManageProjectController extends BaseController implements Initializable {
 
-
-    @FXML
-    private AnchorPane projectAnchor;
     // TableViews
     @FXML
     private TableView<ProjectWrapper> projectTV;
@@ -49,14 +42,12 @@ public class ManageProjectController extends BaseController implements Initializ
     @FXML
     private Label usernameLabel;
     @FXML
-    private Label windowTitleLabel;
-    @FXML
     private Label messageLabel;
 
     // Models
-    private ProjectModel projectModel = ProjectModel.getInstance();
-    private AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
-    private UserModel userModel = UserModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
+    private final AuthenticationModel authenticationModel = AuthenticationModel.getInstance();
+    private final UserModel userModel = UserModel.getInstance();
 
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
@@ -103,10 +94,9 @@ public class ManageProjectController extends BaseController implements Initializ
     /**
      * Assigns a project to the selected user.
      *
-     * @param actionEvent triggered when the user activates the assign project button.
      */
     @FXML
-    private void assignProject(ActionEvent actionEvent) {
+    private void assignProject() {
         logger.info("assignProject() called in " + this.getClass().getName());
         if (projectTV.getSelectionModel().getSelectedItem() != null && techTV.getSelectionModel().getSelectedItem() != null) {
             if (projectTV.getSelectionModel().getSelectedItem().getTotalTasks() > 0) {
@@ -126,10 +116,9 @@ public class ManageProjectController extends BaseController implements Initializ
 
     /**
      * Deletes the selected project.
-     * @param actionEvent triggered when the user activates the delete project button.
      */
     @FXML
-    private void deleteProject(ActionEvent actionEvent) {
+    private void deleteProject() {
         logger.info("deleteProject() called in " + this.getClass().getName());
         if (projectTV.getSelectionModel().getSelectedItem() != null) {
             messageLabel.setText("");
@@ -152,20 +141,17 @@ public class ManageProjectController extends BaseController implements Initializ
 
     /**
      * Opens the new window for the selected project.
-     *
-     * @param actionEvent triggers when the user activates the new project button.
      */
     @FXML
-    private void createProject(ActionEvent actionEvent) {
+    private void createProject() {
         editProj(false);
     }
 
     /**
      * Opens the edit window for the selected project.
-     * @param actionEvent triggers when the user activates the edit project button.
      */
     @FXML
-    private void editProject(ActionEvent actionEvent) {
+    private void editProject() {
         if(projectTV.getSelectionModel().getSelectedItem() != null){
             messageLabel.setText("");
             editProj(true);
@@ -216,10 +202,9 @@ public class ManageProjectController extends BaseController implements Initializ
 
     /**
      * This will open the New Task View.
-     * @param actionEvent triggered by the create task button.
      */
     @FXML
-    private void createTask(ActionEvent actionEvent) {
+    private void createTask() {
         addTask();
     }
 
@@ -256,7 +241,7 @@ public class ManageProjectController extends BaseController implements Initializ
         }
     }
 
-    @FXML private void techTvOnClick(MouseEvent mouseEvent) {
+    @FXML private void techTvOnClick() {
         logger.trace("User clicked techTV in ManageProjectController.");
         messageLabel.setText("");
         if(techTV.getSelectionModel().getSelectedItem() != null) {
@@ -264,7 +249,7 @@ public class ManageProjectController extends BaseController implements Initializ
         }
     }
 
-    @FXML private void anchorOnClick(MouseEvent mouseEvent) {
+    @FXML private void anchorOnClick() {
         logger.trace("User clicked anchorPane in ManageProjectController.");
         if(techTV.getSelectionModel().getSelectedItem() != null){
             techTV.getSelectionModel().clearSelection();

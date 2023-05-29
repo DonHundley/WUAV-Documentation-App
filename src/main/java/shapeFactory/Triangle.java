@@ -3,7 +3,6 @@ package shapeFactory;
 import javafx.scene.canvas.*;
 import javafx.scene.paint.*;
 
-import java.util.*;
 
 public class Triangle extends Shapes{
     private int x1;
@@ -110,6 +109,16 @@ public class Triangle extends Shapes{
         yPoints = new double[]{y1, y2, y3};
     }
 
+    /**
+     * Calculate the area of a triangle with the given coordinates
+     * @param x1 x of the first set of coords
+     * @param y1 y of the first set
+     * @param x2 x of set 2
+     * @param y2 y of set 2
+     * @param x3 x of set 3
+     * @param y3 y of set 3
+     * @return the area of the triangle
+     */
     private double areaOfTriangle(int x1, int y1, int x2, int y2, int x3, int y3){
         return Math.abs((x1*(y2-y3) + x2*(y3-y1)+
                 x3*(y1-y2))/2.0);

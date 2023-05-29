@@ -35,26 +35,14 @@ public class ManageTaskController extends BaseController implements Initializabl
     private static final Logger logger = LogManager.getLogger("debugLogger");
 
 
-    /**
-     * We use this to set our username label and window title label.
-     */
-    private void setUsernameLabel() {// set our username label to the users name.
-        logger.trace("setting username label in ManageTaskController.");
-        usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
-    }
-
-
-    @FXML private void logOut(ActionEvent actionEvent){
-        super.logout(actionEvent);
-    }
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.trace("Initializing ManageTaskController.");
         setUsernameLabel();
 
         logger.info("Checking user access in ManageTaskController.");
+
+        // The TV is filled with different information based on the user access
         if(authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("TECHNICIAN"))
         {
             User loggedIn = authenticationModel.getLoggedInUser();
@@ -64,7 +52,6 @@ public class ManageTaskController extends BaseController implements Initializabl
             projectName.setMinWidth(projectName.getWidth() + 90);
             taskName.setMinWidth(taskName.getWidth() + 90);
             stateOfTask.setMinWidth(stateOfTask.getWidth() + 90);
-
 
         }else {
             taskTV.setItems(projectModel.getTasksInfo());
@@ -80,13 +67,32 @@ public class ManageTaskController extends BaseController implements Initializabl
         logger.trace("Initialize complete.");
     }
 
+    /**
+     * We use this to set our username label and window title label.
+     */
+    private void setUsernameLabel() {// set our username label to the users name.
+        logger.trace("setting username label in ManageTaskController.");
+        usernameLabel.setText(authenticationModel.getLoggedInUser().getFirstName() + " " + authenticationModel.getLoggedInUser().getLastName());
+    }
 
+
+    @FXML private void logOut(ActionEvent actionEvent){
+        super.logout(actionEvent);
+    }
+
+    /**
+     * Open the documentation for the selected project
+     */
     @FXML private void openProjectInfo()  {
         if(taskTV.getSelectionModel().getSelectedItem() != null){
             openProjectInformation();
         } else errorLabel.setText("Please select a task to view documentation.");
     }
 
+    /**
+     * Set relevant information when an item is clicked in the tv
+     * @param mouseEvent if an item is double-clicked, open documentation window.
+     */
     @FXML private void taskTVOnClick(MouseEvent mouseEvent) {
         logger.trace("User clicked taskTV in ManageTaskController");
         if(taskTV.getSelectionModel().getSelectedItem() != null){
@@ -101,6 +107,9 @@ public class ManageTaskController extends BaseController implements Initializabl
 
     }
 
+    /**
+     * Open the documentation for the selected project.
+     */
     private void openProjectInformation(){
         logger.info("openProjectInformation() called in ManageTaskController");
         try {
@@ -115,6 +124,9 @@ public class ManageTaskController extends BaseController implements Initializabl
         }
     }
 
+    /**
+     * Clear the selected item in the tv
+     */
     @FXML private void taskAnchorOnClick() {
         logger.trace("User clicked anchor pane in ManageTaskController.");
         if(taskTV.getSelectionModel().getSelectedItem() != null){

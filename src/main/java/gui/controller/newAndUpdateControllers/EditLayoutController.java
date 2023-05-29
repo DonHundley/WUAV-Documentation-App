@@ -269,7 +269,6 @@ public class EditLayoutController implements Initializable {
         if (gc.equals(g2)) { // If the given graphics context is the gc for canvas2, we add the shapes again.
             for (int i = 0; i < shapeCount; i++) { // Iterate over our shape list.
                 Shapes s = shapesList[i];
-                System.out.println(i);
                 s.createShape(gc); // Draw the shape on the canvas again.
             }
         }
@@ -332,12 +331,12 @@ public class EditLayoutController implements Initializable {
         if (x < 3)                        // Assure x is in the drawing area
             x = 3;
         if (x > canvasWidth)
-            x = canvasWidth;
+            x = canvasWidth - 3;
 
         if (y < 3)                        // Assure y is in the drawing area.
             y = 3;
         if (y > canvasHeight)
-            y = canvasHeight;
+            y = canvasHeight - 3;
 
         g1.strokeLine(prevX, prevY, x, y);  // Draw the line.
 

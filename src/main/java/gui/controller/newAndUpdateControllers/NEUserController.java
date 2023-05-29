@@ -3,14 +3,12 @@ package gui.controller.newAndUpdateControllers;
 import be.*;
 import gui.controller.mainViewControllers.*;
 import gui.model.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 import org.apache.logging.log4j.*;
 
 
-import java.util.*;
 
 public class NEUserController extends BaseController {
 
@@ -33,13 +31,13 @@ public class NEUserController extends BaseController {
     private Button createOrEditUser;
 
     // selections for the accessCB
-    private String[] accessLevels = {"Admin", "Manager", "Sales", "Technician"};
+    private final String[] accessLevels = {"Admin", "Manager", "Sales", "Technician"};
 
     // if editing this is will be the selected user from persistence, otherwise it is the new user to be created.
     private User user;
 
     // Model instances
-    private UserModel userModel = UserModel.getInstance();
+    private final UserModel userModel = UserModel.getInstance();
 
 
     // True if editing, false if creating a new customer.
@@ -77,10 +75,9 @@ public class NEUserController extends BaseController {
     /**
      * This will create or edit a User based on the isEdit boolean
      *
-     * @param actionEvent triggered when the user activates the create/edit button.
      */
     @FXML
-    private void createOrEditUser(ActionEvent actionEvent) {
+    private void createOrEditUser() {
         if (isEdit) {
             editUser();
         } else {
@@ -131,10 +128,9 @@ public class NEUserController extends BaseController {
     /**
      * Closes the window with an action event.
      *
-     * @param actionEvent triggers when the user activates the cancel button.
      */
     @FXML
-    private void cancel(ActionEvent actionEvent) {
+    private void cancel() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

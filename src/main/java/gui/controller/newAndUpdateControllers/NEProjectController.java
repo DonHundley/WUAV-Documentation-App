@@ -4,14 +4,11 @@ import be.*;
 import gui.controller.mainViewControllers.*;
 import gui.model.*;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 import org.apache.logging.log4j.*;
 
-
-import java.util.*;
 
 public class NEProjectController extends BaseController {
     @FXML
@@ -30,13 +27,12 @@ public class NEProjectController extends BaseController {
     private Project project;
 
     // Model instances
-    private ProjectModel projectModel = ProjectModel.getInstance();
-    private CustomerModel customerModel = CustomerModel.getInstance();
+    private final ProjectModel projectModel = ProjectModel.getInstance();
+    private final CustomerModel customerModel = CustomerModel.getInstance();
 
     // True if editing, false if creating a new customer.
     private boolean isEdit;
 
-    private Date creationDate;
 
     //validation
     int maxProjName = 50;
@@ -76,10 +72,9 @@ public class NEProjectController extends BaseController {
     /**
      * This will create or edit a Project based on the isEdit boolean
      *
-     * @param actionEvent triggered when the user activates the create/edit button.
      */
     @FXML
-    private void createOrEditProject(ActionEvent actionEvent) {
+    private void createOrEditProject() {
         if (isEdit) {
             editProject();
         } else {
@@ -142,10 +137,9 @@ public class NEProjectController extends BaseController {
     /**
      * Closes the window with an action event.
      *
-     * @param actionEvent triggers when the user activates the cancel button.
      */
     @FXML
-    private void cancel(ActionEvent actionEvent) {
+    private void cancel() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

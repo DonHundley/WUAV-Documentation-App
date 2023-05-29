@@ -74,10 +74,13 @@ public class DocumentationController extends BaseController implements Initializ
         logger.trace("initializing DocumentationController");
         setUsernameLabel();
         setTaskTV();
+
+        // Hide create task if tech
         if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("TECHNICIAN")) {
             createTaskButton.setVisible(false);
         }
 
+        // Hide all create and edit functions if sales
         if (authenticationModel.getLoggedInUser().getAccess().equalsIgnoreCase("SALES")) {
             createTaskButton.setVisible(false);
             layoutButton.setVisible(false);
@@ -169,7 +172,9 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
 
-
+    /**
+     * Sets the description label of the task
+     */
     private void setDescriptionLabel() {
         if (projectModel.getSelectedTask().getTaskDesc() != null) {
             descriptionLabel.setText(projectModel.getSelectedTask().getTaskDesc());
@@ -195,6 +200,9 @@ public class DocumentationController extends BaseController implements Initializ
         editTask();
     }
 
+    /**
+     * Open the edit task window
+     */
     private void editTask() {
         logger.info("editTask() called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null) {
@@ -258,11 +266,12 @@ public class DocumentationController extends BaseController implements Initializ
     }
 
 
-
-
-
-
-
+    /**
+     * If a task is clicked once we set the relevant data for that task, such as loading the pictures.
+     * If clicked twice, we open the edit window for that task.
+     * If nothing is selected on the TV but the TV is clicked twice, and the user is admin/manager, we open a new task window.
+     * @param mouseEvent triggered on clicking the TV
+     */
     @FXML
     private void taskTVOnMouse(MouseEvent mouseEvent) {
         logger.trace("taskTV clicked in " + this.getClass().getName());
@@ -285,6 +294,9 @@ public class DocumentationController extends BaseController implements Initializ
         }
     }
 
+    /**
+     * Opens the edit layout window
+     */
     public void updateLayout() {
         logger.info("updateLayout() called in " + this.getClass().getName());
         if (taskTV.getSelectionModel().getSelectedItem() != null && projectModel.getSelectedTask() != null) {
@@ -307,6 +319,9 @@ public class DocumentationController extends BaseController implements Initializ
         logger.info("updateLayout() complete.");
     }
 
+    /**
+     * Clears the selected tableview items
+     */
     @FXML
     private void anchorOnClick() {
         logger.trace("User has clicked the anchor pane in " + this.getClass().getName());
